@@ -109,17 +109,7 @@ module.exports = {
   
     const viewpdf = await allpdfs.findOne({ Driverid: userdetails._id });
   
-    // const makeUrl = (filePath) => {
-    //   if (!filePath) return '';
-  
-    //   // je already /images ya /pdfs naal start hove
-    //   if (filePath.startsWith('/images') || filePath.startsWith('/pdfs')) {
-    //     return `http://localhost:2000${filePath}`;
-    //   }
-  
-    //   // je sirf filename aa hove (old data case)
-    //   return `http://localhost:2000/pdfs/${filePath.split('\\').pop()}`;
-    // };
+console.log(viewpdf,"viewpdfviewpdfviewpdfviewpdf")
   const makeUrl = (filePath) => {
   if (!filePath) return '';
 
@@ -151,22 +141,22 @@ module.exports = {
           ...viewpdf._doc,
   
           // PDF docs
-          EmploymentApplication: makeUrl(viewpdf.EmploymentApplication),
-          MedicalCertificate: makeUrl(viewpdf.MedicalCertificate),
-          Dayscert: makeUrl(viewpdf.Dayscert),
-          SocialSecurityCard: makeUrl(viewpdf.SocialSecurityCard),
-          Violations: makeUrl(viewpdf.Violations),
+          EmploymentApplication: (viewpdf.EmploymentApplication),
+          MedicalCertificate: (viewpdf.MedicalCertificate),
+          Dayscert: (viewpdf.Dayscert),
+          SocialSecurityCard: (viewpdf.SocialSecurityCard),
+          Violations: (viewpdf.Violations),
   
           // Image docs
-          MVRRecord: makeUrl(viewpdf.MVRRecord),
-          RoadTest: makeUrl(viewpdf.RoadTest),
-          ClearingHouse: makeUrl(viewpdf.ClearingHouse),
+          MVRRecord: (viewpdf.MVRRecord),
+          RoadTest: (viewpdf.RoadTest),
+          ClearingHouse: (viewpdf.ClearingHouse),
                 Consents: viewpdf.Consents
-        ? viewpdf.Consents.map(file => makeUrl(file))
+        ? viewpdf.Consents.map(file => (file))
         : []
         }
       : {};
-  
+  console.log(updated,"updatedupdatedupdatedupdated")
     res.render("Admin/user/viewUser", {
       title,
       userdetails,
@@ -176,6 +166,8 @@ module.exports = {
       msg: req.flash("msg"),
     });
   }),
+
+
   // viewUser: helpers.AsyncHanddle(async (req, res) => {
   //   let title = "userList";
   //   const userdetails = await Model.Driver.findById({ _id: req.params.id });
