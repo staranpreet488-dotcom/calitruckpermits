@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node calitruckpermits.js",
+    "start": "nnpx puppeteer browsers install chrome && node calitruckpermits.js",
     "postinstall": "node node_modules/puppeteer/install.mjs"
     
   },
