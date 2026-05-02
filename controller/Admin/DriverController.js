@@ -1,17 +1,19 @@
+
+
+
+
 const DriverModel = require("../../Model/DriverModel");
 const Model = require("../../Model/Index");
 const LinkModel = require("../../Model/LinkModel");
 const pdfmodel =require("../../Model/allpdf")
 
-
+require('dotenv').config();
+const BASE_URL = process.env.LiveBase_url || 'http://localhost:2000';
 
 const helper = require("../../utility/helper");
 const helpers = require("../../utility/helpers");
 
-const createError = require('http-errors'); // already existing line
-// 👇 YEH ADD KAR
-require('dotenv').config();
-const BASE_URL = process.env.LiveBase_url || 'http://localhost:2000';
+
 const puppeteer = require("puppeteer");
 const ejs = require("ejs");
 const path = require("path");
@@ -803,20 +805,6 @@ const html = `
 }
 
 
-module.exports = generateConsentPDF;
-// Path ko URL mein convert karne ka helper function
-const toUrl = (filePath) => {
-  if (!filePath) return '';
-  // server path se sirf filename nikalo
-  const fileName = path.basename(filePath);
-  return `${BASE_URL}/pdfs/${fileName}`;
-};
-
-const toConsentUrl = (filePath) => {
-  if (!filePath) return '';
-  const fileName = path.basename(filePath);
-  return `${BASE_URL}/consentpdf/${fileName}`;
-};
 module.exports = {
     slug: async (req, res) => {
         try {
@@ -914,6 +902,18 @@ const trueConsents = Object.keys(driver)
           generatevoilationNPDF(Driver)
         ]);
 
+        // Server path → Live URL convert karo
+        const toUrl = (filePath) => {
+          if (!filePath) return '';
+          const fileName = path.basename(filePath);
+          return `${BASE_URL}/pdfs/${fileName}`;
+        };
+        const toConsentUrl = (filePath) => {
+          if (!filePath) return '';
+          const fileName = path.basename(filePath);
+          return `${BASE_URL}/consentpdf/${fileName}`;
+        };
+
         await pdfmodel.create({
           Driverid: Driver._id,
           EmploymentApplication: toUrl(pdfPath),
@@ -921,8 +921,7 @@ const trueConsents = Object.keys(driver)
           MedicalCertificate: toUrl(Medicalpdf),
           SocialSecurityCard: toUrl(SSnpdf),
           Violations: toUrl(Voilationpdf),
-
-                Consents: consentPDFs.map(toConsentUrl)
+          Consents: consentPDFs.map(toConsentUrl)
         });
 
         console.log("PDFs Generated Successfully ✅");
