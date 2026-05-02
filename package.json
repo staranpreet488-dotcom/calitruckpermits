@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node calitruckpermits.js"
+    "start": "node calitruckpermits.js",
+    "postinstall": "node node_modules/puppeteer/install.mjs"
     
   },
   "keywords": [],
