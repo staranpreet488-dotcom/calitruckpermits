@@ -8,7 +8,10 @@ const pdfmodel =require("../../Model/allpdf")
 const helper = require("../../utility/helper");
 const helpers = require("../../utility/helpers");
 
-
+const createError = require('http-errors'); // already existing line
+// 👇 YEH ADD KAR
+require('dotenv').config();
+const BASE_URL = process.env.LiveBase_url || 'http://localhost:2000';
 const puppeteer = require("puppeteer");
 const ejs = require("ejs");
 const path = require("path");
@@ -85,8 +88,6 @@ const generateMedicalPDF = async (driver) => {
   return filePath;
 };
 
-
-
 const generateDutyPDF = async (driver) => {
 
   const dir = path.join(process.cwd(), "public/pdfs");
@@ -120,8 +121,6 @@ const generateDutyPDF = async (driver) => {
 
   return filePath;
 };
-
-
 
 const generateSSNPDF = async (driver) => {
 
@@ -157,9 +156,6 @@ const generateSSNPDF = async (driver) => {
   return filePath;
 };
 
-
-
-
 const generatevoilationNPDF = async (driver) => {
 
   const dir = path.join(process.cwd(), "public/pdfs");
@@ -193,9 +189,6 @@ const generatevoilationNPDF = async (driver) => {
 
   return filePath;
 };
-
-
-
 
 const consentData = {
   Consents1: {
@@ -810,126 +803,20 @@ const html = `
 }
 
 
-// const consentTexts = {
-//   Consents1: "FMCSA Clearinghouse Limited Query Consent full text...",
-//   Consents2: "FMCSA PSP Disclosure & Authorization...",
-//   Consents3: "Pre-Employment Drug Test...",
-//   Consents4: "Safety Performance History...",
-//   Consents5: "EPN Authorization...",
-//   Consents6: "MVR Consent...",
-//   Consents7: "Driver Handbook...",
-//   Consents8: "Drug & Alcohol Policy..."
-// };
-
-// async function generateConsentPDF(driver, consentKey) {
-//   const browser = await puppeteer.launch({
-//     headless: "new"
-//   });
-
-//   const page = await browser.newPage();
-
-//   const fullName =
-//     `${driver.FirstName || ""} ${driver.LastName || ""}`.trim();
-
-//   const html = `
-//     <html>
-//     <head>
-//       <style>
-//         body {
-//           font-family: Arial, sans-serif;
-//           padding: 40px;
-//           color: #333;
-//         }
-
-//         .header {
-//           text-align: center;
-//           margin-bottom: 30px;
-//         }
-
-//         .box {
-//           border: 1px solid #ddd;
-//           padding: 20px;
-//           border-radius: 8px;
-//         }
-
-//         .title {
-//           font-size: 20px;
-//           font-weight: bold;
-//           margin-bottom: 15px;
-//         }
-
-//         .section {
-//           margin-bottom: 15px;
-//         }
-
-//         .signature {
-//           margin-top: 30px;
-//         }
-
-//         img {
-//           width: 200px;
-//           border: 1px solid #ccc;
-//           padding: 5px;
-//         }
-//       </style>
-//     </head>
-
-//     <body>
-
-//       <div class="header">
-//         <h2>CONSENT DOCUMENT</h2>
-//         <h3>${consentKey}</h3>
-//       </div>
-
-//       <div class="box">
-
-//         <div class="section">
-//           <b>Driver Name:</b> ${fullName}
-//         </div>
-
-//         <div class="section">
-//           <b>Email:</b> ${driver.Email || ""}
-//         </div>
-
-//         <hr/>
-
-//         <div class="section">
-//           ${consentTexts[consentKey]}
-//         </div>
-
-//         <div class="signature">
-//           <b>Driver Signature:</b><br/>
-//           <img src="${driver.Sign}" />
-//         </div>
-
-//         <div class="section">
-//           <b>Date:</b> ${new Date().toLocaleString()}
-//         </div>
-
-//       </div>
-
-//     </body>
-//     </html>
-//   `;
-
-//   await page.setContent(html, { waitUntil: "load" });
-
-//   const fileName = `${consentKey}-${driver._id}.pdf`;
-//   const filePath = path.join(__dirname, "../../public/consentpdf", fileName);
-
-//   await page.pdf({
-//     path: filePath,
-//     format: "A4",
-//     printBackground: true
-//   });
-
-//   await browser.close();
-
-//   return filePath;
-// }
-
 module.exports = generateConsentPDF;
+// Path ko URL mein convert karne ka helper function
+const toUrl = (filePath) => {
+  if (!filePath) return '';
+  // server path se sirf filename nikalo
+  const fileName = path.basename(filePath);
+  return `${BASE_URL}/pdfs/${fileName}`;
+};
 
+const toConsentUrl = (filePath) => {
+  if (!filePath) return '';
+  const fileName = path.basename(filePath);
+  return `${BASE_URL}/consentpdf/${fileName}`;
+};
 module.exports = {
     slug: async (req, res) => {
         try {
@@ -1029,13 +916,13 @@ const trueConsents = Object.keys(driver)
 
         await pdfmodel.create({
           Driverid: Driver._id,
-          EmploymentApplication: pdfPath,
-          Dayscert: Dutypdf,
-          MedicalCertificate: Medicalpdf,
-          SocialSecurityCard: SSnpdf,
-          Violations: Voilationpdf,
+          EmploymentApplication: toUrl(pdfPath),
+          Dayscert: toUrl(Dutypdf),
+          MedicalCertificate: toUrl(Medicalpdf),
+          SocialSecurityCard: toUrl(SSnpdf),
+          Violations: toUrl(Voilationpdf),
 
-                Consents: consentPDFs
+                Consents: consentPDFs.map(toConsentUrl)
         });
 
         console.log("PDFs Generated Successfully ✅");
