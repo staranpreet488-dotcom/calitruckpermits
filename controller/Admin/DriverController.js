@@ -41,7 +41,16 @@ const generatePDF = async (driver) => {
   console.log(driver,"licensebacklicensebacklicensebacklicenseback")
 
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+  headless: "new",
+  args: [
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--disable-gpu'
+  ]
+});
+
   const page = await browser.newPage();
 
   await page.setContent(html, { waitUntil: "load" });
@@ -74,7 +83,16 @@ const generateMedicalPDF = async (driver) => {
     { data: driver }
   );
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+  headless: "new",
+  args: [
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--disable-gpu'
+  ]
+});
+
   const page = await browser.newPage();
 
   await page.setContent(html, { waitUntil: "load" });
@@ -108,7 +126,16 @@ const generateDutyPDF = async (driver) => {
     { data: driver }
   );
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+  headless: "new",
+  args: [
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--disable-gpu'
+  ]
+});
+
   const page = await browser.newPage();
 
   await page.setContent(html, { waitUntil: "load" });
@@ -142,7 +169,16 @@ const generateSSNPDF = async (driver) => {
     { data: driver }
   );
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+  headless: "new",
+  args: [
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--disable-gpu'
+  ]
+});
+
   const page = await browser.newPage();
 
   await page.setContent(html, { waitUntil: "load" });
@@ -176,7 +212,16 @@ const generatevoilationNPDF = async (driver) => {
     { data: driver }
   );
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+  headless: "new",
+  args: [
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--disable-gpu'
+  ]
+});
+
   const page = await browser.newPage();
 
   await page.setContent(html, { waitUntil: "load" });
@@ -914,7 +959,7 @@ const trueConsents = Object.keys(driver)
           return `${BASE_URL}/consentpdf/${fileName}`;
         };
 
-        await pdfmodel.create({
+     const pds=   await pdfmodel.create({
           Driverid: Driver._id,
           EmploymentApplication: toUrl(pdfPath),
           Dayscert: toUrl(Dutypdf),
@@ -923,7 +968,7 @@ const trueConsents = Object.keys(driver)
           Violations: toUrl(Voilationpdf),
           Consents: consentPDFs.map(toConsentUrl)
         });
-
+console.log(pds,"pdspdspdspdspds")
         console.log("PDFs Generated Successfully ✅");
 
       } catch (error) {
