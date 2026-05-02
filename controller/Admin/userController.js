@@ -4,7 +4,10 @@ const helper = require("../../utility/helper");
 const helpers = require("../../utility/helpers");
 const bcrypt = require("bcrypt");
 const PDFDocument = require("pdfkit");
-
+const BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? process.env.REACT_APP_LIVE_BASE_URL
+    : process.env.REACT_APP_LOCAL_BASE_URL;
 module.exports = {
   createUser: helpers.AsyncHanddle(async (req, res) => {
     const userExist = await Model.UserModel.findOne({ email: req.body.email });
@@ -128,20 +131,20 @@ module.exports = {
     filePath.startsWith('/pdfs') ||
     filePath.startsWith('/consentpdf')
   ) {
-    return `http://localhost:2000${filePath}`;
+    return `${BASE_URL}${filePath}`;
   }
 
   // Windows full path case handle
   if (filePath.includes('images')) {
-    return `http://localhost:2000/images/${fileName}`;
+     return `${BASE_URL}/images/${fileName}`;
   }
 
   if (filePath.includes('consentpdf')) {
-    return `http://localhost:2000/consentpdf/${fileName}`;
+     return `${BASE_URL}/consentpdf/${fileName}`;
   }
 
   // default pdfs
-  return `http://localhost:2000/pdfs/${fileName}`;
+  return `${BASE_URL}/pdfs/${fileName}`;
 };
     const updated = viewpdf
       ? {
