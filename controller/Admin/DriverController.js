@@ -25,8 +25,23 @@ console.log(BASE_URL,"BASE_URLBASE_URLBASE_URL")
 const createPDF = (html, filePath) => {
   const options = {
     format: "A4",
-    border: "10mm",
+
+    // ✔ better margins control
+    border: {
+      top: "10mm",
+      right: "10mm",
+      bottom: "10mm",
+      left: "10mm",
+    },
+
+    // ✔ required for CSS background/colors
     printBackground: true,
+
+    // ✔ important for slow rendering (images, big HTML)
+    timeout: 60000,
+
+    
+
   };
 
   return new Promise((resolve, reject) => {
@@ -585,7 +600,7 @@ const generateConsentPDF = async (driver, consentKey, company) => {
     <p><b>License:</b> ${driver.LicenseNumber || ""}</p>
 
     ${content}
-
+<p>Driver Sign</>:
     <div>
       ${
         driver.Sign
