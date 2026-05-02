@@ -19,7 +19,7 @@ const ejs = require("ejs");
 const path = require("path");
 const fs = require("fs");
 const { model } = require("mongoose");
-
+console.log(BASE_URL,"BASE_URLBASE_URLBASE_URL")
 const generatePDF = async (driver) => {
   const dir = path.join(process.cwd(), "public/pdfs");
 
