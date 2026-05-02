@@ -23,6 +23,8 @@ app.use(fileupload());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use("/pdfs", express.static(path.join(__dirname, "public/pdfs")));
+app.use("/consentpdf", express.static(path.join(__dirname, "public/consentpdf")));
 app.use(session({
   secret: 'keyboard cat', resave: false, saveUninitialized: true, cookie: { maxAge: 24 * 60 * 60 * 365 * 1000, },
 }));
