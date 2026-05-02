@@ -1,17 +1,19 @@
 
 
-const { PDFDocument, StandardFonts, rgb } = require("pdf-lib");
+
 
 const DriverModel = require("../../Model/DriverModel");
 const Model = require("../../Model/Index");
 const LinkModel = require("../../Model/LinkModel");
 const pdfmodel =require("../../Model/allpdf")
 
+const pdf = require("html-pdf");
 require('dotenv').config();
 const BASE_URL = process.env.LIVE_BASE_URL || 'https://localhost:2000';
 
 const helper = require("../../utility/helper");
 const helpers = require("../../utility/helpers");
+
 
 
 const ejs = require("ejs");
@@ -20,174 +22,92 @@ const fs = require("fs");
 const { model } = require("mongoose");
 console.log(BASE_URL,"BASE_URLBASE_URLBASE_URL")
 
-const generatePDF = async (data) => {
-  const dir = path.join(process.cwd(), "public/pdfs");
+const createPDF = (html, filePath) => {
+  const options = {
+    format: "A4",
+    border: "10mm",
+    printBackground: true,
+  };
 
+  return new Promise((resolve, reject) => {
+    pdf.create(html, options).toFile(filePath, (err, res) => {
+      if (err) return reject(err);
+      resolve(res.filename);
+    });
+  });
+};
+
+  const ensureDir = (dir) => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
-
-  const filePath = path.join(dir, `driver_${data.FirstName}.pdf`);
-
-  const pdfDoc = await PDFDocument.create();
-  const page = pdfDoc.addPage([595, 842]); // A4 size
-
-  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-
-  let y = 800;
-
-  const draw = (text, size = 10) => {
-    page.drawText(String(text || "-"), {
-      x: 50,
-      y,
-      size,
-      font,
-      color: rgb(0, 0, 0),
-    });
-    y -= size + 8;
-  };
-
-  // TITLE
-  page.drawText("DRIVER APPLICATION FORM", {
-    x: 180,
-    y,
-    size: 14,
-    font,
-    color: rgb(0, 0, 0),
-  });
-
-  y -= 40;
-
-  // ---------------- COMPANY ----------------
-  draw("COMPANY DETAILS", 12);
-  draw(`Company: ${data.companyName}`);
-  draw(`Phone: ${data.companyContact}`);
-  draw(`Email: ${data.companyEmail}`);
-  draw(`City: ${data.companycity}`);
-
-  y -= 10;
-
-  // ---------------- APPLICANT ----------------
-  draw("APPLICANT DETAILS", 12);
-  draw(`Name: ${data.FirstName} ${data.LastName}`);
-  draw(`DOB: ${data.Dob}`);
-  draw(`Phone: ${data.Contact}`);
-  draw(`Email: ${data.Email}`);
-  draw(`Address: ${data.Address}`);
-
-  y -= 10;
-
-  // ---------------- LICENSE ----------------
-  draw("LICENSE INFORMATION", 12);
-  draw(`License No: ${data.LicenseNumber}`);
-  draw(`State: ${data.LicenseState}`);
-  draw(`Issue Date: ${data.LicenseIssueDate}`);
-  draw(`Expiry Date: ${data.LicenseExpiryDate}`);
-
-  y -= 10;
-
-  // ---------------- EXPERIENCE ----------------
-  draw("DRIVING EXPERIENCE", 12);
-  draw(`Straight Truck: ${data.StraightTruck?.experience || "-"}`);
-  draw(`Truck Tractor: ${data.TruckTractor?.experience || "-"}`);
-  draw(`Semi Trailer: ${data.SemiTrailer?.experience || "-"}`);
-  draw(`Flatbed: ${data.Flatbed?.experience || "-"}`);
-  draw(`Bus: ${data.Bus?.experience || "-"}`);
-
-  y -= 10;
-
-  draw("DECLARATION", 12);
-  draw("All information provided is true and correct.");
-
-  // ---------------- SAVE ----------------
-  const pdfBytes = await pdfDoc.save();
-  fs.writeFileSync(filePath, pdfBytes);
-
-  return filePath;
 };
-
-
-
-// -----------------------------
-// MEDICAL PDF
-// -----------------------------
-const generateMedicalPDF = async (data) => {
-  return generateSimplePDF(data, "Medical Certificate");
-};
-
-
-// -----------------------------
-// DUTY PDF
-// -----------------------------
-const generateDutyPDF = async (data) => {
-  return generateSimplePDF(data, "7 Days Duty Report");
-};
-
-
-// -----------------------------
-// SSN PDF
-// -----------------------------
-const generateSSNPDF = async (data) => {
-  return generateSimplePDF(data, "SSN Card");
-};
-
-
-// -----------------------------
-// VIOLATION PDF
-// -----------------------------
-const generatevoilationNPDF = async (data) => {
-  return generateSimplePDF(data, "Violation Report");
-};
-
-
-// -----------------------------
-// SIMPLE COMMON FUNCTION
-// -----------------------------
-const generateSimplePDF = async (data, title) => {
+const generatePDF = async (driver) => {
   const dir = path.join(process.cwd(), "public/pdfs");
+  ensureDir(dir);
 
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
+  const filePath = path.join(dir, `driver_${driver.FirstName}.pdf`);
 
-  const filePath = path.join(dir, `${title}_${data.FirstName}.pdf`);
+  const html = await ejs.renderFile(
+    path.join(__dirname, "../../views/Admin/Link/pdfTemplate.ejs"),
+    { data: driver }
+  );
 
-  const pdfDoc = await PDFDocument.create();
-  const page = pdfDoc.addPage([595, 842]);
-  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-
-  let y = 800;
-
-  const draw = (text, size = 10) => {
-    page.drawText(String(text || "-"), {
-      x: 50,
-      y,
-      size,
-      font,
-      color: rgb(0, 0, 0),
-    });
-    y -= size + 8;
-  };
-
-  page.drawText(title.toUpperCase(), {
-    x: 180,
-    y,
-    size: 14,
-    font,
-  });
-
-  y -= 40;
-
-  draw(`Name: ${data.FirstName} ${data.LastName}`);
-  draw(`Phone: ${data.Contact}`);
-  draw(`Email: ${data.Email}`);
-  draw(`License: ${data.LicenseNumber}`);
-
-  const pdfBytes = await pdfDoc.save();
-  fs.writeFileSync(filePath, pdfBytes);
-
-  return filePath;
+  return await createPDF(html, filePath);
 };
+const generateMedicalPDF = async (driver) => {
+  const dir = path.join(process.cwd(), "public/pdfs");
+  ensureDir(dir);
+
+  const filePath = path.join(dir, `MedicalCer_${driver.FirstName}.pdf`);
+
+  const html = await ejs.renderFile(
+    path.join(__dirname, "../../views/Admin/Link/MedicalCer.ejs"),
+    { data: driver }
+  );
+
+  return await createPDF(html, filePath);
+};
+const generateDutyPDF = async (driver) => {
+  const dir = path.join(process.cwd(), "public/pdfs");
+  ensureDir(dir);
+
+  const filePath = path.join(dir, `7Days_${driver.FirstName}.pdf`);
+
+  const html = await ejs.renderFile(
+    path.join(__dirname, "../../views/Admin/Link/dutyHoursTemplate.ejs"),
+    { data: driver }
+  );
+
+  return await createPDF(html, filePath);
+};
+const generateSSNPDF = async (driver) => {
+  const dir = path.join(process.cwd(), "public/pdfs");
+  ensureDir(dir);
+
+  const filePath = path.join(dir, `SSN_${driver.FirstName}.pdf`);
+
+  const html = await ejs.renderFile(
+    path.join(__dirname, "../../views/Admin/Link/ssnCard.ejs"),
+    { data: driver }
+  );
+
+  return await createPDF(html, filePath);
+};
+const generatevoilationNPDF = async (driver) => {
+  const dir = path.join(process.cwd(), "public/pdfs");
+  ensureDir(dir);
+
+  const filePath = path.join(dir, `violation_${driver.FirstName}.pdf`);
+
+  const html = await ejs.renderFile(
+    path.join(__dirname, "../../views/Admin/Link/voilationpdf.ejs"),
+    { data: driver }
+  );
+
+  return await createPDF(html, filePath);
+};
+
 const consentData = {
   Consents1: {
     title: "FMCSA Clearinghouse Limited Query Consent",
@@ -640,65 +560,52 @@ I further understand that if I refuse to provide consent for <strong><%= company
   `
   },
 };
-const generateConsentPDF = async (driver, consentKey, company) => {
-  let consent = consentData[consentKey];
 
-  if (!consent) throw new Error("Invalid consent key");
+const generateConsentPDF = async (driver, consentKey, company) => {
+  const dir = path.join(process.cwd(), "public/consentpdf");
+  ensureDir(dir);
 
   const fullName = `${driver.FirstName || ""} ${driver.LastName || ""}`.trim();
 
-  // render EJS content
-  let content = await ejs.render(consent.content, {
-    company,
-  });
+  const consent = consentData[consentKey];
+  if (!consent) throw new Error("Invalid consent key");
 
-  // replace placeholders
+  let content = ejs.render(consent.content, { company });
+
   content = content
     .replace(/\[Driver Name\]/g, fullName)
     .replace(/\[License #\]/g, driver.LicenseNumber || "");
 
   const html = `
   <html>
-  <head>
-    <style>
-      body { font-family: Arial; font-size: 12px; padding: 25px; }
-      .header { text-align:center; margin-bottom:20px; }
-      .title { font-size:18px; font-weight:bold; }
-      .box { border:1px solid #000; padding:10px; margin-bottom:15px; }
-    </style>
-  </head>
-
   <body>
+    <h2>${company?.name}</h2>
 
-    <div class="header">
-      <div class="title">${company?.name || ""}</div>
-      <div>${company?.City || ""}</div>
-    </div>
-
-    <div class="box">
-      <b>Driver:</b> ${fullName}<br/>
-      <b>License:</b> ${driver.LicenseNumber || ""}
-    </div>
+    <p><b>Driver:</b> ${fullName}</p>
+    <p><b>License:</b> ${driver.LicenseNumber || ""}</p>
 
     ${content}
+
+    <div>
+      ${
+        driver.Sign
+          ? `<img src="${driver.Sign}" width="150"/>`
+          : "Signature: __________"
+      }
+    </div>
 
   </body>
   </html>
   `;
 
-  return await generatePDF(
-    html,
-    `${consentKey}-${driver._id}.pdf`
-  );
+  const filePath = path.join(dir, `${consentKey}_${driver._id}.pdf`);
+
+  return await createPDF(html, filePath);
 };
-module.exports = {
-  generatePDF,
-  generateMedicalPDF,
-  generateDutyPDF,
-  generateSSNPDF,
-  generatevoilationNPDF,
-  generateConsentPDF
-};
+
+
+
+
 // const generatePDF = async (driver) => {
 //   const dir = path.join(process.cwd(), "public/pdfs");
 
