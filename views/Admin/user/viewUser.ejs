@@ -765,11 +765,12 @@ border-radius: 20px;
       </label>
 
 
-   <label class="customUpload">
-      <input class="file"  hidden onclick="openViewModal('<%= viewpdf.MVRRecord %>')">
-        <i class="bi bi-eye"></i>   View Document
-      </input>
-      </label>
+<label class="customUpload">
+  <button type="button" class="file" 
+    onclick="openViewModal('<%= viewpdf.MVRRecord %>')">
+    <i class="bi bi-eye"></i> View Document
+  </button>
+</label>
     </div>
 
     <!-- Uploaded file name show here -->
