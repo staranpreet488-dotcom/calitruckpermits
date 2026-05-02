@@ -690,9 +690,15 @@ I further understand that if I refuse to provide consent for <strong><%= company
   },
 };
 async function generateConsentPDF(driver, consentKey, company) {
-  const browser = await puppeteer.launch({
-    headless: "new"
-  });
+const browser = await puppeteer.launch({
+  headless: "new",
+  args: [
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--disable-gpu'
+  ]
+});
 
   const page = await browser.newPage();
 
@@ -916,65 +922,58 @@ create_Driver: async (req, res) => {
       data: Driver
     });
 
+// ✅ FAST RESPONSE
+res.status(200).json({ success: true, data: Driver });
+
 const driver = await Model.Driver.findById(Driver._id).lean();
 
-const trueConsents = Object.keys(driver)
-  .filter((key) => key.startsWith("Consents") && driver[key] === true);
+setImmediate(async () => {
+  try {
+    console.log("Starting PDF generation...");
 
-// console.log("trueConsentstrueConsents",trueConsents);
+    // ✅ consentPDFs ANDAR hain ab
+    const trueConsents = Object.keys(driver)
+      .filter((key) => key.startsWith("Consents") && driver[key] === true);
+
     const consentPDFs = await Promise.all(
       trueConsents.map((consentKey) =>
-        generateConsentPDF(driver, consentKey,company)
+        generateConsentPDF(driver, consentKey, company)
       )
     );
-    // 🔥 DELAY THODA JEHA (IMPORTANT)
-    setImmediate(async () => {
-      try {
 
-        console.log("Starting PDF generation...");
+    const [pdfPath, Dutypdf, Medicalpdf, SSnpdf, Voilationpdf] = await Promise.all([
+      generatePDF(Driver),
+      generateDutyPDF(Driver),
+      generateMedicalPDF(Driver),
+      generateSSNPDF(Driver),
+      generatevoilationNPDF(Driver)
+    ]);
 
-        const [
-          pdfPath,
-          Dutypdf,
-          Medicalpdf,
-          SSnpdf,
-          Voilationpdf
-        ] = await Promise.all([
-          generatePDF(Driver),
-          generateDutyPDF(Driver),
-          generateMedicalPDF(Driver),
-          generateSSNPDF(Driver),
-          generatevoilationNPDF(Driver)
-        ]);
+    const toUrl = (filePath) => {
+      if (!filePath) return '';
+      return `${BASE_URL}/pdfs/${path.basename(filePath)}`;
+    };
+    const toConsentUrl = (filePath) => {
+      if (!filePath) return '';
+      return `${BASE_URL}/consentpdf/${path.basename(filePath)}`;
+    };
 
-        // Server path → Live URL convert karo
-        const toUrl = (filePath) => {
-          if (!filePath) return '';
-          const fileName = path.basename(filePath);
-          return `${BASE_URL}/pdfs/${fileName}`;
-        };
-        const toConsentUrl = (filePath) => {
-          if (!filePath) return '';
-          const fileName = path.basename(filePath);
-          return `${BASE_URL}/consentpdf/${fileName}`;
-        };
-
-     const pds=   await pdfmodel.create({
-          Driverid: Driver._id,
-          EmploymentApplication: toUrl(pdfPath),
-          Dayscert: toUrl(Dutypdf),
-          MedicalCertificate: toUrl(Medicalpdf),
-          SocialSecurityCard: toUrl(SSnpdf),
-          Violations: toUrl(Voilationpdf),
-          Consents: consentPDFs.map(toConsentUrl)
-        });
-console.log(pds,"pdspdspdspdspds")
-        console.log("PDFs Generated Successfully ✅");
-
-      } catch (error) {
-        console.error("PDF Background Error ❌", error);
-      }
+    const pds = await pdfmodel.create({
+      Driverid: Driver._id,
+      EmploymentApplication: toUrl(pdfPath),
+      Dayscert: toUrl(Dutypdf),
+      MedicalCertificate: toUrl(Medicalpdf),
+      SocialSecurityCard: toUrl(SSnpdf),
+      Violations: toUrl(Voilationpdf),
+      Consents: consentPDFs.map(toConsentUrl)
     });
+
+    console.log(pds, "PDF entry saved ✅");
+
+  } catch (error) {
+    console.error("PDF Background Error ❌", error);
+  }
+});
 
   } catch (err) {
     console.error(err);
