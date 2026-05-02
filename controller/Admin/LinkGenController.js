@@ -33,7 +33,12 @@ module.exports = {
         .replace(/\s+/g, "-")
         .replace(/[^\w-]+/g, "");
       
-        const link = `http://localhost:2000/${slug}`;
+        const baseUrl =
+    process.env.NODE_ENV === "production"
+      ? process.env.LIVE_BASE_URL
+      : process.env.LOCAL_BASE_URL;
+
+  const link = `${baseUrl}/${slug}`;
       
         const company = await LinkModel.create({
           ...req.body,
