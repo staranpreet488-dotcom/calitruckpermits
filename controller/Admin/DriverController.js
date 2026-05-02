@@ -8,7 +8,7 @@ const LinkModel = require("../../Model/LinkModel");
 const pdfmodel =require("../../Model/allpdf")
 
 require('dotenv').config();
-const BASE_URL = process.env.LIVE_BASE_URL || 'https://portal.calipermits.com';
+const BASE_URL = process.env.LIVE_BASE_URL || 'https://localhost:2000';
 
 const helper = require("../../utility/helper");
 const helpers = require("../../utility/helpers");
@@ -873,35 +873,26 @@ module.exports = {
         }
       },
 
-
-
 create_Driver: async (req, res) => {
   try {
-
-    // ================= IMAGE UPLOAD =================
     if (req.files?.image) {
       req.body.image = await helper.imageUpload(req.files.image, "images");
     }
-
     if (req.files?.image1) {
       req.body.image1 = await helper.imageUpload(req.files.image1, "images");
     }
-
     if (req.files?.medicalImage) {
       req.body.medicalImage = await helper.imageUpload(req.files.medicalImage, "images");
     }
-
     if (req.files?.ssnImage) {
       req.body.ssnImage = await helper.imageUpload(req.files.ssnImage, "images");
     }
 
-    // ================= COMPANY =================
     const company = await LinkModel.findOne({ slug: req.params.slug });
     if (!company) {
       return res.status(404).json({ success: false, message: "Company Not Found" });
     }
 
-    // ================= PARSE =================
     let consents = req.body.consents ? JSON.parse(req.body.consents) : {};
     let bodyData = req.body.data ? JSON.parse(req.body.data) : {};
 
@@ -916,73 +907,178 @@ create_Driver: async (req, res) => {
       SocialSecurityImg: req.body.ssnImage,
     });
 
-    // ✅ FAST RESPONSE
-    res.status(200).json({
-      success: true,
-      data: Driver
+    // ✅ Pehle response bhejo
+    res.status(200).json({ success: true, data: Driver });
+
+    // ✅ Phir background mein PDF banao - koi bhi error response nahi bhejega
+    const driver = await Model.Driver.findById(Driver._id).lean();
+
+    setImmediate(async () => {
+      try {
+        console.log("Starting PDF generation...");
+
+        const trueConsents = Object.keys(driver)
+          .filter((key) => key.startsWith("Consents") && driver[key] === true);
+
+        const consentPDFs = await Promise.all(
+          trueConsents.map((consentKey) =>
+            generateConsentPDF(driver, consentKey, company)
+          )
+        );
+
+        const [pdfPath, Dutypdf, Medicalpdf, SSnpdf, Voilationpdf] = await Promise.all([
+          generatePDF(Driver),
+          generateDutyPDF(Driver),
+          generateMedicalPDF(Driver),
+          generateSSNPDF(Driver),
+          generatevoilationNPDF(Driver)
+        ]);
+
+        const toUrl = (fp) => fp ? `${BASE_URL}/pdfs/${path.basename(fp)}` : '';
+        const toConsentUrl = (fp) => fp ? `${BASE_URL}/consentpdf/${path.basename(fp)}` : '';
+
+        const pds = await pdfmodel.create({
+          Driverid: Driver._id,
+          EmploymentApplication: toUrl(pdfPath),
+          Dayscert: toUrl(Dutypdf),
+          MedicalCertificate: toUrl(Medicalpdf),
+          SocialSecurityCard: toUrl(SSnpdf),
+          Violations: toUrl(Voilationpdf),
+          Consents: consentPDFs.map(toConsentUrl)
+        });
+
+        console.log(pds, "PDF entry saved ✅");
+
+      } catch (error) {
+        // ⚠️ Yahan sirf console.error — koi res.json nahi!
+        console.error("PDF Background Error ❌", error);
+      }
     });
-
-// ✅ FAST RESPONSE
-res.status(200).json({ success: true, data: Driver });
-
-const driver = await Model.Driver.findById(Driver._id).lean();
-
-setImmediate(async () => {
-  try {
-    console.log("Starting PDF generation...");
-
-    // ✅ consentPDFs ANDAR hain ab
-    const trueConsents = Object.keys(driver)
-      .filter((key) => key.startsWith("Consents") && driver[key] === true);
-
-    const consentPDFs = await Promise.all(
-      trueConsents.map((consentKey) =>
-        generateConsentPDF(driver, consentKey, company)
-      )
-    );
-
-    const [pdfPath, Dutypdf, Medicalpdf, SSnpdf, Voilationpdf] = await Promise.all([
-      generatePDF(Driver),
-      generateDutyPDF(Driver),
-      generateMedicalPDF(Driver),
-      generateSSNPDF(Driver),
-      generatevoilationNPDF(Driver)
-    ]);
-
-    const toUrl = (filePath) => {
-      if (!filePath) return '';
-      return `${BASE_URL}/pdfs/${path.basename(filePath)}`;
-    };
-    const toConsentUrl = (filePath) => {
-      if (!filePath) return '';
-      return `${BASE_URL}/consentpdf/${path.basename(filePath)}`;
-    };
-
-    const pds = await pdfmodel.create({
-      Driverid: Driver._id,
-      EmploymentApplication: toUrl(pdfPath),
-      Dayscert: toUrl(Dutypdf),
-      MedicalCertificate: toUrl(Medicalpdf),
-      SocialSecurityCard: toUrl(SSnpdf),
-      Violations: toUrl(Voilationpdf),
-      Consents: consentPDFs.map(toConsentUrl)
-    });
-
-    console.log(pds, "PDF entry saved ✅");
-
-  } catch (error) {
-    console.error("PDF Background Error ❌", error);
-  }
-});
 
   } catch (err) {
+    // ✅ Sirf tab response bhejo jab pehle response nahi bheja
+    if (!res.headersSent) {
+      return res.status(500).json({ success: false, message: "Server Error" });
+    }
     console.error(err);
-    return res.status(500).json({
-      success: false,
-      message: "Server Error"
-    });
   }
 },
+
+// create_Driver: async (req, res) => {
+//   try {
+
+//     // ================= IMAGE UPLOAD =================
+//     if (req.files?.image) {
+//       req.body.image = await helper.imageUpload(req.files.image, "images");
+//     }
+
+//     if (req.files?.image1) {
+//       req.body.image1 = await helper.imageUpload(req.files.image1, "images");
+//     }
+
+//     if (req.files?.medicalImage) {
+//       req.body.medicalImage = await helper.imageUpload(req.files.medicalImage, "images");
+//     }
+
+//     if (req.files?.ssnImage) {
+//       req.body.ssnImage = await helper.imageUpload(req.files.ssnImage, "images");
+//     }
+
+//     // ================= COMPANY =================
+//     const company = await LinkModel.findOne({ slug: req.params.slug });
+//     if (!company) {
+//       return res.status(404).json({ success: false, message: "Company Not Found" });
+//     }
+
+//     // ================= PARSE =================
+//     let consents = req.body.consents ? JSON.parse(req.body.consents) : {};
+//     let bodyData = req.body.data ? JSON.parse(req.body.data) : {};
+
+//     const Driver = await Model.Driver.create({
+//       companyLinkId: company._id,
+//       ...bodyData,
+//       ...consents,
+//       Sign: req.body.Sign,
+//       licensefront: req.body.image,
+//       licenseback: req.body.image1,
+//       MedicalImg: req.body.medicalImage,
+//       SocialSecurityImg: req.body.ssnImage,
+//     });
+
+//     // ✅ FAST RESPONSE
+//     res.status(200).json({
+//       success: true,
+//       data: Driver
+//     });
+
+// const driver = await Model.Driver.findById(Driver._id).lean();
+
+// const trueConsents = Object.keys(driver)
+//   .filter((key) => key.startsWith("Consents") && driver[key] === true);
+
+// // console.log("trueConsentstrueConsents",trueConsents);
+//     const consentPDFs = await Promise.all(
+//       trueConsents.map((consentKey) =>
+//         generateConsentPDF(driver, consentKey,company)
+//       )
+//     );
+//     // 🔥 DELAY THODA JEHA (IMPORTANT)
+//     setImmediate(async () => {
+//       try {
+
+//         console.log("Starting PDF generation...");
+
+//         const [
+//           pdfPath,
+//           Dutypdf,
+//           Medicalpdf,
+//           SSnpdf,
+//           Voilationpdf
+//         ] = await Promise.all([
+//           generatePDF(Driver),
+//           generateDutyPDF(Driver),
+//           generateMedicalPDF(Driver),
+//           generateSSNPDF(Driver),
+//           generatevoilationNPDF(Driver)
+//         ]);
+
+//         // Server path → Live URL convert karo
+//         const toUrl = (filePath) => {
+//           if (!filePath) return '';
+//           const fileName = path.basename(filePath);
+//           return `${BASE_URL}/pdfs/${fileName}`;
+//         };
+//         const toConsentUrl = (filePath) => {
+//           if (!filePath) return '';
+//           const fileName = path.basename(filePath);
+//           return `${BASE_URL}/consentpdf/${fileName}`;
+//         };
+
+//      const pds=   await pdfmodel.create({
+//           Driverid: Driver._id,
+//           EmploymentApplication: toUrl(pdfPath),
+//           Dayscert: toUrl(Dutypdf),
+//           MedicalCertificate: toUrl(Medicalpdf),
+//           SocialSecurityCard: toUrl(SSnpdf),
+//           Violations: toUrl(Voilationpdf),
+//           Consents: consentPDFs.map(toConsentUrl)
+//         });
+// console.log(pds,"pdspdspdspdspds")
+//         console.log("PDFs Generated Successfully ✅");
+
+//       } catch (error) {
+//         console.error("PDF Background Error ❌", error);
+//       }
+//     });
+
+//   } catch (err) {
+//     console.error(err);
+//     return res.status(500).json({
+//       success: false,
+//       message: "Server Error"
+//     });
+//   }
+// },
       Companydocument: async (req, res) => {
         console.log("UPLOAD API HIT");
         try {
