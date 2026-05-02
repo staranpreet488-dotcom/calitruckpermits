@@ -189,13 +189,64 @@ const generateSimplePDF = async (data, title) => {
   return filePath;
 };
 
+const generateConsentPDF = async (driver, consentKey, company) => {
+  let consent = consentData[consentKey];
 
+  if (!consent) throw new Error("Invalid consent key");
+
+  const fullName = `${driver.FirstName || ""} ${driver.LastName || ""}`.trim();
+
+  // render EJS content
+  let content = await ejs.render(consent.content, {
+    company,
+  });
+
+  // replace placeholders
+  content = content
+    .replace(/\[Driver Name\]/g, fullName)
+    .replace(/\[License #\]/g, driver.LicenseNumber || "");
+
+  const html = `
+  <html>
+  <head>
+    <style>
+      body { font-family: Arial; font-size: 12px; padding: 25px; }
+      .header { text-align:center; margin-bottom:20px; }
+      .title { font-size:18px; font-weight:bold; }
+      .box { border:1px solid #000; padding:10px; margin-bottom:15px; }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="header">
+      <div class="title">${company?.name || ""}</div>
+      <div>${company?.City || ""}</div>
+    </div>
+
+    <div class="box">
+      <b>Driver:</b> ${fullName}<br/>
+      <b>License:</b> ${driver.LicenseNumber || ""}
+    </div>
+
+    ${content}
+
+  </body>
+  </html>
+  `;
+
+  return await generatePDF(
+    html,
+    `${consentKey}-${driver._id}.pdf`
+  );
+};
 module.exports = {
   generatePDF,
   generateMedicalPDF,
   generateDutyPDF,
   generateSSNPDF,
   generateViolationPDF,
+  generateConsentPDF
 };
 // const generatePDF = async (driver) => {
 //   const dir = path.join(process.cwd(), "public/pdfs");
