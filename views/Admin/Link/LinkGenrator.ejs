@@ -1,0 +1,199 @@
+<%- include('../common/header'); -%>
+<%- include('../common/sidebar'); -%>
+
+<style>
+  .new_lable {
+    color: black;
+    font-size: 13px;
+    font-weight: 500;
+  }
+</style>
+
+<body class="vertical-layout vertical-menu-modern navbar-floating footer-static">
+
+  <!-- BEGIN: Content-->
+  <div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+
+    <div class="content-wrapper container-xxl p-0">
+
+      <!-- Header -->
+      <div class="content-header row"></div>
+
+      <!-- Body -->
+      <div class="content-body">
+
+        <section id="multiple-column-form">
+          <div class="row">
+
+            <div class="col-md-12 col-12">
+              <div class="card">
+
+                <!-- Card Header -->
+                <div class="card-header border-bottom">
+                  <h4 class="card-title">Create Company</h4>
+                </div>
+
+                <!-- Card Body -->
+                <div class="card-body">
+
+                  <form class="form form-horizontal" action="/create_companyLink" method="POST" id="companyForm">
+
+                    <div class="row">
+
+                      <!-- Row with 3 fields -->
+                      <div class="mb-2 row">
+                        
+                        <div class="col-md-4">
+                          <label class="form-label">Company Name</label>
+                          <input type="text" class="form-control" name="name" placeholder="Enter Company Name">
+                        </div>
+                    
+                        <div class="col-md-4">
+                          <label class="form-label">DOT</label>
+                          <input type="text" class="form-control" name="DOT" placeholder="Enter DOT">
+                        </div>
+                    
+                        <div class="col-md-4">
+                          <label class="form-label">MC</label>
+                          <input type="text" class="form-control" name="MC" placeholder="Enter MC">
+                        </div>
+                    
+                      </div>
+                    
+                      <!-- Next Row -->
+                      <div class="mb-2 row">
+                        
+                        <div class="col-md-4">
+                          <label class="form-label">Street</label>
+                          <input type="text" class="form-control" name="Street" placeholder="Enter Street">
+                        </div>
+                    
+                        <div class="col-md-4">
+                          <label class="form-label">City</label>
+                          <input type="text" class="form-control" name="City" placeholder="Enter City">
+                        </div>
+                    
+                        <div class="col-md-4">
+                          <label class="form-label">State</label>
+                          <input type="text" class="form-control" name="State" placeholder="Enter State">
+                        </div>
+                    
+                      </div>
+                    
+                      <!-- Next Row -->
+                      <div class="mb-2 row">
+                        
+                        <div class="col-md-4">
+                          <label class="form-label">Zip Code</label>
+                          <input type="text" class="form-control" name="ZipCode" placeholder="Enter Zip Code">
+                        </div>
+                    
+                        <div class="col-md-4">
+                          <label class="form-label">Email Address</label>
+                          <input type="email" class="form-control" name="EmailAddress" placeholder="Enter Email">
+                        </div>
+                    
+                        <div class="col-md-4">
+                          <label class="form-label">Phone Number</label>
+                          <input type="text" class="form-control" name="PhoneNumber" placeholder="Enter Phone">
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-12">
+                          <label class="form-label">Account Status</label>
+                          <select class="form-control" name="AccountStatus">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="Onboarding">In Onboarding</option>
+                            <option value="Pending">Pending</option>
+                          </select>
+                        </div>
+                      </div>
+                    
+                      <!-- Submit -->
+                      <div class="text-end mt-3">
+                        <button type="submit" class="btn btn-primary">
+                          Create Company
+                        </button>
+                      </div>
+                    
+                    </div>
+
+                  </form>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="sidenav-overlay"></div>
+  <div class="drag-target"></div>
+
+<%- include('../common/footer'); -%>
+
+
+<!-- VALIDATION -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+
+    // No space validation
+    jQuery.validator.addMethod("noSpace", function (value, element) {
+      return value.trim().length != 0;
+    }, "No space please");
+
+    // Form validation
+    $('#companyForm').validate({
+      rules: {
+        name: {
+          required: true,
+          noSpace: true,
+          maxlength: 60
+        },
+        slug: {
+          required: true,
+          noSpace: true
+        }
+      },
+
+      messages: {
+        name: {
+          required: "Company name is required"
+        },
+        slug: {
+          required: "Slug is required"
+        }
+      },
+
+      errorElement: "div",
+      errorClass: "jqval-error",
+
+      errorPlacement: function (error, element) {
+        error.insertAfter(element);
+        error.slideDown(300);
+      },
+
+      submitHandler: function (form) {
+        form.submit();
+      }
+    });
+
+    // Auto slug generate
+    $('input[name="name"]').on('keyup', function () {
+      let slug = $(this).val()
+        .toLowerCase()
+        .replace(/ /g, '-')
+        .replace(/[^\w-]+/g, '');
+
+      $('input[name="slug"]').val(slug);
+    });
+
+  });
+</script>

@@ -1,0 +1,153 @@
+
+
+
+
+
+
+
+<%- include('../common/header') %>
+<%- include('../common/sidebar') %>
+
+<style>
+  .dashboard-card {
+    border: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+
+  .dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+
+  .dashboard-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bg-soft-primary {
+    background: rgba(115, 103, 240, 0.15);
+  }
+
+  .dashboard-title {
+    font-size: 14px;
+    color: #6e6b7b;
+  }
+
+  .dashboard-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #5e5873;
+  }
+
+  .chart-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  }
+  
+</style>
+
+<div class="app-content content">
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+
+      <!-- Header -->
+      <div class="mb-2">
+        <h2 class="fw-bold">Dashboard</h2>
+        <!-- <p class="text-muted">Welcome back 👋</p> -->
+      </div>
+     
+      <!-- Cards Row -->
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-12 mb-2">
+          <div class="card dashboard-card p-2" onclick="location.href='/LinkList'" style="cursor:pointer;">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <div class="dashboard-value"><%= Clients %></div>
+                <div class="dashboard-title">Total Clients</div>
+              </div>
+              <div class="dashboard-icon bg-soft-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" height="28" viewBox="0 -960 960 960" width="28" fill="#7367f0">
+                  <path d="M480-480q-66 0-108-42t-42-108q0-66 42-108t108-42q66 0 108 42t42 108q0 66-42 108t-108 42ZM160-160v-112q0-34 17-62t47-43q51-25 115-39t141-14q77 0 141 14t115 39q30 15 47 43t17 62v112H160Z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-12 mb-2">
+          <div class="card dashboard-card p-2" onclick="location.href='/dashboard'" style="cursor:pointer;">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <div class="dashboard-value"><%= users %></div>
+                <div class="dashboard-title">Total Drivers</div>
+              </div>
+              <div class="dashboard-icon bg-soft-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" height="28" viewBox="0 -960 960 960" width="28" fill="#7367f0">
+                  <path d="M480-480q-66 0-108-42t-42-108q0-66 42-108t108-42q66 0 108 42t42 108q0 66-42 108t-108 42ZM160-160v-112q0-34 17-62t47-43q51-25 115-39t141-14q77 0 141 14t115 39q30 15 47 43t17 62v112H160Z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+  
+      </div>
+
+      <!-- Chart -->
+      <div class="row mt-3">
+        <div class="col-12">
+          <div class="card chart-card p-2">
+            <h5 class="mb-2">Monthly Clients</h5>
+            <div id="barChart" style="height:350px;"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ApexCharts -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<script>
+  var users = <%- JSON.stringify(monthusers) %>;
+
+  var options = {
+    series: [{
+      name: 'Total Clients',
+      data: users
+    }],
+    chart: {
+      type: 'bar',
+      height: 350,
+      toolbar: { show: false }
+    },
+    colors: ['var(--theme)', 'rgba(12, 173, 213, 0.82)'],
+    plotOptions: {
+      bar: {
+        borderRadius: 6,
+        columnWidth: '40%',
+      }
+    },
+    dataLabels: { enabled: false },
+    xaxis: {
+      categories: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+    },
+    yaxis: {
+      title: { text: "Total Clients" }
+    }
+  };
+
+  var chart = new ApexCharts(document.querySelector("#barChart"), options);
+  chart.render();
+</script>
+
+<%- include('../common/footer') %>

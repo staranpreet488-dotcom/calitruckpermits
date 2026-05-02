@@ -1,0 +1,2193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Driver Application</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <!-- Heroicons -->
+    <style>
+      .error-border {
+  border: 1px solid red !important;
+}
+
+.error-msg {
+  font-size: 12px;
+}
+      .step {
+        cursor: pointer;
+      }
+
+      .active {
+        color: #2563eb;
+        font-weight: 600;
+        border-bottom: 2px solid #2563eb;
+        padding-bottom: 4px;
+      }
+    </style>
+    <style>
+      .active-circle {
+        background-color: #3b82f6;
+        color: white;
+      }
+
+      .completed-circle {
+        background-color: #22c55e;
+        color: white;
+      }
+
+      .completed-line {
+        background-color: #22c55e;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100 px-4 md:px-[200px] py-4 md:py-8">
+  
+    <!-- HEADER -->
+    <form action="" method="POST" enctype="multipart/form-data">
+  
+    <div
+      class="bg-white rounded-xl shadow p-4 md:p-5 flex flex-col md:flex-row justify-between gap-4"
+    >
+      <div class="flex items-start gap-4">
+        <div
+          class="w-12 h-12 bg-blue-100 flex items-center justify-center rounded-lg text-2xl"
+        >
+          <img
+            class="min-w-28"
+            src="/app-assets/images/MATTRIFELOGO.png"
+            height="100"
+          />
+        </div>
+
+        <div>
+          <h2 class="text-lg md:text-xl font-bold">
+            <%= company?.name ? company.name.charAt(0).toUpperCase() +
+            company.name.slice(1) : 'undefined' %>
+          </h2>
+          <p class="text-sm text-gray-500">
+            Applying for professional driver position
+          </p>
+
+          <div class="flex flex-wrap gap-2 mt-2">
+            <span class="bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded"
+              >DOT# <%= company?.DOT ? company.DOT : 'undefined' %></span
+            >
+            <span class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded"
+              ><%= company?.MC ? company.MC : 'undefined' %></span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="text-sm text-gray-600 md:text-right">
+        <p>
+          📍 <%= company?.Street %>, <%= company?.City %> ,<%= company?.State %>
+          <%= company?.ZipCode %>
+        </p>
+        <p>📞 <%= company?.PhoneNumber %></p>
+        <p>✉ <%= company?.EmailAddress %></p>
+      </div>
+    </div>
+
+    <!-- STEPPER (RESPONSIVE) -->
+    <div class="mt-6 overflow-x-auto">
+      <div
+        class="min-w-[700px] md:min-w-full flex items-center justify-between"
+      >
+        <!-- STEP 1 -->
+        <div class="flex items-center flex-1" data-step="0">
+          <!-- ICON CIRCLE -->
+          <div
+            class="circle w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center"
+          >
+            <!-- Heroicon: truck -->
+            <i class="text-gray" data-feather="truck"></i>
+          </div>
+
+          <!-- LINE -->
+          <div class="h-1 flex-1 bg-gray-300"></div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="flex items-center flex-1" data-step="1">
+          <div
+            class="circle w-10 h-10 border rounded-full flex items-center justify-center"
+          >
+            <i class="text-gray" data-feather="home"></i>
+          </div>
+          <div class="h-1 flex-1 bg-gray-300"></div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="flex items-center flex-1" data-step="2">
+          <div
+            class="circle w-10 h-10 border rounded-full flex items-center justify-center"
+          >
+            <i data-feather="credit-card"></i>
+          </div>
+          <div class="h-1 flex-1 bg-gray-300"></div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="flex items-center flex-1" data-step="3">
+          <div
+            class="circle w-10 h-10 border rounded-full flex items-center justify-center"
+          >
+            ✓
+          </div>
+          <div class="h-1 flex-1 bg-gray-300"></div>
+        </div>
+
+        <!-- STEP 5 -->
+        <div class="flex items-center flex-1" data-step="4">
+          <div
+            class="circle w-10 h-10 border rounded-full flex items-center justify-center"
+          >
+            <i data-feather="alert-triangle"></i>
+          </div>
+          <div class="h-1 flex-1 bg-gray-300"></div>
+        </div>
+        <div class="flex items-center flex-1" data-step="5">
+          <div
+            class="circle w-10 h-10 border rounded-full flex items-center justify-center"
+          >
+            <i data-feather="briefcase"></i>
+          </div>
+          <div class="h-1 flex-1 bg-gray-300"></div>
+        </div>
+        <div class="flex items-center flex-1" data-step="6">
+          <div
+            class="circle w-10 h-10 border rounded-full flex items-center justify-center"
+          >
+            <i data-feather="alert-triangle"></i>
+          </div>
+          <div class="h-1 flex-1 bg-gray-300"></div>
+        </div>
+        <div
+          class="circle w-10 h-10 border rounded-full flex items-center justify-center"
+        >
+          <i data-feather="briefcase"></i>
+        </div>
+      </div>
+      <!-- STEP 6 -->
+      <div class="flex items-center"></div>
+    </div>
+
+    <!-- LABELS -->
+    <div
+      id="steps"
+      class="hidden md:flex justify-between text-xs text-gray-500 mt-2 px-2"
+    >
+      <span class="step" data-step="0">Personal</span>
+      <span class="step" data-step="1">Residence</span>
+      <span class="step" data-step="2">License</span>
+      <span class="step" data-step="3">Experience</span>
+      <span class="step" data-step="4">Incidents</span>
+      <span class="step" data-step="5">Employment</span>
+      <span class="step" data-step="6">7 Days Duty</span>
+      <span class="step" data-step="7">Consents</span>
+    </div>
+
+    <!-- PROGRESS -->
+
+    <div class="form-step" data-step="0">
+      <div class="mx-auto mt-3 bg-white shadow-lg rounded-xl p-6">
+        <!-- HEADER -->
+        <h2 class="text-lg font-semibold text-blue-600 border-b pb-2">
+          Personal Information
+        </h2>
+  
+        <!-- GRID -->
+        <div class="grid md:grid-cols-3 gap-4 mt-4">
+          <div>
+            <label class="text-sm text-gray-600">First Name <span class="text-red-600">*</span></label>
+            <input
+              type="text"
+              placeholder="First Name"
+              name="FirstName"
+              class="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-blue-400"
+              required
+            />
+             <small class="text-red-500 hidden error-msg">First Name is required</small>
+          </div>
+  
+          <div>
+            <label class="text-sm text-gray-600">Last Name <span class="text-red-600">*</span></label>
+            <input   name="LastName"
+              type="text"
+              placeholder="Last Name"
+              class="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-blue-400"
+              required
+            />
+           <small class="text-red-500 hidden error-msg">Last Name is required</small>
+          </div>
+  
+          <div>
+            <label class="text-sm text-gray-600">SSN <span class="text-red-600">*</span></label>
+            <input   name="SSN"
+              type="text"
+              placeholder="xxx-xx-xxxx"
+              class="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-blue-400"
+              required
+            />
+           <small class="text-red-500 hidden error-msg">SSN  is required</small>
+          </div>
+  
+          <div>
+            <label class="text-sm text-gray-600">Contact Number <span class="text-red-600">*</span></label>
+            <input   name="Contact"
+              type="text"
+              placeholder="10-15 digit number"
+              class="w-full mt-1 p-2 border rounded"
+              required
+            />
+           <small class="text-red-500 hidden error-msg">Contact Number is required</small>
+          </div>
+  
+          <div>
+            <label class="text-sm text-gray-600">Alt Contact</label>
+            <input   name="AltContact"
+              type="text"
+              placeholder="Optional"
+              class="w-full mt-1 p-2 border rounded"
+            />
+         
+          </div>
+  
+          <div>
+            <label class="text-sm text-gray-600">Date of Birth <span class="text-red-600">*</span></label>
+            <input   name="Dob" type="date" class="w-full mt-1 p-2 border rounded" required />
+           <small class="text-red-500 hidden error-msg">Date of Birth is required</small>
+          </div>
+  
+          <div class="md:col-span-2">
+            <label class="text-sm text-gray-600">Email <span class="text-red-600">*</span></label>
+            <input   name="Email"
+              type="email"
+              placeholder="email@example.com"
+              class="w-full mt-1 p-2 border rounded" required
+            />
+           <small class="text-red-500 hidden error-msg">Email is required</small>
+          </div>
+  
+          <div class="md:col-span-3">
+            <label class="text-sm text-gray-600">Address <span class="text-red-600">*</span></label>
+            <input   name="Address"
+              type="text"
+              placeholder="123 Main St"
+              class="w-full mt-1 p-2 border rounded" required
+            />
+           <small class="text-red-500 hidden error-msg">Address is required</small>
+          </div>
+  
+          <div>
+            <label class="text-sm text-gray-600">City <span class="text-red-600">*</span></label>
+            <input   name="City" class="w-full mt-1 p-2 border rounded" required />
+           <small class="text-red-500 hidden error-msg">City is required</small>
+          </div>
+  
+          <div>
+            <label class="text-sm text-gray-600">State <span class="text-red-600">*</span></label>
+            <input   name="State" class="w-full mt-1 p-2 border rounded" required />
+           <small class="text-red-500 hidden error-msg">State is required</small>
+          </div>
+  
+          <div>
+            <label class="text-sm text-gray-600">Zip Code <span class="text-red-600">*</span></label>
+            <input   name="Zip" class="w-full mt-1 p-2 border rounded" required />
+           <small class="text-red-500 hidden error-msg">Zip Code is required</small>
+          </div>
+        </div>
+  
+        <!-- MEDICAL SECTION -->
+        <h2 class="text-lg font-semibold mt-8 border-b pb-2">
+          Medical & Identification
+        </h2>
+  
+        <div class="grid md:grid-cols-3 gap-4 mt-4">
+          <div>
+            <label class="text-sm text-gray-600">Medical Registry <span class="text-red-600">*</span></label>
+            <input   name="MedicalRegistry" class="w-full mt-1 p-2 border rounded" required />
+            <small class="text-red-500 hidden error-msg">Medical Registry is required</small>
+          </div>
+         
+          <div>
+            <label class="text-sm text-gray-600">Medical Expiry <span class="text-red-600">*</span></label>
+            <input   name="MedicalExpiry" type="date" class="w-full mt-1 p-2 border rounded" required />
+            <small class="text-red-500 hidden error-msg">Medical Expiry is required</small>
+          </div>
+  
+          <div>
+            <label class="text-sm text-gray-600">TWIC Card?</label>
+            <div class="flex gap-4 mt-2">
+              <label><input type="radio" name="TWIC"  value="Yes" /> Yes</label>
+              <label><input type="radio" name="TWIC"  value="No" /> No</label>
+            </div>
+          </div>
+  
+          <div>
+            <label class="text-sm text-gray-600">Passport?</label>
+            <div class="flex gap-4 mt-2">
+              <label><input type="radio" name="Passport"  value="Yes"/> Yes</label>
+              <label><input type="radio" name="Passport"  value="No" /> No</label>
+            </div>
+          </div>
+        </div>
+  
+        <!-- UPLOAD BOX -->
+          <div class="mt-6">
+            <label class="text-sm text-gray-600">Upload Medical Card <span class="text-red-600">*</span></label>
+          
+            <label
+              class="mt-2 border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:bg-gray-50 block"
+            >
+              <p class="text-gray-500 text-sm">Upload a file or drag and drop</p>
+              <p class="text-xs text-gray-400">PNG, JPG, PDF up to 10MB</p>
+          
+              <!-- Hidden File Input -->
+              <input
+                type="file"
+                
+                name="medicalImage"
+                accept=".png,.jpg,.jpeg,.pdf"
+                onchange="handleFileUpload(event)"
+                required
+              />
+
+            </label>
+         
+          </div>
+     <small class="text-red-500 hidden error-msg">Medical Card is required</small>
+        <!-- SOCIAL CARD -->
+        <h2 class="text-lg font-semibold mt-8 border-b pb-2">
+          Social Security Card
+        </h2>
+  
+        <div class="mt-4">
+          
+          <label class="text-sm text-gray-600"
+            >Upload Social Security Card <span class="text-red-600">*</span></label
+          >
+   
+      
+          <label
+          class="mt-2 border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:bg-gray-50 block"
+        >
+          <p class="text-gray-500 text-sm">Upload Social Security Card <span class="text-red-600">*</span></p>
+          <p class="text-xs text-gray-400">PNG, JPG, PDF up to 10MB</p>
+      
+          <!-- Hidden File Input -->
+          <input
+            type="file"
+            name="ssnImage"
+  required
+            
+            accept=".png,.jpg,.jpeg,.pdf"
+            onchange="handleFileUpload(event)"
+          />
+        </label>
+       
+        </div>
+   <small class="text-red-500 hidden error-msg">Social Security Card is required</small>
+        <!-- BUTTON -->
+        <div class="flex justify-between items-center mt-8">
+       
+     <button
+                type="button"
+                class=" clear-form items-center px-3 py-2 text-red-500 text-[10px] sm:text-xs font-medium hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100"
+                title="Clear all data"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-refresh-cw w-3 h-3 mr-1.5"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+                  ></path>
+                  <path d="M21 3v5h-5"></path>
+                  <path
+                    d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+                  ></path>
+                  <path d="M8 16H3v5"></path></svg
+                >Clear Form
+              </button>
+  
+          <button class="next-btn bg-blue-600 text-white px-6 py-2 rounded-lg">
+            Next Step →
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <script>
+      function handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+          console.log("Selected file:", file.name);
+          alert("File selected: " + file.name);
+        }
+      }
+    </script>
+    
+
+    <!-- -------------------------------------resdence------------------------ -->
+
+    <div class="form-step hidden" data-step="1">
+      <div class="mx-auto mt-3 bg-white shadow-lg rounded-xl p-6">
+        <!-- HEADER -->
+        <h2 class="text-lg font-semibold text-blue-600 border-b pb-2">
+          Residence History
+        </h2>
+  
+        <!-- GRID -->
+        <div class="grid md:grid-cols-3 gap-4 mt-4">
+          <div>
+            <label class="text-sm text-gray-600">Address<span class="text-red-600"><span class="text-red-600">*</span></span></label>
+            <input
+              type="text"
+              name="ResidenceAddress"
+              placeholder="Address"
+              class="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-blue-400"
+              required
+            />
+           <small class="text-red-500 hidden error-msg">Address  is required</small>
+
+          </div>
+  
+          <div>
+            <label class="text-sm text-gray-600">City <span class="text-red-600">*</span></label>
+            <input  name="ResidenceCity"
+              type="text"
+              placeholder="City"
+              class="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-blue-400"
+              required
+            />
+           <small class="text-red-500 hidden error-msg">City  is required</small>
+          
+          </div>
+  
+          <div>
+            <label class="text-sm text-gray-600">State <span class="text-red-600">*</span></label>
+            <input  name="ResidenceState"
+              type="text"
+              placeholder="State"
+              class="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-blue-400"
+              required
+            />
+           <small class="text-red-500 hidden error-msg">State  is required</small>
+          
+          </div>
+  
+          <div>
+            <label class="text-sm text-gray-600"> Country <span class="text-red-600">*</span></label>
+            <input  name="ResidenceCountry"
+              type="text"
+              placeholder="Country "
+              class="w-full mt-1 p-2 border rounded" required
+            />
+           <small class="text-red-500 hidden error-msg">Country  is required</small>
+          
+          </div>
+  
+          <div>
+            <label class="text-sm text-gray-600">Zip Code <span class="text-red-600">*</span> </label>
+            <input  name="ResidenceZip"
+              type="text"
+              placeholder="Zip Code"
+              class="w-full mt-1 p-2 border rounded" required
+            />
+           <small class="text-red-500 hidden error-msg">Zip Code  is required</small>
+          
+          </div>
+        </div>
+  
+        <!-- MEDICAL SECTION -->
+        <h2 class="text-lg font-semibold mt-8 border-b pb-2">
+          Emergency Contact
+        </h2>
+  
+        <div class="grid md:grid-cols-3 gap-4 mt-4">
+          <div>
+            <label class="text-sm text-gray-600">Full Name <span class="text-red-600">*</span></label>
+            <input  name="EmergencyFullname" class="w-full mt-1 p-2 border rounded" required />
+           <small class="text-red-500 hidden error-msg">Full Name  is required</small>
+          
+          </div>
+  
+          <div>
+            <label class="text-sm text-gray-600">Relationship <span class="text-red-600">*</span></label>
+            <input  name="EmRelationship" type="text" class="w-full mt-1 p-2 border rounded" required />
+           <small class="text-red-500 hidden error-msg">Relationship  is required</small>
+          
+          </div>
+  
+          <div>
+            <label class="text-sm text-gray-600">Phone Number <span class="text-red-600">*</span></label>
+            <input  name="EmPhone" type="number" class="w-full mt-1 p-2 border rounded" required />
+           <small class="text-red-500 hidden error-msg">Phone Number  is required</small>
+          
+          </div>
+        </div>
+  
+        <!-- BUTTON -->
+        <div class="flex justify-between items-center mt-8">
+        <button
+                type="button"
+                class=" clear-form items-center px-3 py-2 text-red-500 text-[10px] sm:text-xs font-medium hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100"
+                title="Clear all data"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-refresh-cw w-3 h-3 mr-1.5"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+                  ></path>
+                  <path d="M21 3v5h-5"></path>
+                  <path
+                    d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+                  ></path>
+                  <path d="M8 16H3v5"></path></svg
+                >Clear Form
+              </button>
+  
+          <button class="next-btn bg-blue-600 text-white px-6 py-2 rounded-lg">
+            Next Step →
+          </button>
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- licencse -->
+
+
+    <%- include('./licencse.ejs') %>
+
+    <!-- drving ex -->
+
+    <%- include('./drving.ejs') %>
+
+    <!-- incident -->
+
+ 
+    <%- include('./incident.ejs') %>
+
+    <!-- employment -->
+
+    <%- include('./employment.ejs') %>
+
+    <!-- 7days -->
+    <%- include('./7days.ejs') %>
+
+  
+
+    <!-- -------------------consent------------------------------- -->
+    <div class="form-step hidden" data-step="7">
+
+      <div
+        class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-gray-100 overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-blue-600 to-blue-700 p-1 h-2 w-full"
+        ></div>
+        <div class="p-4 sm:p-6 md:p-10">
+          <form novalidate="" class="min-h-[400px]">
+            <div class="animate-fadeIn">
+              <div class="mb-4 sm:mb-6 border-b pb-2">
+                <h2 class="text-lg sm:text-xl font-bold text-gray-800">
+                  Final Consents
+                </h2>
+                <p class="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">
+                  Please read carefully and accept all terms to proceed.
+                </p>
+              </div>
+              <div
+                class="mb-8 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r text-sm text-blue-900 leading-relaxed"
+              >
+                <p class="font-semibold mb-1">Legal Disclaimer:</p>
+                By submitting this application, I certify that I have read and
+                understood all the above documents and that the information
+                provided is true and complete to the best of my knowledge.
+              </div>
+              <div class="space-y-4 mb-8">
+                <div
+                  class="flex items-center justify-between p-4 rounded-xl border transition-all bg-white border-gray-200 hover:border-blue-200 hover:shadow-sm"
+                >
+                  <label
+                    class="flex items-center space-x-3 cursor-pointer flex-grow select-none"
+                    >
+                    <input  type="checkbox" data-key="Consents1" class="consent-checkbox" /><span
+                      class="text-sm font-medium transition-colors text-gray-700"
+                      >FMCSA Clearinghouse Limited Query Consent</span
+                    ></label
+                  ><button
+                    type="button"
+                    onclick="openModal(this)" data-consent="Consents1"
+                    class="flex items-center ml-4 px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-100"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-eye w-3.5 h-3.5 mr-1.5"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                      ></path>
+                      <circle cx="12" cy="12" r="3"></circle></svg
+                    >View
+                  </button>
+                </div>
+                <div
+                  class="flex items-center justify-between p-4 rounded-xl border transition-all bg-white border-gray-200 hover:border-blue-200 hover:shadow-sm"
+                >
+                  <label
+                    class="flex items-center space-x-3 cursor-pointer flex-grow select-none"
+                    >
+                    <input  type="checkbox" data-key="Consents2" class="consent-checkbox" /><span
+                      class="text-sm font-medium transition-colors text-gray-700"
+                      >FMCSA PSP Disclosure &amp; Authorization</span
+                    ></label
+                  ><button
+                    type="button"
+                    onclick="openModal(this)" data-consent="Consents2"
+                    class="flex items-center ml-4 px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-100"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-eye w-3.5 h-3.5 mr-1.5"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                      ></path>
+                      <circle cx="12" cy="12" r="3"></circle></svg
+                    >View
+                  </button>
+                </div>
+                <div
+                  class="flex items-center justify-between p-4 rounded-xl border transition-all bg-white border-gray-200 hover:border-blue-200 hover:shadow-sm"
+                >
+                  <label
+                    class="flex items-center space-x-3 cursor-pointer flex-grow select-none"
+                    >
+                    <input  type="checkbox" data-key="Consents3" class="consent-checkbox" /><span
+                      class="text-sm font-medium transition-colors text-gray-700"
+                      >Pre-Employment Employee Alcohol &amp; Drug Test
+                      Statement</span
+                    ></label
+                  ><button
+                    type="button"
+                    onclick="openModal(this)" data-consent="Consents3"
+                    class="flex items-center ml-4 px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-100"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-eye w-3.5 h-3.5 mr-1.5"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                      ></path>
+                      <circle cx="12" cy="12" r="3"></circle></svg
+                    >View
+                  </button>
+                </div>
+                <div
+                  class="flex items-center justify-between p-4 rounded-xl border transition-all bg-white border-gray-200 hover:border-blue-200 hover:shadow-sm"
+                >
+                  <label
+                    class="flex items-center space-x-3 cursor-pointer flex-grow select-none"
+                    >
+                    <input  type="checkbox" data-key="Consents4" class="consent-checkbox" /><span
+                      class="text-sm font-medium transition-colors text-gray-700"
+                      >Safety Performance History Investigation</span
+                    ></label
+                  ><button
+                    type="button"
+                    onclick="openModal(this)" data-consent="Consents4"
+                    class="flex items-center ml-4 px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-100"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-eye w-3.5 h-3.5 mr-1.5"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                      ></path>
+                      <circle cx="12" cy="12" r="3"></circle></svg
+                    >View
+                  </button>
+                </div>
+                <div
+                  class="flex items-center justify-between p-4 rounded-xl border transition-all bg-white border-gray-200 hover:border-blue-200 hover:shadow-sm"
+                >
+                  <label
+                    class="flex items-center space-x-3 cursor-pointer flex-grow select-none"
+                    >
+                    <input  type="checkbox" data-key="Consents5" class="consent-checkbox" /><span
+                      class="text-sm font-medium transition-colors text-gray-700"
+                      >Employer Pull Notice Program Authorization (CA EPN)</span
+                    ></label
+                  ><button
+                    type="button"
+                    onclick="openModal(this)" data-consent="Consents5"
+                    class="flex items-center ml-4 px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-100"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-eye w-3.5 h-3.5 mr-1.5"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                      ></path>
+                      <circle cx="12" cy="12" r="3"></circle></svg
+                    >View
+                  </button>
+                </div>
+                <div
+                  class="flex items-center justify-between p-4 rounded-xl border transition-all bg-white border-gray-200 hover:border-blue-200 hover:shadow-sm"
+                >
+                  <label
+                    class="flex items-center space-x-3 cursor-pointer flex-grow select-none"
+                    >
+                    <input  type="checkbox" data-key="Consents6" class="consent-checkbox" /><span
+                      class="text-sm font-medium transition-colors text-gray-700"
+                      >Motor Vehicle Record (MVR) Consent</span
+                    ></label
+                  ><button
+                    type="button"
+                    onclick="openModal(this)" data-consent="Consents6"
+                    class="flex items-center ml-4 px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-100"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-eye w-3.5 h-3.5 mr-1.5"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                      ></path>
+                      <circle cx="12" cy="12" r="3"></circle></svg
+                    >View
+                  </button>
+                </div>
+                <div
+                  class="flex items-center justify-between p-4 rounded-xl border transition-all bg-white border-gray-200 hover:border-blue-200 hover:shadow-sm"
+                >
+                  <label
+                    class="flex items-center space-x-3 cursor-pointer flex-grow select-none"
+                    >
+                    <input  type="checkbox" data-key="Consents7" class="consent-checkbox" /><span
+                      class="text-sm font-medium transition-colors text-gray-700"
+                      >General Work Policy &amp; Driver Handbook
+                      Acknowledgment</span
+                    ></label
+                  ><button
+                    type="button"
+                    onclick="openModal(this)" data-consent="Consents7"
+                    class="flex items-center ml-4 px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-100"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-eye w-3.5 h-3.5 mr-1.5"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                      ></path>
+                      <circle cx="12" cy="12" r="3"></circle></svg
+                    >View
+                  </button>
+                </div>
+                <div
+                  class="flex items-center justify-between p-4 rounded-xl border transition-all bg-white border-gray-200 hover:border-blue-200 hover:shadow-sm"
+                >
+                  <label
+                    class="flex items-center space-x-3 cursor-pointer flex-grow select-none"
+                    >
+                    <input  type="checkbox" data-key="Consents8" class="consent-checkbox" /><span
+                      class="text-sm font-medium transition-colors text-gray-700"
+                      >Drug &amp; Alcohol Policy Acknowledgment</span
+                    ></label
+                  ><button
+                    type="button"
+                    onclick="openModal(this)" data-consent="Consents8"
+                    class="flex items-center ml-4 px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-100"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-eye w-3.5 h-3.5 mr-1.5"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                      ></path>
+                      <circle cx="12" cy="12" r="3"></circle></svg
+                    >View
+                  </button>
+                </div>
+              </div>
+              <div class="mb-6">
+                <div class="flex justify-between items-end mb-2">
+                  <label
+                    class="block text-sm font-medium text-gray-700 flex items-center"
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-pen-tool w-4 h-4 mr-2 text-blue-600"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z"
+                      ></path>
+                      <path
+                        d="m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18"
+                      ></path>
+                      <path d="m2.3 2.3 7.286 7.286"></path>
+                      <circle cx="11" cy="11" r="2"></circle></svg
+                    >Applicant Signature
+                    <span class="text-red-500 ml-1"><span class="text-red-600">*</span></span></label
+                  >
+                  <button
+                  type="button"
+                  class="clear-signature-btn text-xs text-red-500 hover:text-red-700 flex items-center bg-red-50 px-2 py-1 rounded"
+                >
+            
+             
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-trash2 lucide-trash-2 w-3 h-3 mr-1"
+                      aria-hidden="true"
+                    >
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                      <path d="M3 6h18"></path>
+                      <path
+                        d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                      ></path></svg
+                    >Clear Signature
+                  </button>
+                </div>
+                <div
+                  class="border-2 border-dashed border-gray-300 rounded-xl bg-white overflow-hidden touch-none hover:border-blue-300 transition-colors"
+                >
+                  <canvas
+                    width="600"
+                    height="200"
+                    class="w-full h-40 cursor-crosshair touch-none"
+                    data-key="ApplicantSignature"
+                  ></canvas>
+                </div>
+                <p class="text-xs text-gray-400 mt-1">
+                  Sign above using your mouse or finger.
+                </p>
+              </div>
+            </div>
+          </form>
+          <div
+            class="mt-8 sm:mt-12 flex items-center justify-between pt-6 border-t border-gray-100"
+          >
+            <div class="flex space-x-2">
+              <button
+                type="button"
+                class="flex items-center px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg text-gray-600 font-medium hover:bg-gray-100 hover:text-gray-900 transition-colors disabled:opacity-50 text-sm"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-chevron-left w-4 h-4 mr-1 sm:mr-2"
+                  aria-hidden="true"
+                >
+                  <path d="m15 18-6-6 6-6"></path>
+                </svg>
+                Back</button
+              ><button
+                type="button"
+                class=" clear-form items-center px-3 py-2 text-red-500 text-[10px] sm:text-xs font-medium hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100"
+                title="Clear all data"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-refresh-cw w-3 h-3 mr-1.5"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+                  ></path>
+                  <path d="M21 3v5h-5"></path>
+                  <path
+                    d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+                  ></path>
+                  <path d="M8 16H3v5"></path></svg
+                >Clear Form
+              </button>
+            </div>
+            <button
+              type="button"
+              class=" submit-application-btn flex items-center px-6 sm:px-8 py-2.5 sm:py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 hover:shadow-lg hover:-translate-y-0.5 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none text-sm sm:text-base"
+            >
+              Submit Application
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+ 
+    </form>
+    <%- include('./allscript.ejs') %>
+
+    <div id="loader" style="
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+  ">
+    <div class="spinner"></div>
+  </div>
+  <style>
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #ddd;
+      border-top: 5px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+    </style>
+    <div id="thankYouModal" style="display:none; position:fixed; top:0; left:0; 
+width:100%; height:100%; background:rgba(0,0,0,0.5); 
+justify-content:center; align-items:center;">
+
+  <div style="background:white; padding:20px; border-radius:8px; text-align:center;">
+    <h2>Thank You!</h2>
+    <p>Your application was successfully submitted.</p>
+    <button onclick="closeModal()">OK</button>
+  </div>
+
+</div>
+
+<div id="consentModal" class="fixed inset-0 hidden items-center justify-center bg-black/60 z-50">
+  
+  <div class="bg-white w-[90%] max-w-3xl max-h-[90vh] rounded-xl shadow-2xl flex flex-col">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between border-b px-6 py-4">
+      <h2 id="modalTitle" class="text-lg font-semibold text-gray-800"></h2>
+      <button onclick="closeModal1()" class="text-gray-500 hover:text-black text-xl">&times;</button>
+    </div>
+
+    <!-- Body -->
+    <div id="modalContent" class="px-6 py-4 overflow-y-auto text-sm text-gray-700 leading-relaxed"></div>
+
+    <!-- Footer -->
+    <div class="border-t px-6 py-4 flex justify-end gap-3">
+      <button onclick="closeModal1()" class="px-4 py-2 border rounded-lg text-gray-600">
+        Close
+      </button>
+
+    </div>
+
+  </div>
+</div>
+<script>
+
+const consentData = {
+  Consents1: {
+    title: "FMCSA Clearinghouse Limited Query Consent",
+    content: `
+      <h3 class="text-center font-bold mb-3">General Consent for Limited Queries of the Federal Motor Carrier Safety Administration (FMCSA)</h3>
+      <h4 class="text-center font-bold mb-3">Drug and Alcohol Clearinghouse</h4>
+      <p class="mb-3">I, <strong>[Driver Name]</strong>, hereby provide consent to <strong><%= company?.name ? company.name.toUpperCase() : 'UNDEFINED' %></strong> to conduct a limited query of the FMCSA Commercial Driver’s License Drug and Alcohol Clearinghouse (Clearinghouse) to determine whether drug or alcohol violation information about me exists in the Clearinghouse.
+I understand that if the limited query conducted by <strong><%= company?.name ? company.name.toUpperCase() : 'UNDEFINED' %></strong> indicates that drug or alcohol violation information about me exists in the Clearinghouse, FMCSA will not disclose that information to <strong><%= company?.name ? company.name.toUpperCase() : 'UNDEFINED' %></strong> without first obtaining additional specific consent from me.
+I further understand that if I refuse to provide consent for <strong><%= company?.name ? company.name.toUpperCase() : 'UNDEFINED' %></strong> to conduct a limited query of the Clearinghouse, <strong><%= company?.name ? company.name.toUpperCase() : 'UNDEFINED' %></strong> must prohibit me from performing safety-sensitive functions, including driving a commercial motor vehicle, as required by FMCSA’s drug and alcohol program regulations.</p>
+      <p class="mb-3">I understand that if the limited query indicates...</p>
+    `
+  },
+  Consents2: {
+    title: "FMCSA PSP Disclosure & Authorization",
+     content: `
+    <h3 class="text-center font-bold mb-3">The below disclosure and authorization language is for mandatory use by all account holders</h3>
+      <h4 class="text-center font-bold mb-3">Important disclosure regarding background reports from the PSP online service</h4>
+
+    <p class="mb-3">
+      Driver Name: <strong>[Driver Name]</strong><br/>
+      License #: <strong>[License #]</strong>
+    </p>
+
+    <p class="mb-3">
+      In connection with your application for employment with <strong><%= company?.name ? company.name.toUpperCase() : 'AGONDH TRUCKS INC' %></strong> ("Prospective Employer"), the Prospective Employer, its employees, agents, or contractors may obtain one or more reports regarding your driving and safety inspection history from the Federal Motor Carrier Safety Administration (FMCSA).
+    </p>
+
+    <p class="mb-3">
+      When the application for employment is submitted in person, if the Prospective Employer uses any information it obtains from FMCSA in a decision to not hire you or to make any other adverse employment decision, the Prospective Employer will provide you with a copy of the report and a written summary of your rights under the Fair Credit Reporting Act before taking any final adverse action.
+    </p>
+
+    <p class="mb-3">
+      When the application is submitted by mail, telephone, computer, or other similar means, the Prospective Employer must provide notification within three business days if adverse action is taken based on FMCSA data. This includes notice of the action, FMCSA contact details, and your right to request a free copy of the report and dispute its accuracy.
+    </p>
+
+    <p class="mb-3">
+      Neither the Prospective Employer nor the FMCSA contractor can correct safety data. You may challenge the accuracy of the data by submitting a request to 
+      <a href="https://dataqs.fmcsa.dot.gov" target="_blank">https://dataqs.fmcsa.dot.gov</a>.
+      Requests involving State-reported data will be forwarded to the appropriate State for review.
+    </p>
+
+    <p class="mb-3">
+      Any crash or inspection in which you were involved will appear on your PSP report. The PSP does not assign fault and includes all reported CMV crashes and inspections, with or without violations. State citations tied to FMCSR violations that have been adjudicated will also appear.
+    </p>
+
+    <h3 class="text-center font-bold mb-3">Authorization</h3>
+
+    <p class="mb-3">
+      I authorize <strong><%= company?.name ? company.name.toUpperCase() : 'AGONDH TRUCKS INC' %></strong> to access the FMCSA Pre-Employment Screening Program (PSP) to obtain my commercial driving safety record, including crash data from the previous five (5) years and inspection history from the previous three (3) years.
+    </p>
+
+    <p class="mb-3">
+      I understand that this information will be used to determine my suitability for employment and that neither the Prospective Employer nor FMCSA can correct inaccurate data. I may dispute inaccuracies through the DataQs system.
+    </p>
+
+    <p class="mb-3">
+      I acknowledge that all crashes (regardless of fault) and all inspections (with or without violations) will be included in the PSP report, along with adjudicated FMCSR-related citations.
+    </p>
+
+    <p class="mb-3">
+      I have read and understand this disclosure and authorize the Prospective Employer and its authorized agents to obtain my PSP report.
+    </p>
+
+    <p class="text-xs mt-4">
+      NOTICE: This form is provided by NIC on behalf of the U.S. Department of Transportation FMCSA. Federal law requires applicant consent before accessing PSP reports. This language must be used exactly as provided and as a stand-alone document.
+    </p>
+  `
+  },
+  Consents3: {
+    title: "Pre-Employment Employee Alcohol & Drug Test Statement",
+
+  content: `
+    <h3 class="text-center font-bold mb-3">PRE-EMPLOYMENT EMPLOYEE ALCOHOL & DRUG TEST STATEMENT</h3>
+
+    <p class="mb-3">
+      49 CFR Part 40.25(j) states, as the employer, you must ask the employee whether he or she has tested positive, or refused to test, on any pre-employment drug or alcohol test administered by an employer to which the employee applied for, but did not obtain, safety-sensitive transportation work covered by DOT agency drug and alcohol testing rules during the past two years. If the employee admits that he or she had a positive test or a refusal to test, you must not use the employee to perform safety-sensitive functions for you, until and unless the employee documents successful completion of the return-to-duty process required in 49 CFR Subpart O.
+    </p>
+
+    <p class="mb-3 text-red-600">
+      You must request from the prospective employee, who violated a DOT drug and alcohol regulation, documentation of the employee's successful completion of DOT return-to-duty requirements (including follow-up tests). If the previous employer does not have information about the return-to-duty process (e.g., an employer who did not hire an employee who tested positive on a pre-employment test), you must seek to obtain this information from the prospective employee.
+    </p>
+
+    <p class="mb-2"><strong>Company Name:</strong> <u><%= company?.name ? company.name.toUpperCase() : 'undefined' %></u></p>
+    <p class="mb-2"><strong>Address:</strong> <u><%= company?.Street %>, <%= company?.City %> ,<%= company?.State %>
+          <%= company?.ZipCode %></u></p>
+    <p class="mb-3"><strong>Prospective Employee Name:</strong> <u>[Driver Name]</u></p>
+
+    <p class="mb-3">
+      As the employer, you must ask the prospective employee whether he or she has:
+    </p>
+
+    <div class="mb-3">
+      <p class="mb-2">
+        <strong>1.</strong> Tested positive, or refused to test, on any pre-employment drug or alcohol test administered by an employer to which the employee applied for, but did not obtain, safety-sensitive transportation work covered by DOT agency drug and alcohol testing rules during the past two years.
+      </p>
+      <label class="mr-4">
+        <input type="radio" name="question1" value="yes" /> Yes
+      </label>
+      <label>
+        <input type="radio" name="question1" value="no" /> No
+      </label>
+    </div>
+
+    <div class="mb-3">
+      <p class="mb-2">
+        <strong>2.</strong> If you answered yes to the above question, can you provide documentation of successful completion of DOT return-to-duty requirements (including follow-up tests)?
+      </p>
+      <label class="mr-4">
+        <input type="radio" name="question2" value="yes" /> Yes
+      </label>
+      <label>
+        <input type="radio" name="question2" value="no" /> No
+      </label>
+    </div>
+  `
+
+  },
+
+   Consents4: {
+    title: "Safety Performance History Investigationt",
+
+   content: `
+    <h3 class="text-center font-bold mb-3">Safety Performance History Investigation</h3>
+
+    <p class="mb-3">
+      I, <strong>[Driver Name]</strong>, hereby authorize release of information to this prospective employer from my employment file and my Department of Transportation regulated drug and alcohol testing records. This release is in accordance with DOT Regulation 49 CFR Parts 40.25/382.413/391.23.
+    </p>
+
+    <p class="mb-3">
+      I understand that information to be released by my previous employer is limited to the previous three (3) years. I release all parties from any and all liability which may result from furnishing such information.
+    </p>
+
+    <p class="mb-3">
+      Pursuant to the federal Fair Credit Reporting Act, I hereby authorize <strong><%= company?.name ? company.name.toUpperCase() : 'AGONDH TRUCKS INC' %></strong> and its designated agents and representatives to conduct a comprehensive review of my background through any consumer report for employment purposes.
+    </p>
+
+    <p class="mb-3">
+      I understand that the scope of the consumer report or investigative consumer report may include, but is not limited to: verification of Social Security number; current and previous residences; employment history (including personnel files); education; references; credit history and reports; criminal history (from federal, state, or county jurisdictions); birth records; motor vehicle records (including traffic citations and registration); and other public records.
+    </p>
+
+    <p class="mb-3">
+      I, <strong>[Driver Name]</strong>, understand that I have the right to review information provided by previous employers; to have errors corrected by the previous employer and for that employer to re-send corrected information; and to have a rebuttal statement attached if there is a disagreement regarding accuracy.
+    </p>
+
+    <p class="mb-3">
+      I understand that to review previous employer-provided investigative information, I must submit a written request, which may be done at any time, including while applying, or up to thirty (30) days after being employed or notified of denial of employment.
+    </p>
+
+    <p class="mb-3">
+      I understand that if I do not arrange to receive or pick up the requested records within thirty (30) days of their availability, it may be considered that I have waived my right to review those records.
+    </p>
+
+    <div class="mt-6">
+      <p class="mb-2"><strong>Driver Signature:</strong> ____________________________</p>
+      <p class="mb-2"><strong>Date:</strong> ____________________________</p>
+    </div>
+  `
+
+  },
+  Consents5: {
+    title: "Employer Pull Notice Program Authorization (CA EPN)",
+
+   content: `
+    <h3 class="text-center font-bold mb-3">Employer Pull Notice Program</h3>
+    <h4 class="text-center font-bold mb-4">Authorization for Release of Driver Record Information</h4>
+
+    <h4 class="font-semibold mb-2">Section 1 - Driver Information</h4>
+
+    <p class="mb-3">
+      I, <strong>[Driver Name]</strong>, Driver License Number <strong>[License #]</strong>, hereby authorize the California Department of Motor Vehicles (DMV) to disclose or otherwise make available my driving record to my employer <strong><%= company?.name ? company.name.toUpperCase() : 'AGONDH TRUCKS INC' %></strong>.
+    </p>
+
+    <p class="mb-3">
+      I understand that my employer may enroll me in the Employer Pull Notice (EPN) program to receive a driver record report at least once every twelve (12) months or when any subsequent conviction, failure to appear, accident, driver’s license suspension, revocation, or any other action is taken against my driving privilege during my employment.
+    </p>
+
+    <p class="mb-4">
+      <strong>City:</strong> <u>______________</u><br/>
+      <strong>State:</strong> <u>______________</u><br/>
+      <strong>Country:</strong> United States
+    </p>
+
+    <h4 class="font-semibold mb-2">Section 2 - Authorized Representative Certification</h4>
+
+    <p class="mb-3">
+      I, <strong>[Driver Name]</strong> of <strong><%= company?.name ? company.name.toUpperCase() : 'AGONDH TRUCKS INC' %></strong>, do hereby certify under penalty of perjury under the laws in the State of California that I am an authorized representative of this company.
+    </p>
+
+    <p class="mb-4">
+      <strong>City:</strong> <u>______________</u><br/>
+      <strong>State:</strong> <u>______________</u><br/>
+      <strong>Country:</strong> United States
+    </p>
+
+    <div class="mt-6">
+      <p class="mb-2"><strong>Driver Signature:</strong> ____________________________</p>
+      <p class="mb-2"><strong>Date:</strong> ____________________________</p>
+    </div>
+  `
+
+  },
+   Consents6: {
+    title: "Motor Vehicle Record (MVR) Consent",
+
+  content: `
+    <h3 class="text-center font-bold mb-3">Motor Vehicle Record (MVR) Consent</h3>
+
+    <p class="mb-3"><strong>To Whom It May Concern:</strong></p>
+
+    <p class="mb-3">
+      I, <strong>[Driver Name]</strong>, hereby give explicit consent to allow a representative of 
+      <strong><%= company?.name ? company.name.toUpperCase() : 'AGONDH TRUCKS INC' %></strong> 
+      to conduct an investigation into my driving and employment history in accordance with the Federal Motor Carrier Safety Administration (FMCSA) regulations, including 49 CFR Part 391.
+    </p>
+
+    <h4 class="font-semibold mb-2">1. Motor Vehicle Record (MVR) Check</h4>
+    <p class="mb-3">
+      <strong><%= company?.name ? company.name.toUpperCase() : 'AGONDH TRUCKS INC' %></strong> is authorized to obtain a Motor Vehicle Record (MVR) from each state in which I hold or have held a motor vehicle operator’s license or permit over the past three (3) years, as required by FMCSA 49 CFR Part 391.23. This MVR check may include:
+    </p>
+    <ul class="list-disc ml-6 mb-3">
+      <li>Driving violations, including speeding tickets, reckless driving, or other infractions.</li>
+      <li>DUI/DWI convictions and other serious traffic violations.</li>
+      <li>Accident history, including at-fault accidents or other incidents.</li>
+      <li>License suspensions, revocations, or restrictions.</li>
+      <li>Drug and alcohol testing history, as mandated by FMCSA 49 CFR Part 382.</li>
+    </ul>
+
+    <h4 class="font-semibold mb-2">2. Employment Verification</h4>
+    <p class="mb-3">
+      I authorize <strong><%= company?.name ? company.name.toUpperCase() : 'AGONDH TRUCKS INC' %></strong> to contact my past employers to verify my employment history, including:
+    </p>
+    <ul class="list-disc ml-6 mb-3">
+      <li>Length of employment (including probationary period if applicable).</li>
+      <li>Status of employment (full-time, part-time, or temporary).</li>
+      <li>Gross base annual salary at the time of employment.</li>
+      <li>Current year-to-date income, if available.</li>
+      <li>Job title or role.</li>
+      <li>History of infractions, violations, or misconduct.</li>
+      <li>Whether proper notice was given before leaving.</li>
+      <li>Termination or resignation details and reasons for leaving.</li>
+      <li>Drug testing history, including violations or refusals under FMCSA regulations.</li>
+    </ul>
+
+    <h4 class="font-semibold mb-2">3. Consent to Review Drug and Alcohol Test Results</h4>
+    <p class="mb-3">
+      I authorize <strong><%= company?.name ? company.name.toUpperCase() : 'AGONDH TRUCKS INC' %></strong> to obtain and review my drug and alcohol testing history in compliance with FMCSA regulations (49 CFR Part 40 and Part 382), including:
+    </p>
+    <ul class="list-disc ml-6 mb-3">
+      <li>Past drug and alcohol test results, including positive tests and refusals.</li>
+      <li>Any required return-to-duty process.</li>
+      <li>Compliance with FMCSA drug and alcohol program requirements.</li>
+    </ul>
+
+    <p class="mb-3">
+      I understand that these checks are part of the pre-employment screening process and are required by law under FMCSA regulations. I acknowledge that any discrepancies or negative findings may result in disqualification from employment consideration.
+    </p>
+
+    <h4 class="font-semibold mb-2">4. Certification and Acknowledgment</h4>
+    <p class="mb-3">
+      I certify that the information provided in this consent form is true and complete to the best of my knowledge. I understand that any falsification or omission may result in disqualification or termination.
+    </p>
+
+    <div class="mt-6">
+      <p class="mb-2"><strong>Driver Signature:</strong> ____________________________</p>
+      <p class="mb-2"><strong>Date:</strong> ____________________________</p>
+    </div>
+  `
+  },
+
+ Consents7: {
+    title: "General Work Policy & Driver Handbook Acknowledgment",
+    content: `
+    <h3 class="text-center font-bold mb-3">GENERAL WORK POLICY & DRIVER HANDBOOK ACKNOWLEDGMENT</h3>
+
+    <p class="mb-3">
+      This policy acknowledgment applies to <strong><%= company?.name ? company.name.toUpperCase() : 'AGONDH TRUCKS INC' %></strong> and is intended as general guidance for safe and compliant operations. Drivers and employees must follow all applicable federal, state, and local laws and regulations, including DOT/FMCSA requirements.
+    </p>
+
+    <div class="border border-red-300 bg-red-50 p-3 mb-4">
+      <p class="text-red-700 text-sm">
+        <strong>Important Notice:</strong> This document is a guide only. Responsibility for compliance remains with the driver/operator. Violations, citations, fines, and penalties may result from non-compliance with laws, regulations, or safe operating practices.
+      </p>
+    </div>
+
+    <h4 class="font-semibold mb-2">1. Receipt & Acknowledgment</h4>
+    <p class="mb-3">
+      I, <strong>[Driver Name]</strong>, acknowledge that I have received access to the Driver Handbook / Safety Manual and related policies. I understand it is my responsibility to read, understand, and comply with these policies at all times while performing work for the company.
+    </p>
+    <p class="mb-3">
+      I understand these policies may be updated, revised, or supplemented at any time. I agree to comply with the most current policies provided by <strong><%= company?.name ? company.name.toUpperCase() : 'AGONDH TRUCKS INC' %></strong>.
+    </p>
+
+    <h4 class="font-semibold mb-2">2. General Safety & Compliance Expectations</h4>
+    <ul class="list-disc ml-6 mb-3">
+      <li>Operate legally and safely at all times (speed limits, weight limits, route restrictions).</li>
+      <li>Hours of Service logs must be accurate and compliant; falsification is strictly prohibited.</li>
+      <li>Vehicle inspection is required; report defects immediately and do not operate unsafe equipment.</li>
+      <li>Accidents/incidents must be reported promptly per company procedures.</li>
+      <li>Professional conduct is required with customers, public, and company staff.</li>
+    </ul>
+
+    <h4 class="font-semibold mb-2">3. Prohibited Conduct</h4>
+    <ul class="list-disc ml-6 mb-3">
+      <li>Drugs & alcohol are strictly prohibited during duty or while operating equipment.</li>
+      <li>Firearms/weapons are prohibited unless authorized in writing and permitted by law.</li>
+      <li>Unauthorized passengers or pets are not allowed unless approved in writing.</li>
+      <li>Dishonesty, theft, or cargo tampering is strictly prohibited.</li>
+      <li>Harassment, discrimination, or violence will not be tolerated.</li>
+    </ul>
+
+    <h4 class="font-semibold mb-2">4. Communication & Dispatch Expectations</h4>
+    <ul class="list-disc ml-6 mb-3">
+      <li>Provide call checks and status updates as requested by dispatch.</li>
+      <li>Notify dispatch immediately of delays, breakdowns, or hazards.</li>
+      <li>Maintain professional communication at all times.</li>
+    </ul>
+
+    <h4 class="font-semibold mb-2">5. Paperwork & Documentation</h4>
+    <ul class="list-disc ml-6 mb-3">
+      <li>Submit required paperwork promptly (BOLs, PODs, logs, inspections).</li>
+      <li>Incomplete documentation may delay payroll, settlement, or invoicing.</li>
+    </ul>
+
+    <h4 class="font-semibold mb-2">6. Discipline, Probation & Termination</h4>
+    <p class="mb-3">
+      Violations of safety rules, compliance requirements, or company policies may result in disciplinary action including termination.
+    </p>
+    <ul class="list-disc ml-6 mb-3">
+      <li>Immediate termination may occur for serious violations (theft, falsification, safety negligence).</li>
+      <li>Progressive discipline may include warnings, suspension, probation, or termination.</li>
+    </ul>
+
+    <h4 class="font-semibold mb-2">7. Hand-Held Device & Distracted Driving Policy</h4>
+    <p class="mb-3">
+      I understand that distracted driving is a serious safety risk and agree to comply with all laws and company policies regarding device usage.
+    </p>
+    <ul class="list-disc ml-6 mb-3">
+      <li>Hand-held device use while driving is prohibited unless legally permitted.</li>
+      <li>Communication must be done only when safely parked.</li>
+      <li>Texting while driving is strictly prohibited.</li>
+    </ul>
+
+    <h4 class="font-semibold mb-2">8. Agreement</h4>
+    <p class="mb-3">
+      By signing below, I confirm that I understand and agree to comply with all policies of <strong><%= company?.name ? company.name.toUpperCase() : 'AGONDH TRUCKS INC' %></strong> and all applicable laws while performing work duties.
+    </p>
+
+    <div class="mt-6">
+      <p class="mb-2"><strong>Driver Name:</strong> <u>[Driver Name]</u></p>
+      <p class="mb-2"><strong>Driver Signature:</strong> ____________________________</p>
+      <p class="mb-2"><strong>Date:</strong> ____________________________</p>
+    </div>
+  `
+  },
+
+
+  Consents8: {
+    title: "Drug & Alcohol Policy Acknowledgment",
+   content: `
+    <h3 class="text-center font-bold mb-3">Drug & Alcohol Policy Acknowledgment</h3>
+
+    <p class="mb-3">
+      This policy applies to <strong><%= company?.name ? company.name.toUpperCase() : 'AGONDH TRUCKS INC' %></strong> and is established in accordance with the Federal Motor Carrier Safety Administration (FMCSA) regulations contained in 49 CFR Part 40 and 49 CFR Part 382.
+    </p>
+
+    <div class="border border-red-300 bg-red-50 p-3 mb-4">
+      <p class="text-red-700 text-sm">
+        <strong>Important Notice:</strong> This document is provided as a compliance guide. Responsibility for adherence to DOT/FMCSA regulations remains with the driver. Violations, citations, penalties, or enforcement actions are the responsibility of the individual operator.
+      </p>
+    </div>
+
+    <h4 class="font-semibold mb-2">1. Policy Purpose</h4>
+    <p class="mb-3">
+      The purpose of this policy is to promote public safety, protect driver health, and ensure compliance with FMCSA regulations governing the misuse of alcohol and controlled substances by drivers performing safety-sensitive functions.
+    </p>
+
+    <h4 class="font-semibold mb-2">2. Covered Drivers</h4>
+    <p class="mb-3">
+      This policy applies to all drivers operating Commercial Motor Vehicles (CMVs) requiring a CDL, including full-time, part-time, temporary, leased drivers, and owner-operators performing work for <strong><%= company?.name ? company.name.toUpperCase() : 'AGONDH TRUCKS INC' %></strong>.
+    </p>
+
+    <h4 class="font-semibold mb-2">3. Prohibited Conduct</h4>
+    <ul class="list-disc ml-6 mb-3">
+      <li>Use, possession, or distribution of controlled substances while performing safety-sensitive functions.</li>
+      <li>Reporting for duty with an alcohol concentration of 0.04 or greater.</li>
+      <li>Use of alcohol within 4 hours prior to safety-sensitive functions.</li>
+      <li>Use of alcohol within 8 hours following an accident or until post-accident testing is completed.</li>
+      <li>Refusal to submit to required drug or alcohol testing.</li>
+      <li>Adulterated or substituted test specimens.</li>
+    </ul>
+
+    <p class="mb-3">
+      <strong>Note:</strong> A driver with an alcohol concentration between 0.02 and 0.039 shall not perform safety-sensitive functions for at least 24 hours.
+    </p>
+
+    <h4 class="font-semibold mb-2">4. Required Testing Types</h4>
+    <ul class="list-disc ml-6 mb-3">
+      <li>Pre-employment</li>
+      <li>Post-accident</li>
+      <li>Random</li>
+      <li>Reasonable suspicion</li>
+      <li>Return-to-duty</li>
+      <li>Follow-up</li>
+    </ul>
+
+    <p class="mb-3">
+      All testing will be conducted in compliance with 49 CFR Part 40 using DOT-approved laboratories, collection sites, and Medical Review Officers (MROs).
+    </p>
+
+    <h4 class="font-semibold mb-2">5. Refusal to Test</h4>
+    <p class="mb-3">
+      A refusal to test is treated the same as a positive test result and includes:
+    </p>
+    <ul class="list-disc ml-6 mb-3">
+      <li>Failure to appear for testing when directed.</li>
+      <li>Failure to remain at the testing site.</li>
+      <li>Failure to provide a sufficient specimen without medical justification.</li>
+      <li>Failure to cooperate with testing procedures.</li>
+      <li>Adulteration or substitution of a specimen.</li>
+    </ul>
+
+    <h4 class="font-semibold mb-2">6. Consequences of Violations</h4>
+    <p class="mb-3">
+      Drivers violating this policy will be immediately removed from safety-sensitive functions and may not return until completing SAP evaluation and required return-to-duty procedures.
+    </p>
+
+    <ul class="list-disc ml-6 mb-3">
+      <li>Substance Abuse Professional (SAP) evaluation required.</li>
+      <li>Completion of recommended education or treatment.</li>
+      <li>Successful return-to-duty test.</li>
+      <li>Completion of follow-up testing program.</li>
+    </ul>
+
+    <h4 class="font-semibold mb-2">7. Prescription & Over-the-Counter Medications</h4>
+    <p class="mb-3">
+      Drivers must disclose any medications that may affect their ability to safely operate a CMV. Medication use is only permitted if prescribed by a licensed medical provider confirming it does not impair driving ability.
+    </p>
+
+    <h4 class="font-semibold mb-2">8. Records & Confidentiality</h4>
+    <p class="mb-3">
+      All drug and alcohol testing records are maintained confidentially in accordance with FMCSA regulations and will only be released with written consent or as required by law.
+    </p>
+
+    <h4 class="font-semibold mb-2">9. Acknowledgment</h4>
+    <p class="mb-3">
+      By signing below, I confirm that I understand the Drug & Alcohol Policy of <strong><%= company?.name ? company.name.toUpperCase() : 'AGONDH TRUCKS INC' %></strong> and agree to fully comply with all FMCSA regulations as a condition of employment or performing safety-sensitive functions.
+    </p>
+
+    <div class="mt-6">
+      <p class="mb-2"><strong>Driver Name:</strong> <u>[Driver Name]</u></p>
+      <p class="mb-2"><strong>Driver Signature:</strong> ____________________________</p>
+      <p class="mb-2"><strong>Date:</strong> ____________________________</p>
+    </div>
+  `
+  },
+};
+function openModal(btn) {
+  const key = btn.getAttribute("data-consent");
+  const data = consentData[key];
+
+  document.getElementById("modalTitle").innerText = data.title;
+  document.getElementById("modalContent").innerHTML = data.content;
+
+  const modal = document.getElementById("consentModal");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+function closeModal1() {
+  const modal = document.getElementById("consentModal");
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+}
+</script>
+
+    <script>
+
+function saveStep0() {
+  formData.FirstName = document.querySelector('[name="FirstName"]').value;
+  formData.LastName = document.querySelector('[name="LastName"]').value;
+  formData.SSN = document.querySelector('[name="SSN"]').value;
+  formData.Contact = document.querySelector('[name="Contact"]').value;
+  formData.AltContact = document.querySelector('[name="AltContact"]').value;
+  formData.Dob = document.querySelector('[name="Dob"]').value;
+  formData.Email = document.querySelector('[name="Email"]').value;
+  formData.Address = document.querySelector('[name="Address"]').value;
+  formData.City = document.querySelector('[name="City"]').value;
+  formData.State = document.querySelector('[name="State"]').value;
+  formData.Zip = document.querySelector('[name="Zip"]').value;
+  formData.MedicalRegistry = document.querySelector('[name="MedicalRegistry"]').value;
+  formData.MedicalExpiry = document.querySelector('[name="MedicalExpiry"]').value;
+  formData.TWIC = document.querySelector('[name="TWIC"]').value;
+  formData.Passport = document.querySelector('[name="Passport"]').value;
+}
+   
+function saveStep1() {
+  formData.ResidenceAddress = document.querySelector('[name="ResidenceAddress"]').value;
+  formData.ResidenceCity = document.querySelector('[name="ResidenceCity"]').value;
+  formData.ResidenceState = document.querySelector('[name="ResidenceState"]').value;
+  formData.ResidenceCountry = document.querySelector('[name="ResidenceCountry"]').value;
+  formData.ResidenceZip = document.querySelector('[name="ResidenceZip"]').value;
+
+  formData.EmergencyFullname = document.querySelector('[name="EmergencyFullname"]').value;
+  formData.EmRelationship = document.querySelector('[name="EmRelationship"]').value;
+  formData.EmPhone = document.querySelector('[name="EmPhone"]').value;
+}
+
+function saveStep2() {
+  formData.LicenseFullName = document.querySelector('[name="LicenseFullName"]').value;
+  formData.LicenseLastName = document.querySelector('[name="LicenseLastName"]').value;
+  formData.LicenseNumber = document.querySelector('[name="LicenseNumber"]').value;
+  formData.ReenterLicenseNumber = document.querySelector('[name="ReenterLicenseNumber"]').value;
+
+  formData.LicenseCountry = document.querySelector('[name="LicenseCountry"]').value;
+  formData.LicenseState = document.querySelector('[name="LicenseState"]').value;
+  formData.LicenseClass = document.querySelector('[name="LicenseClass"]').value;
+
+  formData.LicenseIssueDate = document.querySelector('[name="LicenseIssueDate"]').value;
+  formData.LicenseExpiryDate = document.querySelector('[name="LicenseExpiryDate"]').value;
+}
+
+function saveStep3() {
+
+formData.StraightTruck = {
+  experience: document.querySelector('[name="StraightTruck[experience]"]:checked')?.value || "No",
+  from: document.querySelector('[name="StraightTruck[from]"]')?.value,
+  to: document.querySelector('[name="StraightTruck[to]"]')?.value,
+  approxMiles: Number(document.querySelector('[name="StraightTruck[approxMiles]"]')?.value || 0),
+};
+
+formData.TruckTractor = {
+  experience: document.querySelector('[name="TruckTractor[experience]"]:checked')?.value || "No",
+  from: document.querySelector('[name="TruckTractor[from]"]')?.value,
+  to: document.querySelector('[name="TruckTractor[to]"]')?.value,
+  approxMiles: Number(document.querySelector('[name="TruckTractor[approxMiles]"]')?.value || 0),
+};
+
+formData.SemiTrailer = {
+  experience: document.querySelector('[name="SemiTrailer[experience]"]:checked')?.value || "No",
+  from: document.querySelector('[name="SemiTrailer[from]"]')?.value,
+  to: document.querySelector('[name="SemiTrailer[to]"]')?.value,
+  approxMiles: Number(document.querySelector('[name="SemiTrailer[approxMiles]"]')?.value || 0),
+};
+
+formData.DoubleTriple = {
+  experience: document.querySelector('[name="DoubleTriple[experience]"]:checked')?.value || "No",
+  from: document.querySelector('[name="DoubleTriple[from]"]')?.value,
+  to: document.querySelector('[name="DoubleTriple[to]"]')?.value,
+  approxMiles: Number(document.querySelector('[name="DoubleTriple[approxMiles]"]')?.value || 0),
+};
+
+formData.Flatbed = {
+  experience: document.querySelector('[name="Flatbed[experience]"]:checked')?.value || "No",
+  from: document.querySelector('[name="Flatbed[from]"]')?.value,
+  to: document.querySelector('[name="Flatbed[to]"]')?.value,
+  approxMiles: Number(document.querySelector('[name="Flatbed[approxMiles]"]')?.value || 0),
+};
+
+formData.Bus = {
+  experience: document.querySelector('[name="Bus[experience]"]:checked')?.value || "No",
+  from: document.querySelector('[name="Bus[from]"]')?.value,
+  to: document.querySelector('[name="Bus[to]"]')?.value,
+  approxMiles: Number(document.querySelector('[name="Bus[approxMiles]"]')?.value || 0),
+};
+
+formData.Other = {
+  experience: document.querySelector('[name="Other[experience]"]:checked')?.value || "No",
+  from: document.querySelector('[name="Other[from]"]')?.value,
+  to: document.querySelector('[name="Other[to]"]')?.value,
+  approxMiles: Number(document.querySelector('[name="Other[approxMiles]"]')?.value || 0),
+};
+
+}
+
+
+function saveStep4() {
+
+// ✅ ENDORSEMENT
+formData.Endorsement = document.querySelector('[name="Endorsement"]')?.value || "None";
+
+// -------------------------
+// ✅ ACCIDENT HISTORY
+// -------------------------
+formData.AccidentHistory = {
+  noAccident: document.querySelector('[name="AccidentHistory[noAccident]"]')?.checked || false,
+
+  date: document.querySelector('[name="AccidentHistory[date]"]')?.value,
+  accidentType: document.querySelector('[name="AccidentHistory[accidentType]"]')?.value,
+  vehicleType: document.querySelector('[name="AccidentHistory[vehicleType]"]')?.value,
+  location: document.querySelector('[name="AccidentHistory[location]"]')?.value,
+};
+
+// -------------------------
+// ✅ VIOLATION HISTORY
+// -------------------------
+formData.ViolationHistory = {
+  noViolation: document.querySelector('[name="ViolationHistory[noAccident]"]')?.checked || false,
+
+  date: document.querySelector('[name="ViolationHistory[date]"]')?.value,
+  offense: document.querySelector('[name="ViolationHistory[accidentType]"]')?.value,
+  vehicleType: document.querySelector('[name="ViolationHistory[vehicleType]"]')?.value,
+  location: document.querySelector('[name="ViolationHistory[location]"]')?.value,
+};
+
+}
+
+
+function saveStep5() {
+
+
+formData.companyName = document.querySelector('[name="companyName"]')?.value;
+formData.positionHeld = document.querySelector('[name="positionHeld"]')?.value;
+formData.companyContact = document.querySelector('[name="companyContact"]')?.value;
+formData.companyEmail = document.querySelector('[name="companyEmail"]')?.value;
+formData.companyAddress = document.querySelector('[name="companyAddress"]')?.value;
+
+formData.companycity = document.querySelector('[name="companycity"]')?.value;
+formData.companystate = document.querySelector('[name="companystate"]')?.value;
+formData.companyzipCode = document.querySelector('[name="companyzipCode"]')?.value;
+formData.companycountry = document.querySelector('[name="companycountry"]')?.value;
+
+formData.workedFrom = document.querySelector('[name="workedFrom"]')?.value;
+formData.workedTill = document.querySelector('[name="workedTill"]')?.value;
+
+formData.reasonForLeaving = document.querySelector('[name="reasonForLeaving"]')?.value;
+
+// ---------------- RADIO BUTTONS ----------------
+formData.subjectToDOT = document.querySelector('[name="subjectToDOT"]:checked')?.value || "No";
+formData.safetySensitive = document.querySelector('[name="safetySensitive"]:checked')?.value || "No";
+
+formData.notes = document.querySelector('[name="notes"]')?.value || "";
+
+}
+
+function saveStep6() {
+
+  formData.dutyHours = {
+    days: [],
+    totalHours: 0,
+    applicationDate: null,
+    lastRelieved: null
+  };
+
+  const inputs = document.querySelectorAll(".hoursInput");
+
+  inputs.forEach((input) => {
+    formData.dutyHours.days.push({
+      dateLabel: input.dataset.date, // ✅ clean
+      hours: Number(input.value || 0),
+    });
+  });
+
+  formData.dutyHours.totalHours = Number(
+    document.getElementById("totalHours")?.value || 0
+  );
+
+  // OPTIONAL (agar enable karna)
+  // formData.dutyHours.applicationDate =
+  //   document.querySelector('[name="applicationDate"]')?.value || null;
+
+  // formData.dutyHours.lastRelieved =
+  //   document.querySelector('[name="lastRelieved"]')?.value || null;
+}
+
+
+
+    </script>
+
+
+<script>
+let formData = {};
+let currentStep = 0;
+
+const forms = document.querySelectorAll(".form-step");
+const nextBtns = document.querySelectorAll(".next-btn");
+const stepLabels = document.querySelectorAll("#steps .step");
+const stepIcons = document.querySelectorAll("[data-step]");
+
+/* =========================
+   VALIDATION FUNCTION
+========================= */
+function validateStep(step) {
+  let isValid = true;
+
+  const currentForm = document.querySelector(`.form-step[data-step="${step}"]`);
+
+  // ONLY required fields
+const inputs = currentForm.querySelectorAll("input[required]");
+
+  inputs.forEach(input => {
+    const parent = input.parentElement;
+    const errorMsg = parent.querySelector(".error-msg");
+
+    // radio skip (handle separately if needed)
+    if (input.type === "radio") return;
+
+    if (!input.value.trim()) {
+      isValid = false;
+      input.classList.add("error-border");
+
+      if (errorMsg) errorMsg.classList.remove("hidden");
+    }
+  });
+
+  return isValid;
+}
+
+/* =========================
+   STEP UPDATE FUNCTION
+========================= */
+function updateStep(step) {
+  currentStep = step;
+
+  localStorage.setItem("formStep", currentStep);
+
+  forms.forEach((form, i) => {
+    form.classList.toggle("hidden", i !== step);
+  });
+
+  stepLabels.forEach((el) => {
+    el.classList.remove("text-blue-600", "font-semibold");
+  });
+
+  const activeLabel = document.querySelector(`#steps .step[data-step="${step}"]`);
+  if (activeLabel) {
+    activeLabel.classList.add("text-blue-600", "font-semibold");
+  }
+
+  stepIcons.forEach((el) => {
+    const circle = el.querySelector(".circle");
+    if (!circle) return;
+
+    circle.classList.remove("bg-blue-500", "text-white");
+    circle.classList.add("border", "text-gray-500");
+
+    if (parseInt(el.dataset.step) === step) {
+      circle.classList.remove("border", "text-gray-500");
+      circle.classList.add("bg-blue-500", "text-white");
+    }
+  });
+}
+
+/* =========================
+   RESTORE STEP ON LOAD
+========================= */
+window.addEventListener("load", () => {
+  const savedStep = localStorage.getItem("formStep");
+  currentStep = savedStep ? parseInt(savedStep) : 0;
+  updateStep(currentStep);
+});
+
+/* =========================
+   NEXT BUTTON (FIXED)
+========================= */
+nextBtns.forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    // 🔥 VALIDATION CHECK FIRST
+    if (!validateStep(currentStep)) return;
+
+    // SAVE DATA
+    if (currentStep === 0) saveStep0();
+    if (currentStep === 1) saveStep1();
+    if (currentStep === 2) saveStep2();
+    if (currentStep === 3) saveStep3();
+    if (currentStep === 4) saveStep4();
+    if (currentStep === 5) saveStep5();
+    if (currentStep === 6) saveStep6();
+
+    console.log("Saved Data:", formData);
+
+    // NEXT STEP
+    if (currentStep < forms.length - 1) {
+      updateStep(currentStep + 1);
+    }
+  });
+});
+
+/* =========================
+   STEP NAV CLICK
+========================= */
+stepLabels.forEach((step) => {
+  step.addEventListener("click", () => {
+    const stepIndex = parseInt(step.dataset.step);
+    updateStep(stepIndex);
+  });
+});
+
+/* =========================
+   REMOVE ERROR ON FOCUS
+========================= */
+document.querySelectorAll("input").forEach(input => {
+  input.addEventListener("focus", function () {
+    this.classList.remove("error-border");
+
+    const errorMsg = this.parentElement.querySelector(".error-msg");
+    if (errorMsg) errorMsg.classList.add("hidden");
+  });
+});
+</script>
+
+    <!-- <script>
+        let formData = {};
+      let currentStep = 0;
+    
+      const forms = document.querySelectorAll(".form-step");
+      const nextBtns = document.querySelectorAll(".next-btn");
+      const stepLabels = document.querySelectorAll("#steps .step");
+      const stepIcons = document.querySelectorAll("[data-step]");
+    
+      // ✅ STEP UPDATE FUNCTION
+      function updateStep(step) {
+        currentStep = step;
+    
+        // ✅ SAVE STEP
+        localStorage.setItem("formStep", currentStep);
+    
+        // ✅ SHOW CURRENT FORM
+        forms.forEach((form, i) => {
+          form.classList.toggle("hidden", i !== step);
+        });
+    
+        // ✅ TOP LABEL ACTIVE
+        stepLabels.forEach((el) => {
+          el.classList.remove("text-blue-600", "font-semibold");
+        });
+    
+        const activeLabel = document.querySelector(
+          `#steps .step[data-step="${step}"]`
+        );
+    
+        if (activeLabel) {
+          activeLabel.classList.add("text-blue-600", "font-semibold");
+        }
+    
+        // ✅ ICON ACTIVE
+        stepIcons.forEach((el) => {
+          const circle = el.querySelector(".circle");
+          if (!circle) return;
+    
+          // reset
+          circle.classList.remove("bg-blue-500", "text-white");
+          circle.classList.add("border", "text-gray-500");
+    
+          // active
+          if (parseInt(el.dataset.step) === step) {
+            circle.classList.remove("border", "text-gray-500");
+            circle.classList.add("bg-blue-500", "text-white");
+          }
+        });
+      }
+    
+      // ✅ LOAD → RESTORE STEP
+      window.addEventListener("load", () => {
+        const savedStep = localStorage.getItem("formStep");
+        currentStep = savedStep ? parseInt(savedStep) : 0;
+        updateStep(currentStep);
+      });
+    
+      // ✅ NEXT BUTTON
+      // nextBtns.forEach((btn) => {
+      //   btn.addEventListener("click", (e) => {
+      //     e.preventDefault(); // 🔥 important (form submit rokda)
+    
+      //     if (currentStep < forms.length - 1) {
+      //       updateStep(currentStep + 1);
+      //     }
+      //   });
+      // });
+
+      nextBtns.forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    // ✅ SAVE DATA BEFORE NEXT STEP
+    if (currentStep === 0) saveStep0();
+    if (currentStep === 1) saveStep1();
+    if (currentStep === 2) saveStep2();
+    if (currentStep === 3) saveStep3();
+    if (currentStep === 4) saveStep4();
+    if (currentStep === 5) saveStep5();
+  if (currentStep === 6) saveStep6();
+
+
+
+
+
+
+    console.log("Saved Data:", formData);
+
+    // ✅ MOVE NEXT STEP
+    if (currentStep < forms.length - 1) {
+      updateStep(currentStep + 1);
+    }
+  });
+});
+    
+      // ✅ STEP CLICK (TOP NAV)
+      stepLabels.forEach((step) => {
+        step.addEventListener("click", () => {
+          const stepIndex = parseInt(step.dataset.step);
+          updateStep(stepIndex);
+        });
+      });
+    </script> -->
+
+    <script>
+      const loader = document.getElementById("loader");
+      document.querySelector(".submit-application-btn").addEventListener("click", async () => {
+        loader.style.display = "flex"; // 🔥 SHOW LOADER
+        // 🔥 STEP DATA SAVE (VERY IMPORTANT)
+        saveStep0();
+        saveStep1();
+        saveStep2();
+        saveStep3();
+        saveStep4();
+        saveStep5();
+        saveStep6();
+      
+        console.log("FINAL DATA:", formData);
+      
+        const form = document.querySelector("form");
+        const fd = new FormData(form); // files + inputs
+      
+        // 🔥 FULL JSON DATA ADD
+        fd.append("data", JSON.stringify(formData));
+      
+        // 🔥 SIGNATURE FIX
+        const canvas = document.querySelector('[data-key="ApplicantSignature"]');
+        if (canvas) {
+          const signature = canvas.toDataURL("image/png");
+          console.log("SIGNATURE LENGTH:", signature.length);
+          fd.append("Sign", signature);
+        }
+      
+        // 🔥 CONSENTS FIX
+        const consents = {};
+        document.querySelectorAll(".consent-checkbox").forEach((cb) => {
+          consents[cb.dataset.key] = cb.checked;
+        });
+      
+        fd.append("consents", JSON.stringify(consents));
+      
+        // 🔥 DEBUG (CHECK KI JA REHA)
+        for (let pair of fd.entries()) {
+          console.log(pair[0], pair[1]);
+        }
+      
+        try {
+          const res = await fetch("/<%= company?.slug %>/add-driver", {
+            method: "POST",
+            body: fd
+          });
+      
+          const data = await res.json();
+        
+          console.log("SERVER RESPONSE:", data);
+      
+          if (data.success) {
+             document.getElementById("thankYouModal").style.display = "flex";
+          } else {
+            alert("Submission failed!");
+          }
+      
+        } catch (err) {
+          console.error(err);
+          alert("Error submitting form");
+        }
+        finally {
+          loader.style.display = "none"; 
+        }
+      });
+
+
+      function closeModal() {
+  
+  localStorage.setItem("formStep", "0");
+
+
+
+  document.getElementById("thankYouModal").style.display = "none";
+    location.reload();
+}
+      </script>
+
+    <!-- <script>
+
+      document.querySelector(".submit-application-btn").addEventListener("click", async () => {
+
+        // 🔥 STEP 1: ensure last step save ho jave
+        saveStep0();
+        saveStep1();
+        saveStep2();
+        saveStep3();
+        saveStep4();
+        saveStep5();
+      
+        // 🔥 STEP 2: form for files
+        const form = document.querySelector("form");
+        const fd = new FormData(form);
+      
+        // 🔥 STEP 3: add FULL JSON data
+        fd.append("data", JSON.stringify(formData));
+      
+        // 🔥 signature
+        const canvas = document.querySelector("canvas");
+        fd.append("Sign", canvas.toDataURL("image/png"));
+      
+        // 🔥 checkboxes
+        document.querySelectorAll(".consent-checkbox").forEach((cb) => {
+          fd.append(cb.dataset.key, cb.checked);
+        });
+      
+        try {
+          const res = await fetch("/<%= company?.slug %>/add-driver", {
+            method: "POST",
+            body: fd
+          });
+      
+          const data = await res.json();
+      
+          console.log("SERVER RESPONSE:", data);
+      
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    </script> -->
+    <!-- <script>
+      document.querySelector(".submit-application-btn").addEventListener("click", async () => {
+      
+        const form = document.querySelector("form");
+        const formDataObj = new FormData(form); // 🔥 auto sab inputs + files
+      
+        // ✅ signature add karo
+        const canvas = document.querySelector("canvas");
+        const signature = canvas.toDataURL("image/png");
+        formDataObj.append("Sign", signature);
+      
+        // ✅ checkboxes add karo
+        document.querySelectorAll(".consent-checkbox").forEach((cb) => {
+          formDataObj.append(cb.dataset.key, cb.checked);
+        });
+      
+        try {
+          const res = await fetch("/<%= company?.slug %>/add-driver", {
+            method: "POST",
+            body: formDataObj // ❗ NO JSON
+          });
+      
+          const data = await res.json();
+      
+          if (data.success) {
+            alert("Application submitted successfully!");
+          } else {
+            alert("Submission failed!");
+          }
+      
+        } catch (err) {
+          console.error(err);
+          alert("Error submitting form");
+        }
+      });
+      </script> -->
+
+
+  </body>
+</html>

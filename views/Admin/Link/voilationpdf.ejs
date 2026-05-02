@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial;
+      font-size: 12px;
+      padding: 25px;
+      color: #333;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      text-align: center;
+      background: #eee;
+      padding: 8px;
+      font-weight: bold;
+      margin: 15px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border-bottom: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      font-weight: bold;
+      color: #666;
+    }
+
+    .signature {
+      margin-top: 40px;
+    }
+
+    .line {
+      border-bottom: 1px solid #000;
+      width: 200px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <b>Record of Violations</b><br>
+    Annual review of driver violations
+  </div>
+
+  <div style="text-align:right;">
+    <b><%= data.companyName %></b><br>
+    <%= data.companyEmail %><br>
+    <%= new Date().toISOString().split('T')[0] %>
+  </div>
+</div>
+
+<div class="title">Record of Violations</div>
+
+<!-- TABLE -->
+<table>
+  <thead>
+    <tr>
+      <th>Violation History</th>
+
+      <th>Date</th>
+      <th>Vehicle Type</th>
+      <th>Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% 
+      let violations = [];
+  
+      if (Array.isArray(data.ViolationHistory)) {
+        violations = data.ViolationHistory;
+      } else if (data.ViolationHistory) {
+        violations = [data.ViolationHistory];
+      }
+    %>
+  
+    <% if (violations.length > 0) { %>
+      <% violations.forEach(function(v) { %>
+        <tr>
+          <td>Yes</td>
+
+          <td><%= new Date(v.date).toISOString().split('T')[0] %></td>
+          <td><%= v.vehicleType %></td>
+          <td><%= v.location %></td>
+        </tr>
+      <% }) %>
+    <% } else { %>
+      <tr>
+        <td colspan="3" style="text-align:center; color:#999;">
+          No violation records available
+        </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>
+
+<!-- SIGNATURE -->
+<div class="signature">
+  <p><b>Driver Acknowledgement</b></p>
+
+  <% if (data.Sign) { %>
+    <img src="<%= data.Sign %>" width="120"/>
+  <% } %>
+
+  <div class="line"></div>
+  <p>Signature</p>
+
+  <div style="text-align:right;">
+    <b><%= new Date().toISOString().split('T')[0] %></b><br>
+    Signature Date
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="margin-top:40px; font-size:10px; color:#666;">
+  This document pertains to driver:
+  <%= data.FirstName %> <%= data.LastName %>
+</div>
+
+</body>
+</html>

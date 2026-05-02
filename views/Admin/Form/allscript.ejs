@@ -1,0 +1,231 @@
+<script>
+    const canvas = document.querySelector("canvas");
+    const ctx = canvas.getContext("2d");
+  
+    let drawing = false;
+  
+    // Mouse Events
+    canvas.addEventListener("mousedown", () => {
+      drawing = true;
+    });
+  
+    canvas.addEventListener("mouseup", () => {
+      drawing = false;
+      ctx.beginPath();
+    });
+  
+    canvas.addEventListener("mousemove", draw);
+  
+    function draw(e) {
+      if (!drawing) return;
+  
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = "#000";
+  
+      const rect = canvas.getBoundingClientRect();
+      ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+    }
+  
+    // Touch Support (Mobile)
+    canvas.addEventListener("touchstart", (e) => {
+      drawing = true;
+    });
+  
+    canvas.addEventListener("touchend", () => {
+      drawing = false;
+      ctx.beginPath();
+    });
+  
+    canvas.addEventListener("touchmove", (e) => {
+      e.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches[0];
+  
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = "#000";
+  
+      ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+    });
+  
+    // Clear Button
+    const clearBtn = document.querySelector(".clear-signature-btn");
+
+    clearBtn.disabled = false;
+  
+    clearBtn.addEventListener("click", () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath(); // 🔥 important reset
+    });
+ 
+  </script>
+    <script>
+      // Accident
+
+      document.querySelectorAll(".exp-accident").forEach((box) => {
+        const check = box.querySelector(".acc-check");
+        const fields = box.querySelector(".acc-fields");
+
+        check.addEventListener("change", () => {
+          fields.classList.toggle("hidden", check.checked);
+        });
+
+        // default
+        fields.classList.toggle("hidden", check.checked);
+      });
+
+      // Violation
+      document.querySelectorAll(".exp-violation").forEach((box) => {
+        const check = box.querySelector(".vio-check");
+        const fields = box.querySelector(".vio-fields");
+
+        check.addEventListener("change", () => {
+          fields.classList.toggle("hidden", check.checked);
+        });
+
+        // default
+        fields.classList.toggle("hidden", check.checked);
+      });
+
+
+
+     
+    </script>
+
+    <script>
+      document.querySelectorAll(".exp-row").forEach((row) => {
+        const radios = row.querySelectorAll('input[type="radio"]');
+        const fields = row.querySelectorAll(".exp-fields");
+
+        radios.forEach((radio) => {
+          radio.addEventListener("change", () => {
+            if (radio.value === "yes") {
+              fields.forEach((f) => f.classList.remove("hidden"));
+            } else {
+              fields.forEach((f) => f.classList.add("hidden"));
+            }
+          });
+        });
+
+        // default load
+        const checked = row.querySelector("input:checked");
+        if (checked) checked.dispatchEvent(new Event("change"));
+      });
+    </script>
+
+
+    <!-- <script>
+      let currentStep = 0;
+
+      const forms = document.querySelectorAll(".form-step");
+      const nextBtns = document.querySelectorAll(".next-btn");
+      const stepLabels = document.querySelectorAll("#steps .step");
+      const stepIcons = document.querySelectorAll("[data-step]");
+
+      function updateStep(step) {
+        // ✅ FORM SHOW
+        
+        forms.forEach((form, i) => {
+          form.classList.toggle("hidden", i !== step);
+        });
+
+        // ✅ TOP LABEL ACTIVE
+        stepLabels.forEach((el) => {
+          el.classList.remove("text-blue-600", "font-semibold");
+        });
+
+        const activeLabel = document.querySelector(
+          `#steps .step[data-step="${step}"]`
+        );
+        if (activeLabel) {
+          activeLabel.classList.add("text-blue-600", "font-semibold");
+        }
+
+        // ✅ ICON ACTIVE
+        stepIcons.forEach((el) => {
+          const circle = el.querySelector(".circle");
+
+          if (!circle) return;
+
+          // reset
+          circle.classList.remove("bg-blue-500", "text-white");
+          circle.classList.add("border", "text-gray-500");
+
+          // active
+          if (parseInt(el.dataset.step) === step) {
+            circle.classList.remove("border", "text-gray-500");
+            circle.classList.add("bg-blue-500", "text-white");
+          }
+        });
+
+      
+      }
+
+      // ✅ NEXT BUTTON
+      nextBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (currentStep < forms.length - 1) {
+            currentStep++;
+            updateStep(currentStep);
+          }
+        });
+      });
+
+      // ✅ STEP CLICK
+      stepLabels.forEach((step) => {
+        step.addEventListener("click", () => {
+          currentStep = parseInt(step.dataset.step);
+          updateStep(currentStep);
+        });
+      });
+
+      // INIT
+      updateStep(0);
+    </script> -->
+
+    <script>
+      document.querySelectorAll(".clear-form").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const form = btn.closest("form");
+
+          if (!form) return;
+
+          // INPUTS RESET
+          form.querySelectorAll("input").forEach((input) => {
+            if (input.type === "radio" || input.type === "checkbox") {
+              input.checked = false; // uncheck all
+            } else {
+              input.value = "";
+            }
+          });
+
+          // TEXTAREA RESET
+          form.querySelectorAll("textarea").forEach((el) => (el.value = ""));
+
+          // SELECT RESET
+          form
+            .querySelectorAll("select")
+            .forEach((el) => (el.selectedIndex = 0));
+        });
+      });
+    </script>
+    <script>
+      function preview(e, id) {
+        document.getElementById(id).src = URL.createObjectURL(
+          e.target.files[0]
+        );
+      }
+    </script>
+    <script>
+      feather.replace();
+    </script>
+
+
+

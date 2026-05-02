@@ -1,0 +1,158 @@
+<div class="form-step hidden" data-step="6">
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden mt-4">
+  
+      <div class="bg-gradient-to-r from-blue-600 to-blue-700 h-2 w-full"></div>
+  
+      <div class="p-4 sm:p-6 md:p-10">
+  
+        <form id="step6Form" class="min-h-[400px]">
+  
+          <!-- HEADER -->
+          <div class="mb-6 border-b pb-2">
+            <h2 class="text-lg font-bold text-gray-800">
+              Preceding 7 Days On Duty
+            </h2>
+            <p class="text-sm text-gray-500">
+              Record the total hours on duty for each of the preceding 7 days
+            </p>
+          </div>
+  
+          <!-- NOTICE -->
+          <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded text-sm text-amber-800">
+            <strong>📋 Notice:</strong> Per 49 CFR 395.8 — record last 7 days duty hours.
+          </div>
+  
+          <!-- DAYS CONTAINER (JS will fill this) -->
+          <div class="mt-4 border rounded-xl overflow-hidden">
+  
+            <div class="bg-slate-800 text-white grid grid-cols-2 px-6 py-3 text-sm font-semibold">
+              <span>Date</span>
+              <span>Hours On Duty</span>
+            </div>
+  
+            <div id="daysContainer" class="divide-y"></div>
+  
+            <!-- TOTAL -->
+            <div class="bg-blue-50 grid grid-cols-2 px-6 py-4">
+              <span class="font-bold text-blue-800">Total Hours (7 Days)</span>
+              <input
+                name="totalHours"
+                id="totalHours"
+                readonly
+                class="bg-white border border-blue-200 rounded-lg px-3 py-2 max-w-[160px] font-bold text-blue-700"
+                value="0"
+              />
+            </div>
+  
+          </div>
+  
+          <!-- EXTRA FIELDS -->
+          <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
+  
+            <div>
+              <label class="text-sm font-medium">Application Date <span class="text-red-600">*</span></label>
+              <input type="date" name="applicationDate" required
+                class="w-full border rounded-lg px-3 py-2 mt-1"
+                value="2026-04-17"
+              />
+            </div>
+  
+            <div>
+              <label class="text-sm font-medium">Last Relieved <span class="text-red-600">*</span></label>
+              <input type="datetime-local" name="lastRelieved" required
+                class="w-full border rounded-lg px-3 py-2 mt-1"
+                value="2026-04-28T07:39"
+              />
+            </div>
+  
+          </div> -->
+  
+        </form>
+  
+        <!-- BUTTONS -->
+        <div class="mt-8 flex justify-between border-t pt-6">
+  
+          <button type="button" class="px-4 py-2 text-gray-600">
+            Back
+          </button>
+  
+          <button class="next-btn bg-blue-600 text-white px-6 py-2 rounded-lg">
+            Next Step →
+          </button>
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  <script>
+    function getLast7Days() {
+  const days = [];
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+
+    days.push({
+      date: d,
+      label: d.toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric"
+      })
+    });
+  }
+
+  return days;
+}
+
+function renderDays() {
+  const container = document.getElementById("daysContainer");
+  const days = getLast7Days();
+
+  container.innerHTML = days.map((day, i) => `
+    <div class="grid grid-cols-2 px-6 py-3 items-center">
+
+      <span class="text-sm font-medium text-gray-700">
+        Day ${i + 1} (${day.label})
+      </span>
+
+      <input
+        type="number"
+        min="0"
+        max="24"
+        step="0.5"
+        name="days[${i}][hours]"
+        data-date="${day.date.toISOString()}"
+        class="hoursInput border rounded-lg px-3 py-2 max-w-[160px]"
+        placeholder="0.0"
+      />
+
+    </div>
+  `).join("");
+
+  attachListeners();
+}
+
+function attachListeners() {
+  const inputs = document.querySelectorAll(".hoursInput");
+
+  inputs.forEach(input => {
+    input.addEventListener("input", calculateTotal);
+  });
+}
+
+function calculateTotal() {
+  const inputs = document.querySelectorAll(".hoursInput");
+  let total = 0;
+
+  inputs.forEach(i => {
+    total += Number(i.value || 0);
+  });
+
+  document.getElementById("totalHours").value = total;
+}
+
+// init
+renderDays();
+  </script>

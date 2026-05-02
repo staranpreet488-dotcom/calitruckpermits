@@ -1,0 +1,266 @@
+
+<div class="form-step hidden" data-step="3">
+  <div class="mx-auto mt-3 bg-white shadow-lg rounded-xl p-6">
+
+    <h2 class="text-lg font-semibold text-blue-600 border-b pb-2">
+      Driving Experience
+    </h2>
+    <h5>Select 'Yes' for equipment you have operated</h5>
+
+    <div class="space-y-5">
+
+      <!-- Straight Truck -->
+      <div class="exp-row border rounded-xl p-5 bg-gray-50">
+        <div class="grid md:grid-cols-6 gap-4 items-center">
+          <div class="font-semibold text-gray-700">Straight Truck</div>
+
+          <div class="flex gap-2">
+            <label>
+              <input type="radio" name="StraightTruck[experience]" value="yes" class="hidden peer">
+              <div class="px-4 py-1 border rounded-lg peer-checked:bg-blue-500 peer-checked:text-white">Yes</div>
+            </label>
+            <label>
+              <input type="radio" name="StraightTruck[experience]" value="no" checked class="hidden peer">
+              <div class="px-4 py-1 border rounded-lg peer-checked:bg-blue-500 peer-checked:text-white">No</div>
+            </label>
+          </div>
+
+          <div class="exp-fields hidden">
+            <input type="date" name="StraightTruck[from]" class="w-full p-2 border rounded">
+          </div>
+          <div class="exp-fields hidden">
+            <input type="date" name="StraightTruck[to]" class="w-full p-2 border rounded">
+          </div>
+          <div class="exp-fields hidden">
+            <input type="number" name="StraightTruck[approxMiles]" class="w-full p-2 border rounded">
+          </div>
+        </div>
+      </div>
+
+      <!-- Truck Tractor -->
+      <div class="exp-row border rounded-xl p-5 bg-gray-50">
+        <div class="grid md:grid-cols-6 gap-4 items-center">
+          <div class="font-semibold text-gray-700">Truck Tractor</div>
+
+          <div class="flex gap-2">
+            <label>
+              <input type="radio" name="TruckTractor[experience]" value="yes" class="hidden peer">
+              <div class="px-4 py-1 border rounded-lg peer-checked:bg-blue-500 peer-checked:text-white">Yes</div>
+            </label>
+            <label>
+              <input type="radio" name="TruckTractor[experience]" value="no" checked class="hidden peer">
+              <div class="px-4 py-1 border rounded-lg peer-checked:bg-blue-500 peer-checked:text-white">No</div>
+            </label>
+          </div>
+
+          <div class="exp-fields hidden">
+            <input type="date" name="TruckTractor[from]" class="w-full p-2 border rounded">
+          </div>
+          <div class="exp-fields hidden">
+            <input type="date" name="TruckTractor[to]" class="w-full p-2 border rounded">
+          </div>
+          <div class="exp-fields hidden">
+            <input type="number" name="TruckTractor[approxMiles]" class="w-full p-2 border rounded">
+          </div>
+        </div>
+      </div>
+
+      <!-- Semi Trailer -->
+      <div class="exp-row border rounded-xl p-5 bg-gray-50">
+        <div class="grid md:grid-cols-6 gap-4 items-center">
+          <div class="font-semibold text-gray-700">Semi Trailer</div>
+
+          <div class="flex gap-2">
+            <label>
+              <input type="radio" name="SemiTrailer[experience]" value="yes" class="hidden peer">
+              <div class="px-4 py-1 border rounded-lg peer-checked:bg-blue-500 peer-checked:text-white">Yes</div>
+            </label>
+            <label>
+              <input type="radio" name="SemiTrailer[experience]" value="no" checked class="hidden peer">
+              <div class="px-4 py-1 border rounded-lg peer-checked:bg-blue-500 peer-checked:text-white">No</div>
+            </label>
+          </div>
+
+          <div class="exp-fields hidden">
+            <input type="date" name="SemiTrailer[from]" class="w-full p-2 border rounded">
+          </div>
+          <div class="exp-fields hidden">
+            <input type="date" name="SemiTrailer[to]" class="w-full p-2 border rounded">
+          </div>
+          <div class="exp-fields hidden">
+            <input type="number" name="SemiTrailer[approxMiles]" class="w-full p-2 border rounded">
+          </div>
+        </div>
+      </div>
+
+      <!-- Double Triple -->
+      <div class="exp-row border rounded-xl p-5 bg-gray-50">
+        <div class="grid md:grid-cols-6 gap-4 items-center">
+          <div class="font-semibold text-gray-700">Double / Triple</div>
+
+          <div class="flex gap-2">
+            <label>
+              <input type="radio" name="DoubleTriple[experience]" value="yes" class="hidden peer">
+              <div class="px-4 py-1 border rounded-lg peer-checked:bg-blue-500 peer-checked:text-white">Yes</div>
+            </label>
+            <label>
+              <input type="radio" name="DoubleTriple[experience]" value="no" checked class="hidden peer">
+              <div class="px-4 py-1 border rounded-lg peer-checked:bg-blue-500 peer-checked:text-white">No</div>
+            </label>
+          </div>
+
+          <div class="exp-fields hidden">
+            <input type="date" name="DoubleTriple[from]" class="w-full p-2 border rounded">
+          </div>
+          <div class="exp-fields hidden">
+            <input type="date" name="DoubleTriple[to]" class="w-full p-2 border rounded">
+          </div>
+          <div class="exp-fields hidden">
+            <input type="number" name="DoubleTriple[approxMiles]" class="w-full p-2 border rounded">
+          </div>
+        </div>
+      </div>
+
+      <!-- Flatbed -->
+      <div class="exp-row border rounded-xl p-5 bg-gray-50">
+        <div class="grid md:grid-cols-6 gap-4 items-center">
+          <div class="font-semibold text-gray-700">Flatbed</div>
+
+          <div class="flex gap-2">
+            <label>
+              <input type="radio" name="Flatbed[experience]" value="yes" class="hidden peer">
+              <div class="px-4 py-1 border rounded-lg peer-checked:bg-blue-500 peer-checked:text-white">Yes</div>
+            </label>
+            <label>
+              <input type="radio" name="Flatbed[experience]" value="no" checked class="hidden peer">
+              <div class="px-4 py-1 border rounded-lg peer-checked:bg-blue-500 peer-checked:text-white">No</div>
+            </label>
+          </div>
+
+          <div class="exp-fields hidden">
+            <input type="date" name="Flatbed[from]" class="w-full p-2 border rounded">
+          </div>
+          <div class="exp-fields hidden">
+            <input type="date" name="Flatbed[to]" class="w-full p-2 border rounded">
+          </div>
+          <div class="exp-fields hidden">
+            <input type="number" name="Flatbed[approxMiles]" class="w-full p-2 border rounded">
+          </div>
+        </div>
+      </div>
+
+      <!-- Bus -->
+      <div class="exp-row border rounded-xl p-5 bg-gray-50">
+        <div class="grid md:grid-cols-6 gap-4 items-center">
+          <div class="font-semibold text-gray-700">Bus</div>
+
+          <div class="flex gap-2">
+            <label>
+              <input type="radio" name="Bus[experience]" value="yes" class="hidden peer">
+              <div class="px-4 py-1 border rounded-lg peer-checked:bg-blue-500 peer-checked:text-white">Yes</div>
+            </label>
+            <label>
+              <input type="radio" name="Bus[experience]" value="no" checked class="hidden peer">
+              <div class="px-4 py-1 border rounded-lg peer-checked:bg-blue-500 peer-checked:text-white">No</div>
+            </label>
+          </div>
+
+          <div class="exp-fields hidden">
+            <input type="date" name="Bus[from]" class="w-full p-2 border rounded">
+          </div>
+          <div class="exp-fields hidden">
+            <input type="date" name="Bus[to]" class="w-full p-2 border rounded">
+          </div>
+          <div class="exp-fields hidden">
+            <input type="number" name="Bus[approxMiles]" class="w-full p-2 border rounded">
+          </div>
+        </div>
+      </div>
+
+      <!-- Other -->
+      <div class="exp-row border rounded-xl p-5 bg-gray-50">
+        <div class="grid md:grid-cols-6 gap-4 items-center">
+          <div class="font-semibold text-gray-700">Other</div>
+
+          <div class="flex gap-2">
+            <label>
+              <input type="radio" name="Other[experience]" value="yes" class="hidden peer">
+              <div class="px-4 py-1 border rounded-lg peer-checked:bg-blue-500 peer-checked:text-white">Yes</div>
+            </label>
+            <label>
+              <input type="radio" name="Other[experience]" value="no" checked class="hidden peer">
+              <div class="px-4 py-1 border rounded-lg peer-checked:bg-blue-500 peer-checked:text-white">No</div>
+            </label>
+          </div>
+
+          <div class="exp-fields hidden">
+            <input type="date" name="Other[from]" class="w-full p-2 border rounded">
+          </div>
+          <div class="exp-fields hidden">
+            <input type="date" name="Other[to]" class="w-full p-2 border rounded">
+          </div>
+          <div class="exp-fields hidden">
+            <input type="number" name="Other[approxMiles]" class="w-full p-2 border rounded">
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="flex justify-between items-center mt-8">
+        <button
+                type="button"
+                class=" clear-form items-center px-3 py-2 text-red-500 text-[10px] sm:text-xs font-medium hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100"
+                title="Clear all data"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-refresh-cw w-3 h-3 mr-1.5"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+                  ></path>
+                  <path d="M21 3v5h-5"></path>
+                  <path
+                    d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+                  ></path>
+                  <path d="M8 16H3v5"></path></svg
+                >Clear Form
+              </button>
+  
+
+        <button class="next-btn bg-blue-600 text-white px-6 py-2 rounded-lg">
+          Next Step →
+        </button>
+      </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll(".exp-row").forEach((row) => {
+  const radios = row.querySelectorAll('input[type="radio"]');
+  const fields = row.querySelectorAll(".exp-fields");
+
+  radios.forEach((radio) => {
+    radio.addEventListener("change", () => {
+      if (radio.value === "yes") {
+        fields.forEach((f) => f.classList.remove("hidden"));
+      } else {
+        fields.forEach((f) => f.classList.add("hidden"));
+      }
+    });
+  });
+
+  const checked = row.querySelector("input:checked");
+  if (checked) checked.dispatchEvent(new Event("change"));
+});
+</script>
+

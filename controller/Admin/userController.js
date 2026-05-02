@@ -1,0 +1,271 @@
+const Model = require("../../Model/Index");
+const allpdfs = require("../../Model/allpdf")
+const helper = require("../../utility/helper");
+const helpers = require("../../utility/helpers");
+const bcrypt = require("bcrypt");
+const PDFDocument = require("pdfkit");
+
+module.exports = {
+  createUser: helpers.AsyncHanddle(async (req, res) => {
+    const userExist = await Model.UserModel.findOne({ email: req.body.email });
+    if (userExist) {
+      return helper.failed(res, "Email Already Exist");
+    }
+    if (req.files && req.files.image) {
+      var image = req.files.image;
+      if (image) {
+        req.body.image = helper.imageUpload(image, "images");
+      }
+    }
+    let hash = await bcrypt.hash(req.body.password, 10);
+    let createuser = await Model.UserModel.create({
+      role: req.body.role,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      email: req.body.email,
+      phone: req.body.phone,
+      countryCode: req.body.countryCode,
+      image: req.body.image,
+      password: hash,
+    });
+    return helper.success(res, "created successfully", createuser);
+  }),
+
+  addUser: helpers.AsyncHanddle(async (req, res) => {
+    let title = "userList";
+    res.render("Admin/user/addUser", {
+      title,
+      session: req.session.user,
+      msg: req.flash("msg"),
+    });
+  }),
+
+  editUser: helpers.AsyncHanddle(async (req, res) => {
+    let title = "userList";
+    const updatedata = await Model.UserModel.findOne({ _id: req.params.id });
+    res.render("Admin/user/editUser", {
+      title,
+      updatedata,
+      session: req.session.user,
+      msg: req.flash("msg"),
+    });
+  }),
+
+  updateUser: helpers.AsyncHanddle(async (req, res) => {
+    if (req.files && req.files.image) {
+      var image = req.files.image;
+      if (image) {
+        req.body.image = helper.imageUpload(image, "images");
+      }
+    }
+    await Model.UserModel.updateOne(
+      { _id: req.body.id },
+      {
+        role: req.body.role,
+        name: req.body.name,
+        phone: req.body.phone,
+        email: req.body.email,
+        image: req.body.image,
+      }
+    );
+    res.redirect("/userList");
+  }),
+
+  userList: helpers.AsyncHanddle(async (req, res) => {
+    let title = "userList";
+    const userData = await Model.Driver.find({ }).populate("companyLinkId").sort({ createdAt: -1 });
+    console.log(userData,"userDatauserDatauserData")
+    res.render("Admin/user/userList", {
+      title,
+      userData,
+      session: req.session.user,
+      msg: req.flash("msg"),
+    });
+  }),
+  // List: async (req, res) => {
+  //   try {
+  //     let title = "";
+  //     const userData = await Model.Driver.find().populate("companyLinkId");
+  //     res.render("Admin/user/userList.ejs", {
+  //       title,
+  //       userData,
+  //       session: req.session.user,
+  //       msg: req.flash("msg"),
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // },
+
+
+  viewUser: helpers.AsyncHanddle(async (req, res) => {
+    let title = "userList";
+  
+    const userdetails = await Model.Driver.findById(req.params.id);
+    const Clientdetails = await Model.LinkModel.findById(userdetails.companyLinkId);
+  
+    const viewpdf = await allpdfs.findOne({ Driverid: userdetails._id });
+  
+    // const makeUrl = (filePath) => {
+    //   if (!filePath) return '';
+  
+    //   // je already /images ya /pdfs naal start hove
+    //   if (filePath.startsWith('/images') || filePath.startsWith('/pdfs')) {
+    //     return `http://localhost:2000${filePath}`;
+    //   }
+  
+    //   // je sirf filename aa hove (old data case)
+    //   return `http://localhost:2000/pdfs/${filePath.split('\\').pop()}`;
+    // };
+  const makeUrl = (filePath) => {
+  if (!filePath) return '';
+
+  const fileName = filePath.split('\\').pop();
+
+  // je already static path naal save hoya hove
+  if (
+    filePath.startsWith('/images') ||
+    filePath.startsWith('/pdfs') ||
+    filePath.startsWith('/consentpdf')
+  ) {
+    return `http://localhost:2000${filePath}`;
+  }
+
+  // Windows full path case handle
+  if (filePath.includes('images')) {
+    return `http://localhost:2000/images/${fileName}`;
+  }
+
+  if (filePath.includes('consentpdf')) {
+    return `http://localhost:2000/consentpdf/${fileName}`;
+  }
+
+  // default pdfs
+  return `http://localhost:2000/pdfs/${fileName}`;
+};
+    const updated = viewpdf
+      ? {
+          ...viewpdf._doc,
+  
+          // PDF docs
+          EmploymentApplication: makeUrl(viewpdf.EmploymentApplication),
+          MedicalCertificate: makeUrl(viewpdf.MedicalCertificate),
+          Dayscert: makeUrl(viewpdf.Dayscert),
+          SocialSecurityCard: makeUrl(viewpdf.SocialSecurityCard),
+          Violations: makeUrl(viewpdf.Violations),
+  
+          // Image docs
+          MVRRecord: makeUrl(viewpdf.MVRRecord),
+          RoadTest: makeUrl(viewpdf.RoadTest),
+          ClearingHouse: makeUrl(viewpdf.ClearingHouse),
+                Consents: viewpdf.Consents
+        ? viewpdf.Consents.map(file => makeUrl(file))
+        : []
+        }
+      : {};
+  
+    res.render("Admin/user/viewUser", {
+      title,
+      userdetails,
+      Clientdetails,
+      viewpdf: updated,
+      session: req.session.user,
+      msg: req.flash("msg"),
+    });
+  }),
+  // viewUser: helpers.AsyncHanddle(async (req, res) => {
+  //   let title = "userList";
+  //   const userdetails = await Model.Driver.findById({ _id: req.params.id });
+  //   const Clientdetails = await Model.LinkModel.findById({ _id:userdetails.companyLinkId });
+  //   const viewpdf= await allpdfs.find({ Driverid: userdetails._id})
+  //   console.log(userdetails,"viewpdfviewpdfviewpdfviewpdfviewpdfviewpdfviewpdfviewpdfviewpdfviewpdfviewpdfviewpdf")
+
+  //   const updated = viewpdf.map(doc => {
+  //     const makeUrl = (filePath) =>
+  //       filePath
+  //         ? `http://localhost:2000/pdfs/${filePath.split('\\').pop()}`
+  //         : '';
+    
+  //     return {
+  //       ...doc._doc,
+  //       EmploymentApplication: makeUrl(doc.EmploymentApplication),
+  //       MedicalCertificate: makeUrl(doc.MedicalCertificate),
+  //       Dayscert: makeUrl(doc.Dayscert),
+  //       SocialSecurityCard: makeUrl(doc.SocialSecurityCard),
+  //       Violations: makeUrl(doc.Violations),
+  //     };
+  //   });
+  //   const updated1 = viewpdf.map(doc => {
+  //     const makeUrl = (filePath) =>
+  //       filePath
+  //         ? `http://localhost:2000${filePath}`
+  //         : '';
+    
+  //     return {
+  //       ...doc._doc,
+  //       MVRRecord: makeUrl(doc.MVRRecord),
+  //       RoadTest: makeUrl(doc.RoadTest),
+  //       ClearingHouse: makeUrl(doc.ClearingHouse),
+  //     };
+  //   });
+  
+
+  //   res.render("Admin/user/viewUser", {
+  //     title,
+  //     userdetails,
+  //     Clientdetails,
+      
+  //     viewpdf: updated, 
+  //     session: req.session.user,
+  //     msg: req.flash("msg"),
+  //   });
+  // }),
+
+  customerList: helpers.AsyncHanddle(async (req, res) => {
+    let title = "userList";
+    const userId = req.params.id;
+    const customerdetails = await Model.CustomerModel.find({
+      userId: userId,
+    }).populate("userId");
+    res.render("Admin/user/customet", {
+      title,
+      customerdetails,
+      session: req.session.user,
+      msg: req.flash("msg"),
+    });
+  }),
+
+  teamMemberlist: helpers.AsyncHanddle(async (req, res) => {
+    let title = "userList";
+    const userId = req.params.id;
+    const teamMemberdetails = await Model.TeamMemberModel.find({
+      userId: userId,
+    }).populate("userId");
+    res.render("Admin/user/teammember", {
+      title,
+      teamMemberdetails,
+      session: req.session.user,
+      msg: req.flash("msg"),
+    });
+  }),
+
+  userStatus: helpers.AsyncHanddle(async (req, res) => {
+    await Model.UserModel.updateOne(
+      { _id: req.body.id },
+      { status: req.body.value }
+    );
+    req.flash("msg", "Status updated successfully");
+    if (req.body.value == 0) res.send(false);
+    if (req.body.value == 1) res.send(true);
+  }),
+
+  deleteUser: helpers.AsyncHanddle(async (req, res) => {
+    let userId = req.body.id;
+    await Model.UserModel.findByIdAndUpdate(
+      { _id: userId },
+      { isDeleted: true },
+      { new: true }
+    );
+    res.redirect("/userList");
+  }),
+};

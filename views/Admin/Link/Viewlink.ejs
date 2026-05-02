@@ -1,0 +1,353 @@
+<%- include('../common/header') %>
+<%- include('../common/sidebar') %>
+
+<style>
+.img_small {
+  width: 150px;   /* adjust kar sakda */
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.company-logo {
+  width: 70px;
+  height: 70px;
+  background: #f1f1f1;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.company-logo i {
+  width: 30px;
+  height: 30px;
+}
+
+.stat-box {
+  width: 120px;
+  padding: 15px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #e6edf5, #ffffff);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.stat-box i {
+  width: 20px;
+  height: 20px;
+  margin-bottom: 5px;
+}
+
+.stat-box h3 {
+  margin: 5px 0;
+}
+/* Company Name */
+.company-title {
+  font-weight: 600;
+  font-size: 20px;
+  color: #1f2937;
+  letter-spacing: 0.3px;
+}
+
+/* Sub text (address, phone, email) */
+.company-subtext {
+  font-size: 13px;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+/* ACTIVE badge - premium look */
+.status-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+}
+
+/* ACTIVE color like screenshot */
+.status-badge1.active {
+  background-color: #e6f4ea;
+  color: #16a34a;
+}
+.status-badge1 {
+  padding: 5px 10px;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+</style>
+
+<!-- BEGIN: Content-->
+<div class="app-content content ">
+
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <section id="multiple-column-form">
+        <div class="row">
+          <div class=" col-12 mx-auto">
+            <div class="card">
+              <div class="card-header border-bottom">
+                <h4 class="card-title"> Client Information</h4>
+                <div class="text-end mt-1">
+                  <a href="/LinkList" class="btn btn-primary">Close</a>
+                </div>
+
+              </div>
+           
+              <!-- <div class="card-body">
+                <form class="form form-vertical" id="" action="/" method="POST" enctype="multipart/form-data">
+
+                  <div class="row">
+                 
+                    <div class="col-md-6">
+                   
+                      <div class="mb-1 row">
+                        <div class="col-sm-12">
+                          <label class="col-form-label new_lable" for="name">Company  Name</label>
+                        </div>
+                        <div class="col-sm-12">
+                          <input type="text" id="name" class="form-control" name="name" value="<%=userdetails.name%> " disabled>
+                        </div>
+                      </div>
+                  
+                      <div class="mb-1 row">
+                        <div class="col-sm-12">
+                          <label class="col-form-label new_lable" for="phone">Phone Number</label>
+                        </div>
+                        <div class="col-sm-12">
+                          <input type="text" id="phone" class="form-control" name="phone" value="<%=userdetails?.PhoneNumber%> " disabled>
+                        </div>
+                      </div>
+
+
+
+              
+                    </div>
+              
+                  </div>
+                  <div class="row  text-end">
+                    <div class="col-12 text-end">
+                      <a href="/userList" class="btn btn-primary" title="Edit Profile">Back</a>
+                    </div>
+                  </div>
+                </form>
+              </div> -->
+            </div>
+            <div class="card p-2 shadow-sm">
+
+              <!-- Top Header -->
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+            
+                <!-- Left Section -->
+                <div class="d-flex align-items-center">
+            
+                  <!-- Logo -->
+                  <div class="company-logo me-2">
+                    <i data-feather="briefcase"></i>
+                  </div>
+            
+                  <!-- Info -->
+                  <div>
+                    <h3 class="company-title mb-0">
+                      <%= userdetails.name %>
+                    
+                      <span class="status-badge1 ms-1 
+  <%= userdetails.AccountStatus === 'active' ? 'bg-success' : 
+      userdetails.AccountStatus === 'inactive' ? 'bg-danger' :
+      userdetails.AccountStatus === 'Onboarding' ? 'bg-primary' :
+      'bg-warning' %>">
+
+  <%= userdetails.AccountStatus %>
+</span>
+                    </h3>
+                    
+                    <p class="company-subtext mb-0">
+                      <i data-feather="map-pin"></i>
+                      <%= userdetails?.Street %>, <%= userdetails?.City %> ,<%= userdetails?.State %> <%= userdetails?.ZipCode %>
+                    </p>
+                    
+                    <p class="company-subtext mb-0">
+                      <i data-feather="phone"></i>
+                      <%= userdetails?.PhoneNumber %>
+                    </p>
+                    
+                    <p class="company-subtext">
+                      <i data-feather="mail"></i>
+                      <%= userdetails?.EmailAddress %>
+                    </p>
+                  </div>
+            
+                </div>
+            
+                <!-- Right Stats -->
+                <div class="d-flex gap-2 mt-1">
+            
+                  <div class="stat-box text-center">
+                    <i data-feather="truck"></i>
+                    <h3>0</h3>
+                    <small>Total Trucks</small>
+                  </div>
+            
+                  <div class="stat-box text-center">
+                    <i data-feather="users"></i>
+                    <h3><%=usercount%></h3>
+                    <small>Total Drivers</small>
+                  </div>
+            
+                </div>
+            
+              </div>
+            
+              <!-- Divider -->
+              <hr>
+      
+              <h4 class="card-title">Drivers Management -  <small>Shannon Mckenzie </small></h4>
+              <div class="card-DataTable table-responsive">
+                <table class="table table-hover-animation" style="color: rgb(65, 64, 64);">
+                  <thead>
+                    <tr>
+                      <th>S NO.</th>
+                      <!-- <th>Company Name</th> -->
+                      <th>Driver Name</th>
+                      <th>Phone Number</th>
+                      <th>License Number</th>
+                     <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <%userData.forEach(function(data,i) {%>
+                    <tr>
+                      <td>
+                        <%=1+i%>
+                      </td>
+                      <!-- <td>
+                        <%=data?.companyLinkId?.slug%>
+                      </td> -->
+                      <td>
+                      <a href="/viewUser/<%=data._id%>" class="black-link"><%= (data?.FirstName || "N/A") + " " + (data?.LastName || "") %></i></a>
+                        
+                      </td>
+
+                      <td>
+                     <%= (data?.Contact || "N/A")  %>
+                      </td>
+                      <td>
+                        <%=data?.LicenseNumber%>
+                      </td>
+                     <!-- <td>
+                        <img src="<%=data?.licensefront%>" width="45px" height="40px" type="submit" style="cursor:pointer; border-radius: 10px;">
+                      </td> -->
+                      <!--  <td>
+                        <% if(data?.status==1) { %>
+                        <button onclick="changeStatus(this)" id="userId_<%-data.id%>" class=" btn btn-sm btn-success status " data-id="<%=data._id%>" value="0">Active</button>
+                        <% } else { %>
+                        <button onclick="changeStatus(this)" id="userId_<%-data.id%>" class="btn btn-sm btn-danger status" data-id="<%=data._id%>" value="1">IN-Active</button>
+                        <% } %>
+                      </td> -->
+                      <td>
+                        <!-- <a href="/viewUser/<%=data._id%>" class="btn btn-sm bg-light-primary"><i data-feather='eye'></i></a> -->
+                        <!-- <a href="/editUser/<%=data._id%>" class="btn btn-sm bg-warning"><i data-feather='edit'></i></a> -->
+                        <button onclick="confirmDelete('<%=data._id%>')" class="btn btn-sm bg-danger"> <i data-feather='trash'></i> </button>
+                      </td>
+                    </tr>
+                    <%} )%>
+                  </tbody> 
+                </table>
+              </div>
+              
+              <!-- Bottom Form -->
+            
+            
+              <!-- Back Button -->
+          
+            
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<script>
+  $(document).ready(function() {
+    $('.table').DataTable(); // Initialize DataTable for all tables with the 'table' class
+  });
+</script>
+<style>
+
+.black-link {
+  color: black;
+  text-decoration: none;
+}
+.black-link:hover {
+  color: #0d6efd; /* hover te blue na hove */
+}
+</style>
+
+
+<script>
+  $(document).ready(function() {
+    // alert("ready!");
+  });
+
+  function confirmDelete(id) {
+    console.log(">>>>>>>>done>>>>>>>>>>", id)
+
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-danger',
+        cancelButton: 'btn btn-success'
+      },
+      buttonsStyling: true
+
+    })
+
+    // console.log("------------------------------result------", id);
+
+    swalWithBootstrapButtons.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then((isConfirm) => {
+      // console.log(isConfirm)
+      // return
+      if (isConfirm.isConfirmed) {
+        // alert('asd')
+        $.ajax({
+          url: "/deleteDriver/:id",
+          type: 'put',
+          data: {
+            id: id
+          },
+          success: function(result) {}
+        });
+        swalWithBootstrapButtons.fire(
+          'Deleted!',
+          'The user has been deleted .',
+          'success'
+        ).then(() => {
+          location.reload();
+        })
+      } else {
+        swalWithBootstrapButtons.fire(
+          'Cancelled',
+          'The user is safe :)',
+          'error'
+        )
+      }
+    })
+
+  }
+</script>
+<%- include('../common/footer') %>

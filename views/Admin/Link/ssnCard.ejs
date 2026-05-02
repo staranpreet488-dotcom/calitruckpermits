@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial;
+      font-size: 12px;
+      padding: 25px;
+      color: #333;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      text-align: center;
+      background: #eee;
+      padding: 8px;
+      font-weight: bold;
+      margin: 15px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border-bottom: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      font-weight: bold;
+      color: #666;
+    }
+
+    .summary {
+      margin-top: 20px;
+    }
+
+    .signature {
+      margin-top: 40px;
+    }
+
+    .line {
+      border-bottom: 1px solid #000;
+      width: 200px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <b>Driver Social Security Card
+    </b><br>
+    Generated for Driver Qualification file
+  </div>
+
+  <div style="text-align:right;">
+    <b><%= data.companyName %></b><br>
+    <%= data.companyEmail %><br>
+    <%= new Date().toISOString().split('T')[0] %>
+  </div>
+</div>
+
+<div class="title">Driver Social Security Card
+</div>
+
+
+      <img src="http://localhost:2000/<%= data.SocialSecurityImg %>" width="400"/>
+   
+ 
+
+
+
+<!-- SIGNATURE -->
+<div class="signature">
+  <p><b>Driver Acknowledgement</b></p>
+
+  <img src="<%= data.Sign %>" width="120"/>
+
+  <div class="line"></div>
+  <p>Signature</p>
+
+  <div style="text-align:right;">
+    <b><%= new Date().toISOString().split('T')[0] %></b><br>
+    Signature Date
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="margin-top:40px; font-size:10px; color:#666;">
+  This document pertains to driver: 
+  <%= data.FirstName %> <%= data.LastName %> |
+ 
+</div>
+
+</body>
+</html>

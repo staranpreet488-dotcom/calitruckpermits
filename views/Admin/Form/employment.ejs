@@ -1,0 +1,367 @@
+
+<div class="form-step hidden" data-step="5">
+    <div class="p-4 sm:p-6 md:p-10">
+      <form novalidate="" class="min-h-[400px]">
+        <div class="space-y-8 animate-fadeIn">
+          <div
+            class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded text-amber-800 text-sm"
+          >
+            <strong>Requirement:</strong> Provide a full 3-year employment
+            history. If there are gaps (unemployment), please explain them in
+            the 'Notes' field.
+          </div>
+          <div
+            class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm relative transition-all hover:shadow-md"
+          >
+            <div class="flex justify-between items-center mb-6 pb-2 border-b">
+              <h4 class="font-bold text-gray-700 flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-briefcase w-4 h-4 mr-2 text-blue-500"
+                  aria-hidden="true"
+                >
+                  <path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                  <rect width="20" height="14" x="2" y="6" rx="2"></rect>
+                </svg>
+                Employer
+              </h4>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+              <div class="mb-4 undefined">
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Company Name <span class="text-red-500"><span class="text-red-600">*</span></span></label
+                ><input 
+                  
+
+                  required=""
+                  name="companyName"
+                  placeholder="Company Name"
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 border-gray-300 bg-white"
+                  required
+                  value=""
+                />
+           <small class="text-red-500 hidden error-msg">Company Name is required</small>
+              
+              </div>
+              <div class="mb-4 undefined">
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Position Held <span class="text-red-500"><span class="text-red-600">*</span></span></label
+                ><input 
+                  name="positionHeld"
+
+                  required=""
+                  placeholder="Driver"
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 border-gray-300 bg-white"
+                  required
+                  value=""
+                />
+           <small class="text-red-500 hidden error-msg">Position Held   is required</small>
+              
+              </div>
+              <div class="mb-4 undefined">
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Company Contact <span class="text-red-500"><span class="text-red-600">*</span></span></label
+                ><input 
+                  name="companyContact"
+
+                  required=""
+                  placeholder="(555) 555-5555"
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 border-gray-300 bg-white"
+                  required
+                  value=""
+                />
+           <small class="text-red-500 hidden error-msg">Company Contact  is required</small>
+              
+              </div>
+              <div class="mb-4 undefined">
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Company Email </label
+                ><input 
+                  name="companyEmail"
+
+                  placeholder="company@example.com"
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 border-gray-300 bg-white"
+                  required
+                  type="email"
+                  value=""
+                />
+           <small class="text-red-500 hidden error-msg">Company Email  is required</small>
+              
+              </div>
+              <div class="mb-4 relative col-span-full">
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Company Address </label
+                ><input 
+                  name="companyAddress"
+
+                  placeholder="Company Address"
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-white border-gray-300"
+                  type="text"
+                  value=""
+                  required
+                />
+           <small class="text-red-500 hidden error-msg">Company Address is required</small>
+              
+              </div>
+              <div class="mb-4 relative">
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >City <span class="text-red-500"><span class="text-red-600">*</span></span></label
+                ><input 
+                  name="companycity"
+
+                  placeholder="City"
+                  required
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-white border-gray-300"
+                  type="text"
+                  value=""
+                />
+           <small class="text-red-500 hidden error-msg">City  is required</small>
+              
+              </div>
+              <div class="mb-4 relative">
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >State <span class="text-red-500"><span class="text-red-600">*</span></span></label
+                ><input 
+                  name="companystate"
+
+                  placeholder="State"
+                  required
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-white border-gray-300"
+                  type="text"
+                  value=""
+                />
+           <small class="text-red-500 hidden error-msg">State  is required</small>
+              
+              </div>
+              <div class="mb-4 relative">
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Zip Code <span class="text-red-500"><span class="text-red-600">*</span></span></label
+                ><input 
+                  name="companyzipCode"
+
+                  placeholder="Zip Code"
+                  required
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-white border-gray-300"
+                  type="text"
+                  value=""
+                />
+           <small class="text-red-500 hidden error-msg">Zip Code  is required</small>
+              
+              </div>
+              <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Country <span class="text-red-500"><span class="text-red-600">*</span></span></label
+                >
+                <div class="relative">
+                  <select
+                    required
+                    name="companycountry"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none appearance-none bg-white"
+                  >
+                    <option value="">Select</option>
+                    <option value="US">United States</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Mexico">Mexico</option>
+                  </select>
+                  <div
+                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+                  >
+                    <svg
+                      class="fill-current h-4 w-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                      ></path>
+                    </svg>
+           <small class="text-red-500 hidden error-msg">Country  is required</small>
+                  
+                  </div>
+                </div>
+              </div>
+              <div class="mb-4 undefined">
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Worked From <span class="text-red-500"><span class="text-red-600">*</span></span></label
+                ><input 
+                  name="workedFrom"
+
+                  required=""
+                  max="2026-04-16"
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 border-gray-300 bg-white"
+                  required
+                  type="date"
+                  value=""
+                />
+           <small class="text-red-500 hidden error-msg">Worked From  is required</small>
+
+              </div>
+              <div class="mb-4 undefined">
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Worked Till <span class="text-red-500"><span class="text-red-600">*</span></span></label
+                ><input 
+                  name="workedTill"
+
+                  required=""
+                  max="2026-04-16"
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 border-gray-300 bg-white"
+                  required
+                  type="date"
+                  value=""
+                />
+           <small class="text-red-500 hidden error-msg">Worked Till   is required</small>
+             
+              </div>
+              <div class="lg:col-span-2">
+                <div class="mb-4 col-span-full undefined">
+                  <label class="block text-sm font-medium text-gray-700 mb-1"
+                    >Reason for Leaving
+                    <span class="text-red-500"><span class="text-red-600">*</span></span></label
+                  ><input 
+                  name="reasonForLeaving"
+
+                    required=""
+                    placeholder="..."
+                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 border-gray-300 bg-white"
+                    required
+                    value=""
+                  />
+           <small class="text-red-500 hidden error-msg">Reason for Leaving  is required</small>
+               
+                </div>
+              </div>
+              <div class="col-span-full grid md:grid-cols-2 gap-6 mt-2">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2"
+                    >Subject to DOT/FMCSA?</label
+                  >
+                  <div class="flex space-x-6">
+                    <label class="flex items-center space-x-2 cursor-pointer"
+                      ><input name="subjectToDOT" type="radio" value="Yes" /><span
+                        >Yes</span
+                      ></label
+                    ><label class="flex items-center space-x-2 cursor-pointer"
+                      ><input 
+                  name="subjectToDOT"
+
+                        class="text-blue-600"
+                        type="radio"
+                        value="No"
+                      /><span>No</span></label
+                    >
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2"
+                    >Safety Sensitive Position?</label
+                  >
+                  <div class="flex space-x-6">
+                    <label class="flex items-center space-x-2 cursor-pointer"
+                      ><input name="safetySensitivePosition" type="radio" value="Yes" /><span
+                        >Yes</span
+                      ></label
+                    ><label class="flex items-center space-x-2 cursor-pointer"
+                      ><input name="safetySensitivePosition" type="radio" value="No" /><span>No</span></label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col-span-full mt-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                  >Notes (Explain gaps if applicable)</label
+                ><textarea
+                  class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  rows="2"
+                  name="notes"
+                  placeholder="..."
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="mt-8 sm:mt-12 flex items-center justify-between pt-6 border-t border-gray-100"
+        >
+          <div class="flex space-x-2">
+            <button
+              type="button"
+              class="flex items-center px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg text-gray-600 font-medium hover:bg-gray-100 hover:text-gray-900 transition-colors disabled:opacity-50 text-sm"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-chevron-left w-4 h-4 mr-1 sm:mr-2"
+                aria-hidden="true"
+              >
+                <path d="m15 18-6-6 6-6"></path>
+              </svg>
+              Back</button
+            ><button
+              type="button"
+              class="clear-form flex items-center px-3 py-2 text-red-500 text-[10px] sm:text-xs font-medium hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100"
+              title="Clear all data"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-refresh-cw w-3 h-3 mr-1.5"
+                aria-hidden="true"
+              >
+                <path
+                  d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+                ></path>
+                <path d="M21 3v5h-5"></path>
+                <path
+                  d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+                ></path>
+                <path d="M8 16H3v5"></path></svg
+              >Clear Form
+            </button>
+          </div>
+          <button
+            type="button"
+            class="next-btn items-center px-6 sm:px-8 py-2.5 sm:py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 hover:shadow-lg hover:-translate-y-0.5 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none text-sm sm:text-base"
+          >
+            Next Step<svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-chevron-right w-4 h-4 ml-1 sm:ml-2"
+              aria-hidden="true"
+            >
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

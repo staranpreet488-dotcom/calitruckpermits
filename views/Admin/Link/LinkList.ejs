@@ -1,0 +1,349 @@
+<%- include('../common/header') %>
+<%- include('../common/sidebar') %>
+
+<style>
+
+
+/* .status-dropdown {
+
+
+} */
+.custom-status {
+  min-width: 150px;   /* width increase */
+  font-weight: 600;
+  padding-right: 25px;
+  border-radius: 30px;
+
+  border: none;
+
+  cursor: pointer;
+  
+}
+/* Dynamic colors */
+.status-dropdown option[value="active"] { color: green; }
+.status-dropdown option[value="inactive"] { color: red; }
+.status-dropdown option[value="Onboarding"] { color: blue; }
+.status-dropdown option[value="Pending"] { color: orange; }
+.status-dropdown.active {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-dropdown.inactive {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.status-dropdown.onboarding {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-dropdown.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+</style>
+<!-- BEGIN: Content-->
+<div class="app-content content ">
+  <div class="content-overlay"></div>
+  <div class="header-navbar-shadow"></div>
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <section id="responsive-datatable">
+        <div class="row">
+          <div class="card">
+            <div class="card-header border-bottom">
+              <h4 class="card-title">Client listing</h4>
+              <div class="section-header-breadcrumb-right">
+                                <a href="/Link_Create" class="btn btn-primary float-right" title="Edit Profile"> + Add Client </a>    
+                            </div>
+            </div>
+            <br>
+            <div class="card-DataTable table-responsive">
+              <table class="table table-hover-animation" style="color: rgb(65, 64, 64);">
+                <thead>
+                  <tr>
+                    <th>S NO.</th>
+                    <th>Company Name</th>
+                    <th> Company Links</th>
+                    <th>Account Status</th>
+                  
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <%userData.forEach(function(data,i) {%>
+                  <tr>
+                    <td>
+                      <%=1+i%>
+                    </td>
+                    <td>
+                     
+                      <a href="/viewcleint/<%=data._id%>" class="black-link"><%=data?.slug%></a>
+                    </td>
+                   
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        
+                        <a href="<%= data?.link %>" target="_blank" hidden class="link-text">
+                          <%= data?.link %>
+                        </a>
+                    
+                        <button class="copy-btn" onclick="copyLink(this, '<%= data?.link %>')">
+                          📋Copy Company Link 
+                        </button>
+                    
+                      </div>
+                    </td>
+               
+                    <td>
+                      <select 
+                        class="form-select status-dropdown 
+                        <%= data.AccountStatus === 'active' ? 'active' : 
+                            data.AccountStatus === 'inactive' ? 'inactive' :
+                            data.AccountStatus === 'Onboarding' ? 'onboarding' :
+                            'pending' %>" 
+                        data-id="<%= data._id %>">
+                    
+                        <option value="active" <%= data.AccountStatus === 'active' ? 'selected' : '' %>>🟢 Active</option>
+                        <option value="inactive" <%= data.AccountStatus === 'inactive' ? 'selected' : '' %>>🔴 Inactive</option>
+                        <option value="Onboarding" <%= data.AccountStatus === 'Onboarding' ? 'selected' : '' %>>🔵 Onboarding</option>
+                        <option value="Pending" <%= data.AccountStatus === 'Pending' ? 'selected' : '' %>>🟡 Pending</option>
+                      </select>
+                    </td>
+                
+                    <!-- <td>
+                        <a href="<%= data?.link %>" target="_blank">
+                            <%= data?.link %>
+                          </a>
+                    </td> -->
+                  
+                    <!-- <td>
+                      <img src="<%=data?.image%>" width="45px" height="40px" type="submit" style="cursor:pointer; border-radius: 10px;">
+                    </td> -->
+                 
+                    <td>
+                      <!-- <a href="/viewcleint/<%=data._id%>" class="btn btn-sm bg-light-primary"><i data-feather='eye'></i></a> -->
+                      <!-- <a href="/editUser/<%=data._id%>" class="btn btn-sm bg-warning"><i data-feather='edit'></i></a> -->
+                      <button onclick="confirmDelete('<%=data._id%>')" class="btn btn-sm bg-danger"> <i data-feather='trash'></i> </button>
+                    </td>
+                  </tr>
+                  <%} )%>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+
+
+<%- include('../common/footer') %>
+<style>
+
+.link-text {
+  color: #0d6efd;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.black-link:hover {
+  color: #0d6efd; /* hover te blue na hove */
+}
+.link-text:hover {
+  text-decoration: underline;
+}
+
+.copy-btn {
+  border: none;
+  background: #f1f3f5;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  font-size: 14px;
+}
+.black-link {
+  color: black;
+  text-decoration: none;
+}
+.copy-btn:hover {
+  background: #0d6efd;
+  color: white;
+}
+</style>
+<script>
+  function copyLink(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      
+      const original = btn.innerHTML;
+      btn.innerHTML = "✅";
+
+      setTimeout(() => {
+        btn.innerHTML = original;
+      }, 1500);
+
+    }).catch(() => {
+      alert("Copy failed!");
+    });
+  }
+</script>
+<script>
+  setTimeout(function() {
+    $("div.msg").fadeOut();
+  }, 2000);
+</script>
+
+<script>
+  $(document).ready(function() {
+    $('.table').DataTable(); // Initialize DataTable for all tables with the 'table' class
+  });
+</script>
+
+<script>
+  $(document).ready(function() {
+    // alert("ready!");
+  });
+
+  function confirmDelete(id) {
+    console.log(">>>>>>>>done>>>>>>>>>>", id)
+
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-danger',
+        cancelButton: 'btn btn-success'
+      },
+      buttonsStyling: true
+
+    })
+
+    // console.log("------------------------------result------", id);
+
+    swalWithBootstrapButtons.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then((isConfirm) => {
+      // console.log(isConfirm)
+      // return
+      if (isConfirm.isConfirmed) {
+        // alert('asd')
+        $.ajax({
+          url: "/deleteList/:id",
+          type: 'put',
+          data: {
+            id: id
+          },
+          success: function(result) {}
+        });
+        swalWithBootstrapButtons.fire(
+          'Deleted!',
+          'The user has been deleted .',
+          'success'
+        ).then(() => {
+          location.reload();
+        })
+      } else {
+        swalWithBootstrapButtons.fire(
+          'Cancelled',
+          'The user is safe :)',
+          'error'
+        )
+      }
+    })
+
+  }
+</script>
+
+<script>
+  const changeStatus = (val) => {
+    console.log(val)
+    let id = val.getAttribute('data-id')
+    let value = val.getAttribute('value')
+    let elemID = val.getAttribute('id')
+    elemID = document.getElementById(elemID)
+
+    $.ajax({
+      type: "post",
+      url: "/userStatus",
+      data: {
+        id: id,
+        value: value
+
+      },
+      success: function(data) {
+        if (data) {
+          elemID.setAttribute('value', 0)
+          elemID.innerText = `Active`
+          elemID.classList.remove('btn-danger')
+          elemID.classList.add('btn-success')
+        } else {
+          elemID.setAttribute('value', 1)
+          elemID.innerText = `IN-Active`
+          elemID.classList.remove('btn-success')
+          elemID.classList.add('btn-danger')
+        }
+        window.location.reload();
+      }
+    });
+  }
+</script>
+
+ <script>
+  document.querySelectorAll(".status-dropdown").forEach(select => {
+    select.addEventListener("change", async function () {
+      const id = this.dataset.id;
+      const value = this.value;
+
+      const res = await fetch("/ClinetStatus", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id, value })
+      });
+
+      const data = await res.json();
+      
+      if (data) {
+        showToast("✅ Status Updated");
+
+        updateStatusClass(this, value);
+      } else {
+        alert("❌ Failed");
+      }
+    });
+  });
+  function updateStatusClass(select, value) {
+    select.classList.remove("active", "inactive", "onboarding", "pending");
+    select.classList.add(value.toLowerCase());
+  }
+  // 🔥 simple toast (no alert)
+  function showToast(msg) {
+    const toast = document.createElement("div");
+    toast.innerText = msg;
+    toast.style.position = "fixed";
+    toast.style.bottom = "20px";
+    toast.style.right = "20px";
+    toast.style.background = "#333";
+    toast.style.color = "#fff";
+    toast.style.padding = "10px 15px";
+    toast.style.borderRadius = "5px";
+    toast.style.zIndex = "9999";
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.remove();
+    }, 2000);
+  }
+</script> 

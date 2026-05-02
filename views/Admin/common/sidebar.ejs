@@ -1,0 +1,32 @@
+<!-- BEGIN: Main Menu-->
+<div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
+  <div class="navbar-header">
+    <ul class="nav navbar-nav flex-row">
+      <li class="nav-item">
+        <a href="/dashboard" class="navbar-brand">
+          <img class="big_img" src="/app-assets/images/MATTRIFELOGO.png" height="100">
+          <img class="sm_img" src="/app-assets/images/iconMatt.png" height="40">
+        </a>
+        <!-- <h2 class="brand-text">NewPro</h2> -->
+      </li>
+      <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pe-0" data-bs-toggle="collapse"><i class="d-block d-xl-none text-primary toggle-icon font-medium-4" data-feather="x"></i><i class="d-none d-xl-block collapse-toggle-icon font-medium-4  text-primary" data-feather="disc" data-ticon="disc"></i></a></li>
+    </ul>
+  </div>
+  <div class="shadow-bottom"></div>
+  <div class="main-menu-content">
+    <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+      <li class=" <%= title =='dashboard'?'active':'' %>"><a class="d-flex align-items-center" href="/dashboard"><i class="material-symbols-outlined">home</i><span class="menu-title text-truncate" data-i18n="Email">Dashboard</span></a>
+      </li>
+      <!-- <li class=" <%= title =='userList'?'active':'' %> "><a class="d-flex align-items-center" href="/Driver-List"><i class="material-symbols-outlined">group</i><span class="menu-title text-truncate" data-i18n="Chat"> Driver List</span></a>
+      </li> -->
+      <li class=" <%= title =='Link_Create'?'active':'' %>"><a class="d-flex align-items-center" href="/LinkList"><i class="material-symbols-outlined">home</i><span class="menu-title text-truncate" data-i18n="Email">Client List</span></a>
+      </li>
+    
+    </ul>
+  </div>
+</div>
+<!-- END: Main Menu-->
+
+
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial;
+      font-size: 11px;
+      padding: 20px;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      background: #000;
+      color: #fff;
+      padding: 5px;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 5px;
+    }
+
+    td {
+      border: 1px solid #000;
+      padding: 5px;
+    }
+
+    .label {
+      font-weight: bold;
+      width: 20%;
+    }
+
+    .box {
+      height: 40px;
+    }
+
+    img {
+      border: 1px solid #000;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="title">DRIVER APPLICATION FORM</div>
+
+<!-- COMPANY -->
+<div class="section-title">COMPANY DETAILS</div>
+<table>
+  <tr>
+    <td class="label">Company</td>
+    <td><%= data.companyName %></td>
+    <td class="label">Phone</td>
+    <td><%= data.companyContact %></td>
+  </tr>
+  <tr>
+    <td class="label">Email</td>
+    <td><%= data.companyEmail %></td>
+    <td class="label">City</td>
+    <td><%= data.companycity %></td>
+  </tr>
+</table>
+
+<!-- APPLICANT -->
+<div class="section-title">APPLICANT DETAILS</div>
+<table>
+  <tr>
+    <td class="label">Full Name</td>
+    <td><%= data.FirstName %> <%= data.LastName %></td>
+    <td class="label">DOB</td>
+    <td><%= data.Dob %></td>
+  </tr>
+
+  <tr>
+    <td class="label">Phone</td>
+    <td><%= data.Contact %></td>
+    <td class="label">Email</td>
+    <td><%= data.Email %></td>
+  </tr>
+
+  <tr>
+    <td class="label">Address</td>
+    <td colspan="3"><%= data.Address %></td>
+  </tr>
+</table>
+
+<!-- LICENSE -->
+<div class="section-title">LICENSE INFORMATION</div>
+<table>
+  <tr>
+    <td class="label">License No</td>
+    <td><%= data.LicenseNumber %></td>
+    <td class="label">State</td>
+    <td><%= data.LicenseState %></td>
+  </tr>
+
+  <tr>
+    <td class="label">Issue Date</td>
+    <td><%= data.LicenseIssueDate %></td>
+    <td class="label">Expiry</td>
+    <td><%= data.LicenseExpiryDate %></td>
+  </tr>
+</table>
+
+<!-- EXPERIENCE -->
+<div class="section-title">DRIVING EXPERIENCE</div>
+<table>
+  <tr>
+    <td>Equipment</td>
+    <td>Experience</td>
+    <td>From</td>
+    <td>To</td>
+    <td>Miles</td>
+  </tr>
+
+  <tr>
+    <td>Straight Truck</td>
+    <td><%= data.StraightTruck?.experience || '-' %></td>
+    <td><%= data.StraightTruck?.from || '-' %></td>
+    <td><%= data.StraightTruck?.to || '-' %></td>
+    <td><%= data.StraightTruck?.approxMiles || '-' %></td>
+  </tr>
+  <tr>
+    <td>Straight Truck</td>
+    <td><%= data.StraightTruck?.experience || '-' %></td>
+    <td><%= data.StraightTruck?.from || '-' %></td>
+    <td><%= data.StraightTruck?.to || '-' %></td>
+    <td><%= data.StraightTruck?.approxMiles || '-' %></td>
+  </tr> <tr>
+    <td>Truck Tractor</td>
+    <td><%= data.TruckTractor?.experience || '-' %></td>
+    <td><%= data.TruckTractor?.from || '-' %></td>
+    <td><%= data.TruckTractor?.to || '-' %></td>
+    <td><%= data.TruckTractor?.approxMiles || '-' %></td>
+  </tr> <tr>
+    <td>Semi Trailer</td>
+    <td><%= data.SemiTrailer?.experience || '-' %></td>
+    <td><%= data.SemiTrailer?.from || '-' %></td>
+    <td><%= data.SemiTrailer?.to || '-' %></td>
+    <td><%= data.SemiTrailer?.approxMiles || '-' %></td>
+  </tr> <tr>
+    <td>Double Triple</td>
+    <td><%= data.DoubleTriple?.experience || '-' %></td>
+    <td><%= data.DoubleTriple?.from || '-' %></td>
+    <td><%= data.DoubleTriple?.to || '-' %></td>
+    <td><%= data.DoubleTriple?.approxMiles || '-' %></td>
+  </tr>
+  <tr>
+    <td>Flatbed</td>
+    <td><%= data.Flatbed?.experience || '-' %></td>
+    <td><%= data.Flatbed?.from || '-' %></td>
+    <td><%= data.Flatbed?.to || '-' %></td>
+    <td><%= data.Flatbed?.approxMiles || '-' %></td>
+  </tr>
+  <tr>
+    <td>Bus</td>
+    <td><%= data.Bus?.experience || '-' %></td>
+    <td><%= data.Bus?.from || '-' %></td>
+    <td><%= data.Bus?.to || '-' %></td>
+    <td><%= data.Bus?.approxMiles || '-' %></td>
+  </tr> 
+  <tr>
+    <td>Other</td>
+    <td><%= data.Other?.experience || '-' %></td>
+    <td><%= data.Other?.from || '-' %></td>
+    <td><%= data.Other?.to || '-' %></td>
+    <td><%= data.Other?.approxMiles || '-' %></td>
+  </tr> 
+
+
+</table>
+
+<!-- IMAGES -->
+<div class="section-title">LICENSE IMAGES</div>
+<table>
+  <tr>
+    <td>
+      Front<br>
+      <img src="http://localhost:2000/<%= data.licensefront %>" width="200"/>
+    </td>
+    <td>
+      Back<br>
+      <img src="http://localhost:2000/<%= data.licenseback %>" width="200"/>
+    </td>
+  </tr>
+</table>
+
+<!-- SIGN -->
+<div class="section-title">SIGNATURE</div>
+<table>
+  <tr>
+    <td>
+      <img src="<%= data.Sign %>" width="200"/>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

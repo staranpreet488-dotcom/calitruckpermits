@@ -1,0 +1,134 @@
+
+<div class="form-step hidden" data-step="4">
+  <div class="mx-auto mt-3 bg-white shadow-lg rounded-xl p-6">
+
+    <h2 class="text-lg font-semibold text-blue-600 border-b pb-2">
+      Endorsements
+    </h2>
+    <p class="text-sm text-gray-500 mt-1">Select your CDL endorsements</p>
+
+    <!-- ENDORSEMENT -->
+    <div class="mt-4">
+      <label class="text-sm text-gray-600">Endorsement</label>
+      <select name="Endorsement" class="w-full mt-1 p-2 border rounded">
+        <option value="None">None</option>
+        <option value="H">H - Placarded Hazmat</option>
+        <option value="N">N - Tank Vehicles</option>
+        <option value="P">P - Passengers</option>
+        <option value="T">T - Double/Triple</option>
+        <option value="X">X - Tank & Hazmat</option>
+      </select>
+    </div>
+
+    <!-- ACCIDENT -->
+    <div class="mt-6 border rounded-xl p-5 bg-gray-50 exp-accident">
+      <div class="flex justify-between items-center">
+        <div>
+          <h3 class="font-semibold text-gray-800">Accident History</h3>
+          <p class="text-sm text-gray-500">Past 3 Years</p>
+        </div>
+
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" name="AccidentHistory[noAccident]" class="acc-check" />
+          <span class="text-sm">I have no accidents</span>
+        </label>
+      </div>
+
+      <div class="grid md:grid-cols-4 gap-4 mt-4 acc-fields">
+        <div>
+          <label class="text-sm text-gray-600">Date <span class="text-red-600">*</span></label>
+          <input type="date" name="AccidentHistory[date]" class="w-full mt-1 p-2 border rounded" />
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-600">Accident Type <span class="text-red-600">*</span></label>
+          <input type="text" name="AccidentHistory[accidentType]" class="w-full mt-1 p-2 border rounded" />
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-600">Vehicle Type <span class="text-red-600">*</span></label>
+          <input type="text" name="AccidentHistory[vehicleType]" class="w-full mt-1 p-2 border rounded" />
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-600">Location <span class="text-red-600">*</span></label>
+          <input type="text" name="AccidentHistory[location]" class="w-full mt-1 p-2 border rounded" />
+        </div>
+      </div>
+    </div>
+
+    <!-- VIOLATION -->
+    <div class="mt-6 border rounded-xl p-5 bg-gray-50 exp-violation">
+      <div class="flex justify-between items-center">
+        <div>
+          <h3 class="font-semibold text-gray-800">Violation History</h3>
+          <p class="text-sm text-gray-500">Past 3 Years</p>
+        </div>
+
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" name="ViolationHistory[noAccident]" class="vio-check" />
+          <span class="text-sm">I have no violations</span>
+        </label>
+      </div>
+
+      <div class="grid md:grid-cols-4 gap-4 mt-4 vio-fields">
+        <div>
+          <label class="text-sm text-gray-600">Date <span class="text-red-600">*</span></label>
+          <input type="date"  name="ViolationHistory[date]" class="w-full mt-1 p-2 border rounded" />
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-600">Offense <span class="text-red-600">*</span></label>
+          <input type="text" name="ViolationHistory[accidentType]" class="w-full mt-1 p-2 border rounded" />
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-600">Vehicle Type <span class="text-red-600">*</span></label>
+          <input type="text" name="ViolationHistory[vehicleType]" class="w-full mt-1 p-2 border rounded" />
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-600">Location <span class="text-red-600">*</span></label>
+          <input type="text" name="ViolationHistory[location]" class="w-full mt-1 p-2 border rounded" />
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-between items-center mt-8">
+        <button
+                type="button"
+                class=" clear-form items-center px-3 py-2 text-red-500 text-[10px] sm:text-xs font-medium hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100"
+                title="Clear all data"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-refresh-cw w-3 h-3 mr-1.5"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+                  ></path>
+                  <path d="M21 3v5h-5"></path>
+                  <path
+                    d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+                  ></path>
+                  <path d="M8 16H3v5"></path></svg
+                >Clear Form
+              </button>
+  
+      <button class="next-btn bg-blue-600 text-white px-6 py-2 rounded-lg">
+        Next Step →
+      </button>
+    </div>
+
+  </div>
+</div>
+

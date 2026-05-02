@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Driver Form</title>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #1d2671, #c33764);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      width: 450px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(15px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+      color: white;
+    }
+
+    /* HEADER */
+    .header {
+      padding: 25px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .company-name {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: linear-gradient(90deg, #fff, #ddd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tag {
+      margin-top: 6px;
+      font-size: 13px;
+      color: #ccc;
+    }
+
+    /* FORM */
+    .form {
+      padding: 25px;
+    }
+
+    .input-group {
+      margin-bottom: 18px;
+    }
+
+    .input-group label {
+      font-size: 13px;
+      margin-bottom: 5px;
+      display: block;
+      color: #ddd;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 11px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background: rgba(255,255,255,0.15);
+      color: white;
+      transition: 0.3s;
+    }
+
+    .input-group input::placeholder {
+      color: #bbb;
+    }
+
+    .input-group input:focus {
+      background: rgba(255,255,255,0.25);
+      transform: scale(1.02);
+    }
+
+    /* BUTTON */
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #ff9966, #ff5e62);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    .header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 20px;
+  background: linear-gradient(135deg, #1f1c2c, #928dab);
+  color:#fff;
+  border-radius:12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.header-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.logo-box{
+  width:45px;
+  height:45px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,0.15);
+  border-radius:10px;
+  font-size:22px;
+}
+
+.company-name{
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:0.5px;
+}
+
+.subtitle{
+  font-size:12px;
+  opacity:0.8;
+  margin-top:2px;
+}
+
+
+
+  </style>
+  <!-- img -->
+  <style>
+    .img-thumbnail {
+      padding: 0.25rem;
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 50%;
+      max-width: 100%;
+      height: 6rem;
+      width: 6rem;
+    }
+  
+    .new_lable {
+      color: black;
+      font-size: 13px;
+      font-weight: 500;
+    }
+  
+  
+    ::-webkit-file-upload-button {
+      display: none;
+    }
+  
+    ::file-selector-button {
+      display: none;
+    }
+  
+    input[type="file"] {
+      color: transparent;
+    }
+  
+    .fe-24 {
+    position: absolute;
+    top: 508px;
+    left: 86px;
+    color: #ffffff;
+    border: 2px solid #878181fc;
+    border-radius: 50%;
+    background: #000000c9;
+}
+  
+    .camera_icon {
+      height: 2ch;
+      width: 2rem;
+      padding: 16px;
+      display: inline-block;
+    }
+
+
+    .license-row{
+  display:flex;
+  gap:20px;
+  justify-content:space-between;
+  margin-top:15px;
+}
+
+.license-box{
+  flex:1;
+  text-align:center;
+  position:relative;
+}
+
+.camera-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:8px;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#000;
+  color:#fff;
+  cursor:pointer;
+}
+
+.camera-btn i{
+  width:18px;
+  height:18px;
+  stroke: white;
+}
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+
+    <!-- 🔥 COMPANY HEADER -->
+    <div class="header">
+      <div class="header-left">
+        <div class="logo-box">
+          🚛
+        </div>
+    
+        <div class="title-block">
+          <div class="company-name">
+            <%= company?.name 
+                ? company.name.charAt(0).toUpperCase() + company.name.slice(1)
+                : '' %>
+          </div>
+          <div class="subtitle">
+            Driver Management Portal • Transport Company System
+          </div>
+        </div>
+      </div>
+    
+   
+    </div>
+
+    <!-- FORM -->
+    <div class="form">
+      <form action="/<%= company?.slug %>/add-driver" method="POST">
+
+        <div class="input-group">
+          <label>Full Name (as per ID)</label>
+          <input type="text" name="driverName" placeholder="Enter Full Name " required>
+        </div>
+
+        <div class="input-group">
+          <label>Mobile Number</label>
+          <input type="text" name="phone" placeholder="Enter Mobile Number">
+        </div>
+
+        <div class="input-group">
+          <label>Driving License Number</label>
+          <input type="text" name="license" placeholder="Enter Driving License Number">
+        </div>
+        <div class="input-group">
+          <label>License Expiry Date</label>
+          <input type="text" name="licenseExpiry" placeholder="Enter License Expiry Date">
+        </div>
+
+     
+
+
+
+        <div class="license-row">
+
+          <!-- FRONT -->
+          <div class="license-box">
+            <p class="input-group">Driving License Front</p>
+        
+            <img src="..." id="outputLicenseFront" class="img-thumbnail">
+        
+            <input 
+            type="file" 
+            id="licenseFrontInp" 
+            name="image" 
+            onchange="loadFile(event,'outputLicenseFront')" 
+            style="display:none;"
+          />
+        
+            <label for="licenseFrontInp" class="camera-btn">
+              <i data-feather="camera"></i>
+            </label>
+          </div>
+        
+          <!-- BACK -->
+          <div class="license-box">
+            <p class="input-group">Driving License Back</p>
+        
+            <img src="..." id="outputLicenseBack" class="img-thumbnail">
+        
+            <input 
+            type="file" 
+            id="licenseBackInp" 
+            name="image1" 
+            onchange="loadFile1(event,'outputLicenseBack')" 
+            style="display:none;"
+          />
+        
+            <label for="licenseBackInp" class="camera-btn">
+              <i data-feather="camera"></i>
+            </label>
+          </div>
+        
+        </div>
+
+        <div class="input-group">
+          <label>Driving license Back</label>
+          <input type="text" name="licenseBack" placeholder="Enter Driving license Back">
+        </div>
+        <!-- <div class="input-group">
+          <label>Driving license front</label>
+          <input type="text" name="licenseExpiry" placeholder="Enter Driving license front">
+        </div> -->
+        <button class="btn" type="submit">Submit</button>
+
+      </form>
+    </div>
+
+  </div>
+  <script>
+    // for preview of image
+    function loadFile(event, c) {
+      var image = document.getElementById(c);
+      image.src = URL.createObjectURL(event.target.files[0]);
+    }
+
+    function loadFile1(event, c) {
+      var image = document.getElementById(c);
+      image.src = URL.createObjectURL(event.target.files[0]);
+    }
+  </script>
+
+  <script>
+    $(window).on('load', function() {
+      if (feather) {
+        feather.replace({
+          width: 14,
+          height: 14
+        });
+      }
+    })
+  </script>
+</body>
+</html>
