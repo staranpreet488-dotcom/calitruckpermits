@@ -114,7 +114,7 @@ console.log(viewpdf,"viewpdfviewpdfviewpdfviewpdf")
   if (!filePath) return '';
 
   // already full URL
-  if (filePath.startsWith('https')) return filePath;
+  if (filePath.startsWith('http')) return filePath;
 
   const fileName = filePath.split('\\').pop();
 
