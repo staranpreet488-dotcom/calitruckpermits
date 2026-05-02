@@ -15,18 +15,59 @@ const path = require("path");
 const fs = require("fs");
 const { model } = require("mongoose");
 
+// const generatePDF = async (driver) => {
+//   const dir = path.join(process.cwd(), "public/pdfs");
+
+//   if (!fs.existsSync(dir)) {
+//     fs.mkdirSync(dir, { recursive: true });
+//   }
+
+//   const filePath = path.join(
+//     dir,
+//     `driver_${driver.FirstName}.pdf`
+//   );
+
+  
+
+//   const html = await ejs.renderFile(
+//     path.join(__dirname, "../../views/Admin/Link/pdfTemplate.ejs"),
+//     { data: driver }
+//   );
+//   console.log(driver,"licensebacklicensebacklicensebacklicenseback")
+
+
+//   const browser = await puppeteer.launch();
+//   const page = await browser.newPage();
+
+//   await page.setContent(html, { waitUntil: "load" });
+
+//   await page.pdf({
+//     path: filePath,
+//     format: "A4",
+//     printBackground: true,
+//   });
+
+//   await browser.close();
+
+//   return filePath;
+// };
+
+
+
 const generatePDF = async (driver) => {
-  const filePath = path.join(
-    __dirname,
-    `../../public/pdfs/driver_${driver.FirstName}.pdf`
-  );
+  const dir = path.join(process.cwd(), "public/pdfs");
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+
+  const fileName = `driver_${Date.now()}.pdf`;
+  const filePath = path.join(dir, fileName);
 
   const html = await ejs.renderFile(
     path.join(__dirname, "../../views/Admin/Link/pdfTemplate.ejs"),
     { data: driver }
   );
-  console.log(driver,"licensebacklicensebacklicensebacklicenseback")
-
 
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
@@ -41,7 +82,8 @@ const generatePDF = async (driver) => {
 
   await browser.close();
 
-  return filePath;
+  // ✅ THIS is what should go in DB
+  return `/pdfs/${fileName}`;
 };
 const generateMedicalPDF = async (driver) => {
 
