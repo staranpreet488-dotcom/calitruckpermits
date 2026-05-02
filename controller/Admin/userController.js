@@ -131,20 +131,20 @@ module.exports = {
     filePath.startsWith('/pdfs') ||
     filePath.startsWith('/consentpdf')
   ) {
-    return `${BASE_URL}${filePath}`;
+    return `${filePath}`;
   }
 
   // Windows full path case handle
   if (filePath.includes('images')) {
-     return `${BASE_URL}/images/${fileName}`;
+     return `/images/${fileName}`;
   }
 
   if (filePath.includes('consentpdf')) {
-     return `${BASE_URL}/consentpdf/${fileName}`;
+     return `/consentpdf/${fileName}`;
   }
 
   // default pdfs
-  return `${BASE_URL}/pdfs/${fileName}`;
+  return `/pdfs/${fileName}`;
 };
     const updated = viewpdf
       ? {
