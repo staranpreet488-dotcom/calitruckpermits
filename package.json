@@ -1,10 +1,10 @@
 {
-  "name": "truckingproject",
+  "name": "calitruckpermits",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon calitruckpermits.js"
+    "start": "node calitruckpermits.js"
   },
   "keywords": [],
   "author": "",
