@@ -6,6 +6,7 @@ const DriverModel = require("../../Model/DriverModel");
 const Model = require("../../Model/Index");
 const LinkModel = require("../../Model/LinkModel");
 const pdfmodel =require("../../Model/allpdf")
+const pdf = require("html-pdf-node");
 
 require('dotenv').config();
 const BASE_URL = process.env.LIVE_BASE_URL || 'https://localhost:2000';
@@ -20,222 +21,273 @@ const path = require("path");
 const fs = require("fs");
 const { model } = require("mongoose");
 console.log(BASE_URL,"BASE_URLBASE_URLBASE_URL")
-const generatePDF = async (driver) => {
-  const dir = path.join(process.cwd(), "public/pdfs");
+// const generatePDF = async (driver) => {
+//   const dir = path.join(process.cwd(), "public/pdfs");
 
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
+//   if (!fs.existsSync(dir)) {
+//     fs.mkdirSync(dir, { recursive: true });
+//   }
 
-  const filePath = path.join(
-    dir,
-    `driver_${driver.FirstName}.pdf`
-  );
+//   const filePath = path.join(
+//     dir,
+//     `driver_${driver.FirstName}.pdf`
+//   );
 
   
 
+//   const html = await ejs.renderFile(
+//     path.join(__dirname, "../../views/Admin/Link/pdfTemplate.ejs"),
+//     { data: driver }
+//   );
+//   console.log(driver,"licensebacklicensebacklicensebacklicenseback")
+
+
+//   const browser = await puppeteer.launch({
+//   headless: "new",
+//   args: [
+//     '--no-sandbox',
+//     '--disable-setuid-sandbox',
+//     '--disable-dev-shm-usage',
+//     '--disable-gpu'
+//   ]
+// });
+
+//   const page = await browser.newPage();
+
+//   await page.setContent(html, { waitUntil: "load" });
+
+//   await page.pdf({
+//     path: filePath,
+//     format: "A4",
+//     printBackground: true,
+//   });
+
+//   await browser.close();
+
+//   return filePath;
+// };
+
+const generatePDF = async (driver) => {
   const html = await ejs.renderFile(
     path.join(__dirname, "../../views/Admin/Link/pdfTemplate.ejs"),
     { data: driver }
   );
-  console.log(driver,"licensebacklicensebacklicensebacklicenseback")
 
+  const file = { content: html };
 
-  const browser = await puppeteer.launch({
-  headless: "new",
-  args: [
-    '--no-sandbox',
-    '--disable-setuid-sandbox',
-    '--disable-dev-shm-usage',
-    '--disable-gpu'
-  ]
-});
-
-  const page = await browser.newPage();
-
-  await page.setContent(html, { waitUntil: "load" });
-
-  await page.pdf({
-    path: filePath,
-    format: "A4",
-    printBackground: true,
+  const pdfBuffer = await pdf.generatePdf(file, {
+    format: "A4"
   });
 
-  await browser.close();
+  const filePath = path.join(process.cwd(), "public/pdfs", `driver_${driver.FirstName}.pdf`);
+
+  fs.writeFileSync(filePath, pdfBuffer);
 
   return filePath;
 };
-const generateMedicalPDF = async (driver) => {
-
-  const dir = path.join(process.cwd(), "public/pdfs");
-
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-
-  const filePath = path.join(
-    dir,
-    `../../public/pdfs/MedcicalCer_${driver.FirstName}.pdf`
-  );
-
-  const html = await ejs.renderFile(
-    path.join(__dirname, "../../views/Admin/Link/MedicalCer.ejs"),
-    { data: driver }
-  );
-
-  const browser = await puppeteer.launch({
-  headless: "new",
-  args: [
-    '--no-sandbox',
-    '--disable-setuid-sandbox',
-    '--disable-dev-shm-usage',
-    '--disable-gpu'
-  ]
-});
-
-  const page = await browser.newPage();
-
-  await page.setContent(html, { waitUntil: "load" });
-
-  await page.pdf({
-    path: filePath,
-    format: "A4",
-    printBackground: true,
+const generateMedicalPDF = (driver) => {
+  return generatePDF({
+    templatePath: path.join(__dirname, "../../views/Admin/Link/MedicalCer.ejs"),
+    data: driver,
+    fileName: `MedicalCer_${driver.FirstName}.pdf`,
   });
-
-  await browser.close();
-
-  return filePath;
 };
+// const generateMedicalPDF = async (driver) => {
 
-const generateDutyPDF = async (driver) => {
+//   const dir = path.join(process.cwd(), "public/pdfs");
 
-  const dir = path.join(process.cwd(), "public/pdfs");
+//   if (!fs.existsSync(dir)) {
+//     fs.mkdirSync(dir, { recursive: true });
+//   }
 
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
+//   const filePath = path.join(
+//     dir,
+//     `../../public/pdfs/MedcicalCer_${driver.FirstName}.pdf`
+//   );
 
-  const filePath = path.join(
-    dir,
-    `../../public/pdfs/7Days_${driver.FirstName}.pdf`
-  );
+//   const html = await ejs.renderFile(
+//     path.join(__dirname, "../../views/Admin/Link/MedicalCer.ejs"),
+//     { data: driver }
+//   );
 
-  const html = await ejs.renderFile(
-    path.join(__dirname, "../../views/Admin/Link/dutyHoursTemplate.ejs"),
-    { data: driver }
-  );
+//   const browser = await puppeteer.launch({
+//   headless: "new",
+//   args: [
+//     '--no-sandbox',
+//     '--disable-setuid-sandbox',
+//     '--disable-dev-shm-usage',
+//     '--disable-gpu'
+//   ]
+// });
 
-  const browser = await puppeteer.launch({
-  headless: "new",
-  args: [
-    '--no-sandbox',
-    '--disable-setuid-sandbox',
-    '--disable-dev-shm-usage',
-    '--disable-gpu'
-  ]
-});
+//   const page = await browser.newPage();
 
-  const page = await browser.newPage();
+//   await page.setContent(html, { waitUntil: "load" });
 
-  await page.setContent(html, { waitUntil: "load" });
+//   await page.pdf({
+//     path: filePath,
+//     format: "A4",
+//     printBackground: true,
+//   });
 
-  await page.pdf({
-    path: filePath,
-    format: "A4",
-    printBackground: true,
+//   await browser.close();
+
+//   return filePath;
+// };
+const generateDutyPDF = (driver) => {
+  return generatePDF({
+    templatePath: path.join(__dirname, "../../views/Admin/Link/dutyHoursTemplate.ejs"),
+    data: driver,
+    fileName: `7Days_${driver.FirstName}.pdf`,
   });
-
-  await browser.close();
-
-  return filePath;
 };
+// const generateDutyPDF = async (driver) => {
 
-const generateSSNPDF = async (driver) => {
+//   const dir = path.join(process.cwd(), "public/pdfs");
 
-  const dir = path.join(process.cwd(), "public/pdfs");
+//   if (!fs.existsSync(dir)) {
+//     fs.mkdirSync(dir, { recursive: true });
+//   }
 
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
+//   const filePath = path.join(
+//     dir,
+//     `../../public/pdfs/7Days_${driver.FirstName}.pdf`
+//   );
 
-  const filePath = path.join(
-    dir,
-    `../../public/pdfs/SSn${driver.FirstName}.pdf`
-  );
+//   const html = await ejs.renderFile(
+//     path.join(__dirname, "../../views/Admin/Link/dutyHoursTemplate.ejs"),
+//     { data: driver }
+//   );
 
-  const html = await ejs.renderFile(
-    path.join(__dirname, "../../views/Admin/Link/ssnCard.ejs"),
-    { data: driver }
-  );
+//   const browser = await puppeteer.launch({
+//   headless: "new",
+//   args: [
+//     '--no-sandbox',
+//     '--disable-setuid-sandbox',
+//     '--disable-dev-shm-usage',
+//     '--disable-gpu'
+//   ]
+// });
 
-  const browser = await puppeteer.launch({
-  headless: "new",
-  args: [
-    '--no-sandbox',
-    '--disable-setuid-sandbox',
-    '--disable-dev-shm-usage',
-    '--disable-gpu'
-  ]
-});
+//   const page = await browser.newPage();
 
-  const page = await browser.newPage();
+//   await page.setContent(html, { waitUntil: "load" });
 
-  await page.setContent(html, { waitUntil: "load" });
+//   await page.pdf({
+//     path: filePath,
+//     format: "A4",
+//     printBackground: true,
+//   });
 
-  await page.pdf({
-    path: filePath,
-    format: "A4",
-    printBackground: true,
+//   await browser.close();
+
+//   return filePath;
+// };
+
+
+
+
+const generateSSNPDF = (driver) => {
+  return generatePDF({
+    templatePath: path.join(__dirname, "../../views/Admin/Link/ssnCard.ejs"),
+    data: driver,
+    fileName: `SSN_${driver.FirstName}.pdf`,
   });
-
-  await browser.close();
-
-  return filePath;
 };
+// const generateSSNPDF = async (driver) => {
 
-const generatevoilationNPDF = async (driver) => {
+//   const dir = path.join(process.cwd(), "public/pdfs");
 
-  const dir = path.join(process.cwd(), "public/pdfs");
+//   if (!fs.existsSync(dir)) {
+//     fs.mkdirSync(dir, { recursive: true });
+//   }
 
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
+//   const filePath = path.join(
+//     dir,
+//     `../../public/pdfs/SSn${driver.FirstName}.pdf`
+//   );
 
-  const filePath = path.join(
-    dir,
-    `../../public/pdfs/voilation${driver.FirstName}.pdf`
-  );
+//   const html = await ejs.renderFile(
+//     path.join(__dirname, "../../views/Admin/Link/ssnCard.ejs"),
+//     { data: driver }
+//   );
 
-  const html = await ejs.renderFile(
-    path.join(__dirname, "../../views/Admin/Link/voilationpdf.ejs"),
-    { data: driver }
-  );
+//   const browser = await puppeteer.launch({
+//   headless: "new",
+//   args: [
+//     '--no-sandbox',
+//     '--disable-setuid-sandbox',
+//     '--disable-dev-shm-usage',
+//     '--disable-gpu'
+//   ]
+// });
 
-  const browser = await puppeteer.launch({
-  headless: "new",
-  args: [
-    '--no-sandbox',
-    '--disable-setuid-sandbox',
-    '--disable-dev-shm-usage',
-    '--disable-gpu'
-  ]
-});
+//   const page = await browser.newPage();
 
-  const page = await browser.newPage();
+//   await page.setContent(html, { waitUntil: "load" });
 
-  await page.setContent(html, { waitUntil: "load" });
+//   await page.pdf({
+//     path: filePath,
+//     format: "A4",
+//     printBackground: true,
+//   });
 
-  await page.pdf({
-    path: filePath,
-    format: "A4",
-    printBackground: true,
+//   await browser.close();
+
+//   return filePath;
+// };
+
+
+
+const generatevoilationNPDF = (driver) => {
+  return generatePDF({
+    templatePath: path.join(__dirname, "../../views/Admin/Link/voilationpdf.ejs"),
+    data: driver,
+    fileName: `Violation_${driver.FirstName}.pdf`,
   });
-
-  await browser.close();
-
-  return filePath;
 };
+// const generatevoilationNPDF = async (driver) => {
+
+//   const dir = path.join(process.cwd(), "public/pdfs");
+
+//   if (!fs.existsSync(dir)) {
+//     fs.mkdirSync(dir, { recursive: true });
+//   }
+
+//   const filePath = path.join(
+//     dir,
+//     `../../public/pdfs/voilation${driver.FirstName}.pdf`
+//   );
+
+//   const html = await ejs.renderFile(
+//     path.join(__dirname, "../../views/Admin/Link/voilationpdf.ejs"),
+//     { data: driver }
+//   );
+
+//   const browser = await puppeteer.launch({
+//   headless: "new",
+//   args: [
+//     '--no-sandbox',
+//     '--disable-setuid-sandbox',
+//     '--disable-dev-shm-usage',
+//     '--disable-gpu'
+//   ]
+// });
+
+//   const page = await browser.newPage();
+
+//   await page.setContent(html, { waitUntil: "load" });
+
+//   await page.pdf({
+//     path: filePath,
+//     format: "A4",
+//     printBackground: true,
+//   });
+
+//   await browser.close();
+
+//   return filePath;
+// };
 
 const consentData = {
   Consents1: {
@@ -689,171 +741,228 @@ I further understand that if I refuse to provide consent for <strong><%= company
   `
   },
 };
-async function generateConsentPDF(driver, consentKey, company) {
-const browser = await puppeteer.launch({
-  headless: "new",
-  args: [
-    '--no-sandbox',
-    '--disable-setuid-sandbox',
-    '--disable-dev-shm-usage',
-    '--disable-gpu'
-  ]
-});
 
-  const page = await browser.newPage();
+async function generateConsentPDF(driver, consentKey, company) {
+  const dir = path.join(process.cwd(), "public/consentpdf");
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
 
   const fullName = `${driver.FirstName || ""} ${driver.LastName || ""}`.trim();
 
-  // 👉 get correct consent
   let consent = consentData[consentKey];
-
   if (!consent) throw new Error("Invalid consent key");
 
-  // 👉 replace dynamic values
-let content = await ejs.render(consent.content, {
-  company,
-});
+  let content = await ejs.render(consent.content, { company });
 
-// then replace simple placeholders
-content = content
-  .replace(/\[Driver Name\]/g, fullName)
-  .replace(/\[License #\]/g, driver.LicenseNumber || "");
+  content = content
+    .replace(/\[Driver Name\]/g, fullName)
+    .replace(/\[License #\]/g, driver.LicenseNumber || "");
 
-const html = `
-<html>
-<head>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    padding: 25px 40px;
-    font-size: 12px;
-    color: #333;
-    line-height: 1.6;
-  }
+  const html = `
+  <html>
+  <body style="font-family: Arial; padding: 30px; font-size: 12px;">
+    <h2 style="text-align:center;">${company?.name || ""}</h2>
 
-  .header {
-    text-align: center;
-    margin-bottom: 10px;
-  }
+    <p><strong>Driver:</strong> ${fullName}</p>
+    <p><strong>License:</strong> ${driver.LicenseNumber || ""}</p>
 
-  .company-name {
-    font-size: 18px;
-    font-weight: bold;
-  }
+    <hr/>
 
-  .company-address {
-    font-size: 11px;
-    margin-top: 3px;
-  }
+    ${content}
 
-  .generated-date {
-    font-size: 10px;
-    margin-top: 3px;
-    color: #666;
-  }
-
-  .driver-box {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-top: 15px;
-    margin-bottom: 20px;
-  }
-
-  .driver-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 5px;
-  }
-
-  hr {
-    margin: 15px 0;
-  }
-
-  ul {
-    margin-left: 20px;
-  }
-
-  .signature {
-    margin-top: 40px;
-  }
-
-  .signature img {
-    width: 180px;
-    border: 1px solid #ccc;
-    padding: 4px;
-  }
-
-</style>
-</head>
-
-<body>
-
-  <!-- COMPANY HEADER -->
-  <div class="header">
-    <div class="company-name">
-      ${(company?.name || "").toUpperCase()}
-    </div>
-
-    <div class="company-address">
-      ${company?.Street || ""}, 
-      ${company?.City || ""}, 
-      ${company?.State || ""} 
-      ${company?.ZipCode || ""}, 
-      United States
-    </div>
-
-    <div class="generated-date">
-      Generated on: ${new Date().toLocaleDateString()}
-    </div>
-  </div>
-
-  <hr/>
-
-  <!-- DRIVER INFO BOX -->
-  <div class="driver-box">
-    <div class="driver-row">
-      <div><strong>Driver:</strong> ${fullName}</div>
-      <div><strong>License:</strong> ${driver.LicenseNumber || ""}</div>
-    </div>
-
-    <div class="driver-row">
-      <div><strong>Email:</strong> ${driver.Email || ""}</div>
-      <div><strong>Phone:</strong> ${driver.Contact || ""}</div>
-    </div>
-  </div>
-
-  <!-- CONSENT CONTENT -->
-  ${content}
-
-  <!-- SIGNATURE -->
-  <div class="signature">
-    <strong>Driver Signature:</strong><br/>
+    <br/><br/>
+    <strong>Signature:</strong><br/>
     ${
       driver.Sign
-        ? `<img src="${driver.Sign}" />`
-        : "_____________________________"
+        ? `<img src="${driver.Sign}" width="180"/>`
+        : "______________________"
     }
-  </div>
+  </body>
+  </html>
+  `;
 
-</body>
-</html>
-`;
+  const file = { content: html };
 
-  await page.setContent(html, { waitUntil: "load" });
+  const options = {
+    format: "A4",
+    printBackground: true,
+  };
 
   const fileName = `${consentKey}-${driver._id}.pdf`;
-  const filePath = path.join(__dirname, "../../public/consentpdf", fileName);
+  const filePath = path.join(dir, fileName);
 
-  await page.pdf({
-    path: filePath,
-    format: "A4",
-    printBackground: true
-  });
-
-  await browser.close();
+  const buffer = await pdf.generatePdf(file, options);
+  fs.writeFileSync(filePath, buffer);
 
   return filePath;
 }
+// async function generateConsentPDF(driver, consentKey, company) {
+// const browser = await puppeteer.launch({
+//   headless: "new",
+//   args: [
+//     '--no-sandbox',
+//     '--disable-setuid-sandbox',
+//     '--disable-dev-shm-usage',
+//     '--disable-gpu'
+//   ]
+// });
+
+//   const page = await browser.newPage();
+
+//   const fullName = `${driver.FirstName || ""} ${driver.LastName || ""}`.trim();
+
+//   // 👉 get correct consent
+//   let consent = consentData[consentKey];
+
+//   if (!consent) throw new Error("Invalid consent key");
+
+//   // 👉 replace dynamic values
+// let content = await ejs.render(consent.content, {
+//   company,
+// });
+
+// // then replace simple placeholders
+// content = content
+//   .replace(/\[Driver Name\]/g, fullName)
+//   .replace(/\[License #\]/g, driver.LicenseNumber || "");
+
+// const html = `
+// <html>
+// <head>
+// <style>
+//   body {
+//     font-family: Arial, sans-serif;
+//     padding: 25px 40px;
+//     font-size: 12px;
+//     color: #333;
+//     line-height: 1.6;
+//   }
+
+//   .header {
+//     text-align: center;
+//     margin-bottom: 10px;
+//   }
+
+//   .company-name {
+//     font-size: 18px;
+//     font-weight: bold;
+//   }
+
+//   .company-address {
+//     font-size: 11px;
+//     margin-top: 3px;
+//   }
+
+//   .generated-date {
+//     font-size: 10px;
+//     margin-top: 3px;
+//     color: #666;
+//   }
+
+//   .driver-box {
+//     border: 1px solid #ccc;
+//     padding: 10px;
+//     margin-top: 15px;
+//     margin-bottom: 20px;
+//   }
+
+//   .driver-row {
+//     display: flex;
+//     justify-content: space-between;
+//     margin-bottom: 5px;
+//   }
+
+//   hr {
+//     margin: 15px 0;
+//   }
+
+//   ul {
+//     margin-left: 20px;
+//   }
+
+//   .signature {
+//     margin-top: 40px;
+//   }
+
+//   .signature img {
+//     width: 180px;
+//     border: 1px solid #ccc;
+//     padding: 4px;
+//   }
+
+// </style>
+// </head>
+
+// <body>
+
+//   <!-- COMPANY HEADER -->
+//   <div class="header">
+//     <div class="company-name">
+//       ${(company?.name || "").toUpperCase()}
+//     </div>
+
+//     <div class="company-address">
+//       ${company?.Street || ""}, 
+//       ${company?.City || ""}, 
+//       ${company?.State || ""} 
+//       ${company?.ZipCode || ""}, 
+//       United States
+//     </div>
+
+//     <div class="generated-date">
+//       Generated on: ${new Date().toLocaleDateString()}
+//     </div>
+//   </div>
+
+//   <hr/>
+
+//   <!-- DRIVER INFO BOX -->
+//   <div class="driver-box">
+//     <div class="driver-row">
+//       <div><strong>Driver:</strong> ${fullName}</div>
+//       <div><strong>License:</strong> ${driver.LicenseNumber || ""}</div>
+//     </div>
+
+//     <div class="driver-row">
+//       <div><strong>Email:</strong> ${driver.Email || ""}</div>
+//       <div><strong>Phone:</strong> ${driver.Contact || ""}</div>
+//     </div>
+//   </div>
+
+//   <!-- CONSENT CONTENT -->
+//   ${content}
+
+//   <!-- SIGNATURE -->
+//   <div class="signature">
+//     <strong>Driver Signature:</strong><br/>
+//     ${
+//       driver.Sign
+//         ? `<img src="${driver.Sign}" />`
+//         : "_____________________________"
+//     }
+//   </div>
+
+// </body>
+// </html>
+// `;
+
+//   await page.setContent(html, { waitUntil: "load" });
+
+//   const fileName = `${consentKey}-${driver._id}.pdf`;
+//   const filePath = path.join(__dirname, "../../public/consentpdf", fileName);
+
+//   await page.pdf({
+//     path: filePath,
+//     format: "A4",
+//     printBackground: true
+//   });
+
+//   await browser.close();
+
+//   return filePath;
+// }
 
 
 module.exports = {
