@@ -110,30 +110,19 @@ module.exports = {
     const viewpdf = await allpdfs.findOne({ Driverid: userdetails._id });
   
 console.log(viewpdf,"viewpdfviewpdfviewpdfviewpdf")
-  const makeUrl = (filePath) => {
+ const makeUrl = (filePath) => {
   if (!filePath) return '';
+
+  // already full URL
+  if (filePath.startsWith('https')) return filePath;
 
   const fileName = filePath.split('\\').pop();
 
-  // je already static path naal save hoya hove
-  if (
-    filePath.startsWith('/images') ||
-    filePath.startsWith('/pdfs') ||
-    filePath.startsWith('/consentpdf')
-  ) {
-    return `${filePath}`;
-  }
+  if (filePath.startsWith('/pdfs')) return filePath;
+  if (filePath.includes('pdfs')) return `/pdfs/${fileName}`;
+  if (filePath.includes('images')) return `/images/${fileName}`;
+  if (filePath.includes('consentpdf')) return `/consentpdf/${fileName}`;
 
-  // Windows full path case handle
-  if (filePath.includes('images')) {
-     return `/images/${fileName}`;
-  }
-
-  if (filePath.includes('consentpdf')) {
-     return `/consentpdf/${fileName}`;
-  }
-
-  // default pdfs
   return `/pdfs/${fileName}`;
 };
     const updated = viewpdf
@@ -141,18 +130,18 @@ console.log(viewpdf,"viewpdfviewpdfviewpdfviewpdf")
           ...viewpdf._doc,
   
           // PDF docs
-          EmploymentApplication: (viewpdf.EmploymentApplication),
-          MedicalCertificate: (viewpdf.MedicalCertificate),
-          Dayscert: (viewpdf.Dayscert),
-          SocialSecurityCard: (viewpdf.SocialSecurityCard),
-          Violations: (viewpdf.Violations),
+          EmploymentApplication: makeUrl(viewpdf.EmploymentApplication),
+          MedicalCertificate: makeUrl(viewpdf.MedicalCertificate),
+          Dayscert: makeUrl(viewpdf.Dayscert),
+          SocialSecurityCard: makeUrl(viewpdf.SocialSecurityCard),
+          Violations: makeUrl(viewpdf.Violations),
   
           // Image docs
-          MVRRecord: (viewpdf.MVRRecord),
-          RoadTest: (viewpdf.RoadTest),
-          ClearingHouse: (viewpdf.ClearingHouse),
+          MVRRecord: makeUrl(viewpdf.MVRRecord),
+          RoadTest: makeUrl(viewpdf.RoadTest),
+          ClearingHouse: makeUrl(viewpdf.ClearingHouse),
                 Consents: viewpdf.Consents
-        ? viewpdf.Consents.map(file => (file))
+        ? viewpdf.Consents.map(file => makeUrl(file))
         : []
         }
       : {};
