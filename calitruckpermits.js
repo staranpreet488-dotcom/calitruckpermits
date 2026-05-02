@@ -28,8 +28,15 @@ app.use(session({
 }));
 app.use(flash());
 app.use('/', indexRouter);
+const baseUrl =
+  process.env.NODE_ENV === 'production'
+    ? process.env.LiveBase_url
+    : process.env.LocalBase_url;
 
-
+    app.use((req, res, next) => {
+  res.locals.baseUrl = baseUrl;
+  next();
+});
 app.use(function (req, res, next) {
   next(createError(404));
 });
