@@ -8,7 +8,7 @@ const LinkModel = require("../../Model/LinkModel");
 const pdfmodel =require("../../Model/allpdf")
 
 require('dotenv').config();
-const BASE_URL = process.env.LiveBase_url || 'http://localhost:2000';
+const BASE_URL = process.env.LIVE_BASE_URL || 'http://localhost:2000';
 
 const helper = require("../../utility/helper");
 const helpers = require("../../utility/helpers");
