@@ -6,8 +6,8 @@ const bcrypt = require("bcrypt");
 const PDFDocument = require("pdfkit");
 const BASE_URL =
   process.env.NODE_ENV === 'production'
-    ? process.env.REACT_APP_LIVE_BASE_URL
-    : process.env.REACT_APP_LOCAL_BASE_URL;
+    ? process.env.LIVE_BASE_URL
+    : process.env.LOCAL_BASE_URL || 'http://localhost:2000';
 module.exports = {
   createUser: helpers.AsyncHanddle(async (req, res) => {
     const userExist = await Model.UserModel.findOne({ email: req.body.email });
@@ -100,8 +100,64 @@ module.exports = {
   //   }
   // },
 
+// crutennt 
+//   viewUser: helpers.AsyncHanddle(async (req, res) => {
+//     let title = "userList";
+  
+//     const userdetails = await Model.Driver.findById(req.params.id);
+//     const Clientdetails = await Model.LinkModel.findById(userdetails.companyLinkId);
+  
+//     const viewpdf = await allpdfs.findOne({ Driverid: userdetails._id });
+  
+// console.log(viewpdf,"viewpdfviewpdfviewpdfviewpdf")
+//  const makeUrl = (filePath) => {
+//   if (!filePath) return '';
 
-  viewUser: helpers.AsyncHanddle(async (req, res) => {
+//   // already full URL
+//   if (filePath.startsWith('http')) return filePath;
+
+//   const fileName = filePath.split('\\').pop();
+
+//   if (filePath.startsWith('/pdfs')) return filePath;
+//   if (filePath.includes('pdfs')) return `/pdfs/${fileName}`;
+//   if (filePath.includes('images')) return `/images/${fileName}`;
+//   if (filePath.includes('consentpdf')) return `/consentpdf/${fileName}`;
+
+//   return `/pdfs/${fileName}`;
+// };
+// console.log(makeUrl,"makeUrlmakeUrlmakeUrl")
+//     const updated = viewpdf
+//       ? {
+//           ...viewpdf._doc,
+  
+//           // PDF docs
+//           EmploymentApplication: makeUrl(viewpdf.EmploymentApplication),
+//           MedicalCertificate: makeUrl(viewpdf.MedicalCertificate),
+//           Dayscert: makeUrl(viewpdf.Dayscert),
+//           SocialSecurityCard: makeUrl(viewpdf.SocialSecurityCard),
+//           Violations: makeUrl(viewpdf.Violations),
+  
+//           // Image docs
+//           MVRRecord: viewpdf.MVRRecord,
+//           RoadTest: viewpdf.RoadTest,
+//           ClearingHouse: viewpdf.ClearingHouse,
+//                 Consents: viewpdf.Consents
+//         ? viewpdf.Consents.map(file => makeUrl(file))
+//         : []
+//         }
+//       : {};
+//   console.log(updated,"updatedupdatedupdatedupdated")
+//     res.render("Admin/user/viewUser", {
+//       title,
+//       userdetails,
+//       Clientdetails,
+//       viewpdf: updated,
+//       session: req.session.user,
+//       msg: req.flash("msg"),
+//     });
+//   }),
+
+viewUser: helpers.AsyncHanddle(async (req, res) => {
     let title = "userList";
   
     const userdetails = await Model.Driver.findById(req.params.id);
@@ -112,18 +168,16 @@ module.exports = {
 console.log(viewpdf,"viewpdfviewpdfviewpdfviewpdf")
  const makeUrl = (filePath) => {
   if (!filePath) return '';
-
-  // already full URL
-  if (filePath.startsWith('http')) return filePath;
-
-  const fileName = filePath.split('\\').pop();
-
-  if (filePath.startsWith('/pdfs')) return filePath;
-  if (filePath.includes('pdfs')) return `/pdfs/${fileName}`;
-  if (filePath.includes('images')) return `/images/${fileName}`;
-  if (filePath.includes('consentpdf')) return `/consentpdf/${fileName}`;
-
-  return `/pdfs/${fileName}`;
+ 
+  // filename nikalo - chahe full URL ho ya local path
+  const fileName = filePath.split('/').pop().split('\\').pop();
+ 
+  // folder detect karo
+  if (filePath.includes('consentpdf')) return `${BASE_URL}/consentpdf/${fileName}`;
+  if (filePath.includes('images')) return `${BASE_URL}/images/${fileName}`;
+  if (filePath.includes('pdfs')) return `${BASE_URL}/pdfs/${fileName}`;
+ 
+  return `${BASE_URL}/pdfs/${fileName}`;
 };
 console.log(makeUrl,"makeUrlmakeUrlmakeUrl")
     const updated = viewpdf
@@ -156,8 +210,6 @@ console.log(makeUrl,"makeUrlmakeUrlmakeUrl")
       msg: req.flash("msg"),
     });
   }),
-
-
   // viewUser: helpers.AsyncHanddle(async (req, res) => {
   //   let title = "userList";
   //   const userdetails = await Model.Driver.findById({ _id: req.params.id });
