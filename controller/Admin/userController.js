@@ -125,6 +125,7 @@ console.log(viewpdf,"viewpdfviewpdfviewpdfviewpdf")
 
   return `/pdfs/${fileName}`;
 };
+console.log(makeUrl,"makeUrlmakeUrlmakeUrl")
     const updated = viewpdf
       ? {
           ...viewpdf._doc,
@@ -137,9 +138,9 @@ console.log(viewpdf,"viewpdfviewpdfviewpdfviewpdf")
           Violations: makeUrl(viewpdf.Violations),
   
           // Image docs
-          MVRRecord: makeUrl(viewpdf.MVRRecord),
-          RoadTest: makeUrl(viewpdf.RoadTest),
-          ClearingHouse: makeUrl(viewpdf.ClearingHouse),
+          MVRRecord: viewpdf.MVRRecord,
+          RoadTest: viewpdf.RoadTest,
+          ClearingHouse: viewpdf.ClearingHouse,
                 Consents: viewpdf.Consents
         ? viewpdf.Consents.map(file => makeUrl(file))
         : []

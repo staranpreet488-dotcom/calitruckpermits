@@ -764,12 +764,10 @@ border-radius: 20px;
                             </button>
       </label>
 
-
-   <label class="customUpload">
-      <input class="file"  hidden onclick="openViewModal('<%= viewpdf.MVRRecord %>')">
-        <i class="bi bi-eye"></i>   View Document
-      </input>
-      </label>
+<label class="customUpload"
+  onclick="openViewModal('<%= viewpdf.MVRRecord %>')">
+  <i class="bi bi-eye"></i> View Document
+</label>
     </div>
 
     <!-- Uploaded file name show here -->
@@ -1222,8 +1220,8 @@ function openViewModal(filePath) {
 
   const fileUrl = filePath.startsWith("http")
     ? filePath
-    : BASE_URL;
-
+    : BASE_URL + filePath;
+console.log(fileUrl,"fileUrlfileUrlfileUrl")
   const container = document.getElementById("documentContainer");
 
   if (fileUrl.toLowerCase().includes(".pdf")) {
