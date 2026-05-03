@@ -9,7 +9,9 @@ const pdfmodel =require("../../Model/allpdf")
 
 const pdf = require("html-pdf");
 require('dotenv').config();
-const BASE_URL = process.env.LIVE_BASE_URL || 'http://localhost:2000';
+const BASE_URL = process.env.NODE_ENV === 'production'
+  ? process.env.LIVE_BASE_URL
+  : process.env.LOCAL_BASE_URL || 'http://localhost:2000';
 
 const helper = require("../../utility/helper");
 const helpers = require("../../utility/helpers");
