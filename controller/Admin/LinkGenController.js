@@ -115,6 +115,9 @@ module.exports = {
 
  exportallpdfs : async (req,res)=>{
   try {
+    console.log("===== PDF EXPORT START =====");
+console.log("CWD:", process.cwd());
+console.log("__dirname:", __dirname);
     const record = await allpdf.findOne({ Driverid: req.params.id }).populate("Driverid")
  
     if (!record) {
